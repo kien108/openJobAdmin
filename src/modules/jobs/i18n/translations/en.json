@@ -1,0 +1,31 @@
+{
+   "adminManagement": {
+      "title": "Admin Management",
+      "create": "Create new admin",
+      "editPassword": "Edit password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "role": "Role",
+      "username": "Username",
+      "password": "Password",
+      "newPassword": "New password",
+      "active": "Status",
+      "actions": "Actions",
+      "enterFirstName": "Enter first name...",
+      "enterLastName": "Enter last name...",
+      "enterUsername": "Enter username...",
+      "enterPassword": "Enter password...",
+      "enterNewPassword": "Enter new password...",
+      "status": "Status",
+      "createAdminSuccessful": "Add new admin successfully!!!",
+      "updateAdminSuccessful": "Update admin successfully!!!",
+      "editPasswordSuccessful": "Edit password successfully!!!",
+      "deleteWarning": "Are you sure about inactive this account?",
+      "deleteAdminSuccessful": "Inactive admin successfully!!!",
+
+      "admin": "ADMIN",
+      "superAdmin": "SUPER ADMIN",
+      "valueExists": "Username already exists",
+      "notMatch": "Current password not match"
+   }
+}

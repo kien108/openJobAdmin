@@ -1,0 +1,15 @@
+{
+   "form": {
+      "error": "Tên đăng nhập hoặc mật khẩu không đúng."
+   },
+
+   "login": {
+      "username": "Tên người dùng",
+      "enterUsername": "Nhập tên người dùng",
+      "password": "Mật khẩu",
+      "enterPassword": "Nhập mật khẩu",
+      "remember": "Ghi nhớ đăng nhập",
+      "contact": "Không thể truy cập tài khoản? Vui lòng liên hệ với <1>quản trị viên</1>",
+      "btn": "Đăng nhập"
+   }
+}

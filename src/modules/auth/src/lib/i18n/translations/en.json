@@ -1,0 +1,19 @@
+{
+   "form": {
+      "error": "The username or password is incorrect."
+   },
+   "dateRange": "Date Range",
+   "hidePassword": "Hide Password",
+   "showPassword": "Show Password",
+   "copy": "Copy",
+   "copied": "Copied!",
+   "login": {
+      "username": "Username",
+      "enterUsername": "Enter username",
+      "password": "Password",
+      "enterPassword": "Enter password",
+      "remember": "Remember me",
+      "contact": "Can't access your account? Please contact with <1>administrators</1>",
+      "btn": "Login"
+   }
+}
