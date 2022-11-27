@@ -96,9 +96,9 @@ const Skills = () => {
          dataIndex: "id",
          render: (_: string, item: any) => (
             <StyledFunctions>
-               <BtnFunction onClick={() => handleOpenUpdate(item)}>
+               {/* <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />
-               </BtnFunction>
+               </BtnFunction> */}
                <BtnFunction onClick={() => handleOpenDelete(item)}>
                   <DeleteIcon />
                </BtnFunction>
@@ -129,8 +129,9 @@ const Skills = () => {
    const handleOnChange = debounce(setValueToSearchParams, 500);
 
    const handleConfirmDelete = () => {
+      console.log(selectedSkill?.name);
       selectedSkill &&
-         deleteSpecialization(selectedSkill.id)
+         deleteSpecialization(selectedSkill?.name)
             .unwrap()
             .then(() => {
                openNotification({
@@ -143,8 +144,9 @@ const Skills = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
+                  message: t("Skill already in use and can't be deleted"),
                });
+               handleCloseDelete();
             });
    };
 
@@ -183,7 +185,7 @@ const Skills = () => {
 
          <ContainerTable>
             <FormProvider {...form}>
-               <Input
+               {/* <Input
                   icons={<SearchIcon />}
                   name="keyword"
                   onChange={(e) => {
@@ -191,7 +193,7 @@ const Skills = () => {
                      handleOnChange("keyword", e.target.value);
                   }}
                   placeholder="Search by skill name"
-               />
+               /> */}
             </FormProvider>
             <Table
                columns={columns}

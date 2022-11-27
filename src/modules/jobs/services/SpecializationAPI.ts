@@ -4,7 +4,7 @@ import { baseQuery } from "./baseQuery";
 
 export const SpecializationAPI = createApi({
    reducerPath: "SpecializationAPI",
-   tagTypes: ["SPECIALIZAIONS", "SKILLS", "SKILLS_VERIFY"],
+   tagTypes: ["SPECIALIZAIONS", "SKILLS", "SKILLS_VERIFY", "SPECIALIZAIONS_BY_ID"],
    baseQuery,
    endpoints: (builder) => ({
       getSpecializations: builder.query<any, any>({
@@ -14,13 +14,20 @@ export const SpecializationAPI = createApi({
          }),
          providesTags: ["SPECIALIZAIONS"],
       }),
+      getSpecializationsById: builder.query<any, any>({
+         query: ({ id, ...params }) => ({
+            url: `/specialization/bymajor/${id}`,
+            params,
+         }),
+         providesTags: ["SPECIALIZAIONS_BY_ID"],
+      }),
       createSpecialization: builder.mutation<any, any>({
          query: (body) => ({
             url: "/specialization/create",
             body,
             method: "POST",
          }),
-         invalidatesTags: ["SPECIALIZAIONS"],
+         invalidatesTags: ["SPECIALIZAIONS", "SPECIALIZAIONS_BY_ID"],
       }),
       updateSpecialization: builder.mutation<any, any>({
          query: (body) => ({
@@ -28,14 +35,14 @@ export const SpecializationAPI = createApi({
             body,
             method: "PUT",
          }),
-         invalidatesTags: ["SPECIALIZAIONS"],
+         invalidatesTags: ["SPECIALIZAIONS", "SPECIALIZAIONS_BY_ID"],
       }),
       deleteSpecialization: builder.mutation<any, string>({
          query: (id) => ({
             url: `/specialization/delete/${id}`,
             method: "DELETE",
          }),
-         invalidatesTags: ["SPECIALIZAIONS"],
+         invalidatesTags: ["SPECIALIZAIONS", "SPECIALIZAIONS_BY_ID"],
       }),
       checkUsername: builder.mutation<string, any>({
          query: (body) => ({
@@ -102,4 +109,5 @@ export const {
    useDeleteSpecializationMutation,
    useGetSkillInvalidateQuery,
    useValidateSkillMutation,
+   useGetSpecializationsByIdQuery,
 } = SpecializationAPI;

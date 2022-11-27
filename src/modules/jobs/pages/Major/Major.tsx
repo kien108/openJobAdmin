@@ -129,8 +129,9 @@ const Major = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
+                  message: t("Major already in use and can't be deleted"),
                });
+               handleCloseDelete();
             });
    };
 
@@ -150,7 +151,7 @@ const Major = () => {
          <Header handleOpenCreate={handleOpen} title="Major Management" />
          <ContainerTable>
             <FormProvider {...form}>
-               <Input
+               {/* <Input
                   icons={<SearchIcon />}
                   name="keyword"
                   onChange={(e) => {
@@ -158,7 +159,7 @@ const Major = () => {
                      handleOnChange("keyword", e.target.value);
                   }}
                   placeholder="Search by major name"
-               />
+               /> */}
             </FormProvider>
             <Table
                columns={columns}

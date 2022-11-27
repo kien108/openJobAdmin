@@ -61,7 +61,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
                </button>
             </Popover>
          </div>
-         <div className="notification">
+         {/* <div className="notification">
             <Popover
                overlayClassName="styled-header-popover"
                content={<Notification></Notification>}
@@ -72,7 +72,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
                   <div className="number-notification">1</div>
                </button>
             </Popover>
-         </div>
+         </div> */}
          <div className="dropdown">
             <Popover
                overlayClassName="styled-header-popover"

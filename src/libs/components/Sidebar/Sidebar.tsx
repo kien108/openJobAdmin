@@ -42,7 +42,7 @@ const SideBar = () => {
    };
 
    const items: MenuItem[] = [
-      getItem(true, t("sidebar.overview"), "/overview", "overview", <AiOutlineHome />),
+      // getItem(true, t("sidebar.overview"), "/overview", "overview", <AiOutlineHome />),
       getItem(
          useRole([ROLE_ENUM.SUPER_ADMIN]),
          t("sidebar.adminManagement"),

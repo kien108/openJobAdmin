@@ -1,6 +1,13 @@
 import React, { FC, useState } from "react";
 
-import { DeleteIcon, EditIcon, Modal, Switch, Table } from "../../../../libs/components";
+import {
+   DeleteIcon,
+   EditIcon,
+   Modal,
+   Switch,
+   Table,
+   TextEllipsis,
+} from "../../../../libs/components";
 
 import { BtnFunction, StyledFunctions, StyledEmailContent } from "./styles";
 
@@ -41,22 +48,12 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
 
    const [openDelete, toggleOpenDelete] = useToggle();
 
-   // const templates = data?.data;
-
    useEffect(() => {
       if (!dataSettings) return;
 
       const dataSource = dataSettings.filter((item) => item.extraValue);
       setDataSource(dataSource);
    }, [dataSettings]);
-   // const dataSource =
-   //    templates?.items && templates?.items.length > 0
-   //       ? templates.items.map((item) => ({
-   //            key: item.id,
-   //            email: item,
-   //            ...item,
-   //         }))
-   //       : [];
 
    const handleOpenUpdate = (email: ISetting) => {
       handleOpenEdit();
@@ -73,11 +70,14 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
          title: t("Name"),
          dataIndex: "name",
          sorter: true,
+         width: "20%",
       },
       {
          title: t("Value"),
          dataIndex: "value",
          sorter: true,
+         render: (item: string) => (item ? <TextEllipsis data={item} length={100} /> : "-"),
+         width: "80%",
       },
       {
          title: t("Functions"),

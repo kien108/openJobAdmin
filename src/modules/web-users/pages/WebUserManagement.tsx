@@ -194,7 +194,7 @@ const WebUserManagement = () => {
          <ContainerTable>
             <FormProvider {...form}>
                <Row align={"middle"} gutter={[10, 10]}>
-                  <Col span={12}>
+                  <Col span={24}>
                      <Input
                         icons={<SearchIcon />}
                         name="keyword"
@@ -207,7 +207,7 @@ const WebUserManagement = () => {
                         }`}
                      />
                   </Col>
-                  <Col>
+                  {/* <Col>
                      <Checkbox
                         name="filterType"
                         checked={checked}
@@ -220,7 +220,7 @@ const WebUserManagement = () => {
                      >
                         {t("By Company")}
                      </Checkbox>
-                  </Col>
+                  </Col> */}
                </Row>
             </FormProvider>
             <Table

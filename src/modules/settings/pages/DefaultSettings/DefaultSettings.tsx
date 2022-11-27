@@ -40,10 +40,11 @@ const DefaultSettings = () => {
       resolver: yupResolver(yup.object({})),
    });
 
-   const { data: dataSettings, isLoading: loadingSettings } = useGetSettingsQuery(
-      {},
-      { refetchOnMountOrArgChange: true }
-   );
+   const {
+      data: dataSettings,
+      isLoading: loadingSettings,
+      isFetching: fetchingSettings,
+   } = useGetSettingsQuery({}, { refetchOnMountOrArgChange: true });
 
    const [deleteSetting, { isLoading: loadingDelete }] = useDeleteMutation();
 
@@ -58,6 +59,7 @@ const DefaultSettings = () => {
                });
 
                handleClose();
+               setSelectedId(undefined);
             })
             .catch((error) => {
                openNotification({
@@ -82,7 +84,7 @@ const DefaultSettings = () => {
             });
    }, [dataSettings]);
    return (
-      <>
+      <Spin spinning={loadingSettings || fetchingSettings}>
          <StyledHeader>
             <Title>{t("Default settings")}</Title>
             <Button
@@ -169,14 +171,14 @@ const DefaultSettings = () => {
                </Button>
             </GroupButton>
          </Modal>
-         <StyledModal destroyOnClose={true} visible={openEdit} onCancel={handleEdit}>
+         <StyledModal destroyOnClose visible={openEdit} onCancel={handleEdit}>
             <CreateAndEditSetting
                handleClose={handleEdit}
                id={selectedId}
                settingName={selectedName}
             />
          </StyledModal>
-      </>
+      </Spin>
    );
 };
 

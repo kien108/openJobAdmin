@@ -34,8 +34,9 @@ const DeleteEmail: FC<IDeleteEmail> = ({ handleClose, id }) => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
+                  message: t("Email already in use and can't be deleted"),
                });
+               handleClose();
             });
    };
 

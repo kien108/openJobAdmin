@@ -31,4 +31,5 @@ export {
    useDeleteSkillMutation,
    useGetSkillInvalidateQuery,
    useValidateSkillMutation,
+   useGetSpecializationsByIdQuery,
 } from "./SpecializationAPI";

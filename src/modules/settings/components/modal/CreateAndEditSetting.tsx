@@ -28,7 +28,11 @@ const CreateAndEditSetting: FC<IProps> = ({ handleClose, id, settingName }) => {
       },
       resolver: yupResolver(
          yup.object({
-            name: yup.string().trim().required(t("common:form.required")),
+            name: yup
+               .string()
+               .trim()
+               .required(t("common:form.required"))
+               .min(4, "This field length must more than 3 characters"),
             value: yup.string().trim().required(t("common:form.required")),
          })
       ),
@@ -41,6 +45,7 @@ const CreateAndEditSetting: FC<IProps> = ({ handleClose, id, settingName }) => {
    });
 
    const onSubmit = (data: any) => {
+      console.log(id);
       id
          ? createAndUpdate({ ...data, type: "update", id })
               .unwrap()
@@ -88,7 +93,7 @@ const CreateAndEditSetting: FC<IProps> = ({ handleClose, id, settingName }) => {
          <Spin spinning={loadingDataSetting}>
             <Row gutter={[20, 20]} justify="center">
                <Col span={24}>
-                  <Title>{t("Edit setting")}</Title>
+                  <Title>{id ? t("Edit Setting") : t("Create Setting")}</Title>
                </Col>
                <Col span={24}>
                   <Input

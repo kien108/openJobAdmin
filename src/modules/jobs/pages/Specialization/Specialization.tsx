@@ -30,6 +30,7 @@ import { GroupButton } from "../../components/modal/styles";
 import {
    useDeleteSpecializationMutation,
    useGetMajorsQuery,
+   useGetSpecializationsByIdQuery,
    useGetSpecializationsQuery,
 } from "../../services";
 import useFilter from "../../hooks/useFilter";
@@ -76,6 +77,22 @@ const Specialization = () => {
       },
       {
          refetchOnMountOrArgChange: true,
+         skip: !!form.watch("majorId"),
+      }
+   );
+
+   const {
+      data: dataFilterSpec,
+      isLoading: loadingFilterSpec,
+      isFetching: fetchingFilterSpec,
+   } = useGetSpecializationsByIdQuery(
+      {
+         ...tableInstance.params,
+         id: form.watch("majorId"),
+      },
+      {
+         refetchOnMountOrArgChange: true,
+         skip: !form.watch("majorId"),
       }
    );
 
@@ -159,22 +176,29 @@ const Specialization = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
+                  message: t("Specialization already in use and can't be deleted"),
                });
+               handleCloseDelete();
             });
    };
 
    useEffect(() => {
-      if (!dataSpecializations) return;
-
-      dataSpecializations &&
+      if (form.watch("majorId")) {
          setDataSource(
-            dataSpecializations.map((item: any) => ({
+            (dataFilterSpec ?? []).map((item: any) => ({
                key: item.id,
                ...item,
             }))
          );
-   }, [dataSpecializations]);
+      } else {
+         setDataSource(
+            (dataSpecializations ?? []).map((item: any) => ({
+               key: item.id,
+               ...item,
+            }))
+         );
+      }
+   }, [dataSpecializations, dataFilterSpec]);
 
    useEffect(() => {
       if (!dataMajors) return;
@@ -194,7 +218,7 @@ const Specialization = () => {
          <ContainerTable>
             <FormProvider {...form}>
                <Row gutter={[32, 32]}>
-                  <Col span={12}>
+                  {/* <Col span={12}>
                      <Input
                         icons={<SearchIcon />}
                         name="keyword"
@@ -204,14 +228,15 @@ const Specialization = () => {
                         }}
                         placeholder="Search by specialization name"
                      />
-                  </Col>
-                  <Col span={8}>
+                  </Col> */}
+                  <Col span={24}>
                      <Select
                         options={options}
                         name="majorId"
                         label={t("Major")}
                         onSelect={(value: any) => {
                            setValueToSearchParams("majorId", value);
+                           form.setValue("majorId", value);
                         }}
                         onClear={() => setValueToSearchParams("majorId", "")}
                      />
