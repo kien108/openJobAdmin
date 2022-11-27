@@ -8,6 +8,24 @@ const variables = [
    },
    {
       id: uuidv4(),
+      name: "company",
+      description: "Company name",
+      marker: "[[company]]",
+   },
+   {
+      id: uuidv4(),
+      name: "email",
+      description: "Email",
+      marker: "[[email]]",
+   },
+   {
+      id: uuidv4(),
+      name: "password",
+      description: "Password",
+      marker: "[[password]]",
+   },
+   {
+      id: uuidv4(),
       name: "createDate",
       description: "createDate",
       marker: "[[createDate]]",

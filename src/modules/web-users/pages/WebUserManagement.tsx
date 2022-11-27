@@ -31,6 +31,7 @@ import * as yup from "yup";
 import { Col, Row } from "antd";
 import { useFilter } from "../hooks";
 import { debounce } from "lodash";
+import { ContactInformation } from "../components/ContactInformation";
 
 const WebUserManagement = () => {
    const { t } = useTranslation();
@@ -62,7 +63,7 @@ const WebUserManagement = () => {
    });
 
    const {
-      data,
+      data: data,
       isLoading: loadingUsers,
       isFetching: fetchingUsers,
    } = useGetUsersQuery(
@@ -97,12 +98,14 @@ const WebUserManagement = () => {
          dataIndex: "email",
          key: "email",
          sorter: true,
+         render: (item) => (item ? item : "-"),
       },
       {
          title: t("adminManagement.role"),
          dataIndex: "role",
          key: "role",
          sorter: true,
+         render: (item) => (item ? item : "-"),
       },
       {
          title: t("adminManagement.active"),
@@ -120,9 +123,11 @@ const WebUserManagement = () => {
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
-               <BtnFunction onClick={() => handleOpenDelete(record.id)}>
-                  <DeleteIcon />
-               </BtnFunction>
+               {record?.isActive && (
+                  <BtnFunction onClick={() => handleOpenDelete(record.id)}>
+                     <DeleteIcon />
+                  </BtnFunction>
+               )}
             </StyledFunctions>
          ),
       },
@@ -147,7 +152,7 @@ const WebUserManagement = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Deactivate this account successfully!!!"),
+                  message: t("Deactivate this user successfully!!!"),
                });
                searchParams.delete("id");
                setSearchParams(searchParams);
@@ -174,76 +179,18 @@ const WebUserManagement = () => {
    const handleOnChange = debounce(setValueToSearchParams, 500);
 
    useEffect(() => {
-      console.log(data);
       data &&
          setDataSource(
-            data.users.map((item) => ({
+            (data?.users ?? []).map((item) => ({
                key: item.id,
                ...item,
             }))
          );
-      const fakeData = [
-         {
-            id: 1,
-            firstName: "Trung Kien",
-            lastName: "Le",
-            email: "abc@gmail.com",
-            role: "HR",
-            isActive: true,
-            company: {
-               id: 1,
-               name: "company1",
-               address: "so 1 vo van ngan",
-               phone: "090909090",
-               totalEmployee: 40,
-               description: "This is fake company",
-               logoUrl: "/asdfsadf",
-               wallpaperUrl: "/asdfasfsaf",
-            },
-         },
-         {
-            id: 2,
-            email: "abc@gmail.com",
-            firstName: "Van Nam",
-            lastName: "Duong",
-            role: "HEAD_HUNTER",
-            isActive: true,
-            company: {
-               id: 1,
-               name: "company1",
-               address: "so 1 vo van ngan",
-               phone: "090909090",
-               totalEmployee: 40,
-               description: "This is fake company",
-               logoUrl: "/asdfsadf",
-               wallpaperUrl: "/asdfasfsaf",
-            },
-         },
-         {
-            id: 3,
-            email: "abc@gmail.com",
-            firstName: "Hehe",
-            lastName: "Admin",
-            role: "HEAD_HUNTER",
-            isActive: false,
-            company: {
-               id: 1,
-               name: "company1",
-               address: "so 1 vo van ngan",
-               phone: "090909090",
-               totalEmployee: 40,
-               description: "This is fake company",
-               logoUrl: "/asdfsadf",
-               wallpaperUrl: "/asdfasfsaf",
-            },
-         },
-      ];
-      setDataSource(fakeData);
-   }, []);
+   }, [data]);
 
    return (
       <>
-         <Title>Web Users</Title>
+         <Title>Web Users Management</Title>
          <ContainerTable>
             <FormProvider {...form}>
                <Row align={"middle"} gutter={[10, 10]}>
@@ -286,7 +233,6 @@ const WebUserManagement = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={t("Create new head hunter")}
             destroyOnClose
             open={isOpen}
             onCancel={() => {
@@ -295,7 +241,7 @@ const WebUserManagement = () => {
                setSearchParams(searchParams);
             }}
          >
-            <CreateAndEditHr handleClose={handleClose} />
+            <ContactInformation handleClose={handleClose} />
          </StyledModal>
          <Modal
             type="confirm"

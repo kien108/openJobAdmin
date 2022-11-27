@@ -98,8 +98,14 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const onSubmit = (data: any) => {
       const { companyName, ...dataBody } = data;
 
+      console.log(dataAccount);
       isEdit
-         ? updateHr({ ...dataAccount, ...dataBody, updatePassword: false })
+         ? updateHr({
+              ...dataAccount,
+              ...dataBody,
+              updatePassword: false,
+              company: { ...dataAccount?.company, accountBalance: dataBody?.accountBalance },
+           })
               .unwrap()
               .then(() => {
                  openNotification({

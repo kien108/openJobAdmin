@@ -4,7 +4,7 @@ import { StyledSidebar, StyledImage, StyledLogo } from "./styles";
 import ImageLogo from "../../../assets/img/logo.png";
 
 import { RiAdminLine } from "react-icons/ri";
-import { MdWorkOutline } from "react-icons/md";
+import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
@@ -59,7 +59,7 @@ const SideBar = () => {
          <AiOutlineUser />
       ),
       getItem(true, t("sidebar.settings"), "/settings", "settings", <AiOutlineSetting />),
-      getItem(true, t("sidebar.jobs"), "/jobs", "jobs", <AiOutlineSetting />),
+      getItem(true, t("sidebar.jobs"), "/jobs", "jobs", <MdOutlinePostAdd />),
    ];
 
    const onOpenChange = (items: string[]) => {

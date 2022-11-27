@@ -58,6 +58,13 @@ export const SpecializationAPI = createApi({
          }),
          providesTags: ["SKILLS_VERIFY"],
       }),
+      validateSkill: builder.mutation<any, any>({
+         query: (id) => ({
+            url: `/verify-skill/${id}`,
+            method: "POST",
+         }),
+         invalidatesTags: ["SKILLS_VERIFY"],
+      }),
       createSkill: builder.mutation<any, any>({
          query: (body) => ({
             url: "/skill/create",
@@ -94,4 +101,5 @@ export const {
    useUpdateSpecializationMutation,
    useDeleteSpecializationMutation,
    useGetSkillInvalidateQuery,
+   useValidateSkillMutation,
 } = SpecializationAPI;

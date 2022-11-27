@@ -12,6 +12,10 @@
       "cancel": "Cancel",
       "ok": "OK"
    },
+   "buttonAction": {
+      "showMore": "Show More...",
+      "showLess": "Show Less"
+   },
    "notification": {
       "nothingFound": "Nothing found...",
       "noResults": "No results",

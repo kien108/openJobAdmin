@@ -31,4 +31,7 @@ export interface IHr {
    avatarUrl: string;
    company: ICompany;
    password: string;
+   phone: string;
+   gender: string;
+   dob: string;
 }

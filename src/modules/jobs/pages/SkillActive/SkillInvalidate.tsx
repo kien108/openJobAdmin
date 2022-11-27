@@ -15,50 +15,26 @@ import {
    Select,
    Switch,
    Table,
+   Title,
 } from "../../../../libs/components";
 
 import { useModal } from "../../../../libs/common";
-import { Header } from "../../components/Header";
-import { FormProvider, useForm } from "react-hook-form";
 
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { debounce } from "lodash";
-import CreateAndEditSpecialization from "../../components/modal/CreateAndEditSpecialization";
+
 import { GroupButton } from "../../components/modal/styles";
-import {
-   useDeleteSpecializationMutation,
-   useGetMajorsQuery,
-   useGetSkillInvalidateQuery,
-   useGetSpecializationsQuery,
-} from "../../services";
-import useFilter from "../../hooks/useFilter";
-import { Col, Row } from "antd";
+import { useGetSkillInvalidateQuery, useValidateSkillMutation } from "../../services";
+
+import { BsCheckCircle } from "react-icons/bs";
 
 const SkillInvalidate = () => {
    const { t } = useTranslation();
    const navigate = useNavigate();
-   const [selectedSpecialization, setSelectedSpecialization] = useState<any>(undefined);
+   const [selectedId, setSelectedId] = useState<any>(undefined);
    const [searchParams, setSearchParams] = useSearchParams();
    const [dataSource, setDataSource] = useState<any>([]);
-   const [options, setOptions] = useState<OptionType[]>([]);
 
    const tableInstance = Table.useTable();
-
-   const { isOpen, handleOpen, handleClose } = useModal();
-
-   const form = useForm({
-      defaultValues: {
-         keyword: searchParams.get("keyword"),
-         majorId: searchParams.get("majorId"),
-      },
-      resolver: yupResolver(
-         yup.object({
-            keyword: yup.string(),
-         })
-      ),
-   });
 
    const {
       isOpen: isOpenDelete,
@@ -72,8 +48,7 @@ const SkillInvalidate = () => {
       isFetching: fetchingMajors,
    } = useGetSkillInvalidateQuery({ ...tableInstance.params }, { refetchOnMountOrArgChange: true });
 
-   const [deleteSpecialization, { isLoading: loadingDeleteSpecialization }] =
-      useDeleteSpecializationMutation();
+   const [validate, { isLoading: loadingValidate }] = useValidateSkillMutation();
 
    const columns: ColumnsType<any> = [
       {
@@ -83,103 +58,69 @@ const SkillInvalidate = () => {
          sorter: true,
       },
       {
+         title: t("Major"),
+         dataIndex: "major",
+         key: "major",
+         sorter: true,
+      },
+      {
+         title: t("Specialization"),
+         dataIndex: "specialization",
+         key: "specialization",
+         sorter: true,
+      },
+      {
          title: t("adminManagement.actions"),
          dataIndex: "id",
          render: (_: string, item: any) => (
             <StyledFunctions>
-               <BtnFunction
-                  onClick={() => {
-                     searchParams.set("specName", item.name);
-                     setSelectedSpecialization(searchParams);
-                     navigate({
-                        pathname: `${item.id}`,
-                        search: searchParams.toString(),
-                     });
-                  }}
-               >
-                  <EyeIcon />
-               </BtnFunction>
-               <BtnFunction onClick={() => handleOpenUpdate(item)}>
-                  <EditIcon />
-               </BtnFunction>
-               <BtnFunction onClick={() => handleOpenDelete(item)}>
-                  <DeleteIcon />
+               <BtnFunction onClick={() => handleOpenDelete(item?.id)}>
+                  <BsCheckCircle size={28} />
                </BtnFunction>
             </StyledFunctions>
          ),
       },
    ];
 
-   const handleOpenUpdate = (Specialization: any) => {
-      setSelectedSpecialization(Specialization);
-      handleOpen();
-   };
-
    const handleOpenDelete = (Specialization: any) => {
-      setSelectedSpecialization(Specialization);
+      setSelectedId(Specialization);
 
       handleOpenDeleteModal();
    };
-   const setValueToSearchParams = (name: string, value: string) => {
-      if (value) {
-         searchParams.set(name, value);
-         setSearchParams(searchParams);
-      } else {
-         searchParams.delete(name);
-         setSearchParams(searchParams);
-      }
-   };
-   const handleOnChange = debounce(setValueToSearchParams, 500);
 
    const handleConfirmDelete = () => {
-      selectedSpecialization &&
-         deleteSpecialization(selectedSpecialization.id)
+      selectedId &&
+         validate(selectedId)
             .unwrap()
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Delete this Specialization successfully!!!"),
+                  message: t("Validate this skill successfully!!!"),
                });
-               setSelectedSpecialization(undefined);
+               setSelectedId(undefined);
                handleCloseDelete();
             })
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
+                  message: t("INTERNAL SERVER ERROR"),
                });
+               handleCloseDelete();
             });
    };
 
    useEffect(() => {
-      if (!dataSkills) return;
-
-      console.log(dataSkills);
-
-      const options = dataSkills.map((item: any) => ({
+      const dataSources = (dataSkills?.listSkill ?? [])?.map((item: any) => ({
          key: item.id,
-         label: item.name,
-         value: item.id,
-         render: () => item.name,
+         ...item,
       }));
 
-      setOptions(options);
+      setDataSource(dataSources);
    }, [dataSkills]);
    return (
       <>
-         <Header handleOpenCreate={handleOpen} title="Specialization Management" />
+         <Title>Invalidate Skill Management</Title>
          <ContainerTable>
-            <FormProvider {...form}>
-               <Input
-                  icons={<SearchIcon />}
-                  name="keyword"
-                  onChange={(e) => {
-                     form.setValue("keyword", e.target.value);
-                     handleOnChange("keyword", e.target.value);
-                  }}
-                  placeholder="Search by skill name"
-               />
-            </FormProvider>
             <Table
                columns={columns}
                dataSource={dataSource}
@@ -189,25 +130,7 @@ const SkillInvalidate = () => {
                totalPages={0}
             />
          </ContainerTable>
-         <StyledModal
-            title={
-               selectedSpecialization ? t("Update Specialization") : t("Create new Specialization")
-            }
-            destroyOnClose
-            open={isOpen}
-            onCancel={() => {
-               handleClose();
-               setSelectedSpecialization(undefined);
-            }}
-         >
-            <CreateAndEditSpecialization
-               specialization={selectedSpecialization}
-               handleClose={() => {
-                  handleClose();
-                  setSelectedSpecialization(undefined);
-               }}
-            />
-         </StyledModal>
+
          <Modal
             type="confirm"
             open={isOpenDelete}
@@ -217,7 +140,7 @@ const SkillInvalidate = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title={t("Do to want to delete this specialization?")}
+            title={t("Do to want to validate this skill?")}
          >
             <GroupButton>
                <Button
@@ -226,7 +149,7 @@ const SkillInvalidate = () => {
                   key="back"
                   border="outline"
                   onClick={() => {
-                     setSelectedSpecialization(undefined);
+                     setSelectedId(undefined);
                      handleCloseDelete();
                   }}
                >
@@ -235,10 +158,10 @@ const SkillInvalidate = () => {
                <Button
                   height={44}
                   key="submit"
-                  loading={loadingDeleteSpecialization}
+                  loading={loadingValidate}
                   onClick={handleConfirmDelete}
                >
-                  {t(t("common:confirm.ok"))}
+                  {t(t("Validate"))}
                </Button>
             </GroupButton>
          </Modal>

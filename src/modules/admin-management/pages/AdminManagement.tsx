@@ -42,15 +42,6 @@ const AdminManagement = () => {
 
    const [searchParams, setSearchParams] = useSearchParams();
 
-   const { data: e } = useGetCompaniesQuery(
-      { page: 0, size: 10 },
-      { refetchOnMountOrArgChange: true }
-   );
-
-   useEffect(() => {
-      console.log(e);
-   }, [e]);
-
    const {
       data,
       isLoading: loadingAdmins,

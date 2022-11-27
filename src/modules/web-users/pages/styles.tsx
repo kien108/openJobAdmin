@@ -55,7 +55,7 @@ export const StyledModalDelete = styled(Modal)`
 
 export const StyledModal = styled(Modal)`
    &.ant-modal {
-      width: 42.5rem !important;
+      width: 660px !important;
 
       .ant-typography {
          font-size: 28px;

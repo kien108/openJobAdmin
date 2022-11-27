@@ -60,10 +60,11 @@ const Login = () => {
          .unwrap()
          .then((data: AuthResponse) => {
             if (isRememberMe) {
-               dispatch(saveRemember({ isRemember: true } as any));
+               localStorage.setItem("isRemember", JSON.stringify(true));
+
                localStorage.setItem("access_token", data["access-token"]);
             } else {
-               dispatch(saveRemember({ isRemember: false } as any));
+               localStorage.setItem("isRemember", JSON.stringify(false));
                sessionStorage.setItem("access_token", data["access-token"]);
             }
 

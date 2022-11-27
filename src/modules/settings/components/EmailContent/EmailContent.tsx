@@ -70,7 +70,7 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
 
    const columns = [
       {
-         title: t("email.name"),
+         title: t("Name"),
          dataIndex: "name",
          sorter: true,
       },
@@ -80,7 +80,7 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
          sorter: true,
       },
       {
-         title: t("email.functions"),
+         title: t("Functions"),
          dataIndex: "email",
          render: (_: string, email: ISetting) => (
             <StyledFunctions>
@@ -105,7 +105,7 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
             totalItems={0}
             totalPages={0}
             totalElements={0}
-            loading={false}
+            loading={isLoadTemplates || isFetchTemplates}
          />
          <Modal
             type="confirm"

@@ -1,7 +1,7 @@
 import { PrivateRoute, i18n } from "./libs/common";
 
 import { Layout, Common as CommonPage } from "./libs/components";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { ModulesAuth } from "./modules/auth/src";
 import { I18nextProvider } from "react-i18next";
@@ -18,6 +18,8 @@ export function App() {
          <I18nextProvider i18n={i18n}>
             <Routes>
                <Route path="/*" element={<Layout />}>
+                  <Route index element={<Navigate to="admin" />} />
+
                   <Route path="admin/*" element={<ModulesAdmin />} />
                   <Route path="company/*" element={<ModulesCompany />} />
                   <Route path="candidates/*" element={<ModulesWebUsers />} />

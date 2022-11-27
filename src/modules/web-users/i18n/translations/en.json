@@ -20,7 +20,7 @@
       "createAdminSuccessful": "Add new admin successfully!!!",
       "updateAdminSuccessful": "Update admin successfully!!!",
       "editPasswordSuccessful": "Edit password successfully!!!",
-      "deleteWarning": "Are you sure about inactive this account?",
+      "deleteWarning": "Are you sure about deactivate this user?",
       "deleteAdminSuccessful": "Inactive admin successfully!!!",
 
       "admin": "ADMIN",

@@ -12,6 +12,7 @@ import {
    openNotification,
    SearchIcon,
    Table,
+   TextEllipsis,
    Title,
 } from "../../../libs/components";
 
@@ -111,12 +112,14 @@ const CompanyManagement = () => {
          dataIndex: "contractEndDate",
          key: "contractEndDate",
          sorter: true,
+         render: (item) => <span>{item ?? "-"}</span>,
       },
       {
          title: t("Description"),
          dataIndex: "description",
          key: "description",
          sorter: true,
+         render: (item) => (item ? <TextEllipsis data={item} length={50} /> : "-"),
       },
       {
          title: t("Phone number"),

@@ -7,7 +7,7 @@ import {
    useGetAdminByIdQuery,
 } from "../../../common";
 import { Layout as AntLayout } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import "./styles.scss";
 import { decodeToken } from "react-jwt";
@@ -23,8 +23,9 @@ interface IToken {
 const Layout = () => {
    const dispatch = useCommonDispatch();
    const { id } = useCommonSelector((state: RootState) => state.user.user);
-
+   const navigate = useNavigate();
    const { data, isLoading } = useGetAdminByIdQuery(id, { skip: !id });
+   const accessToken = getToken();
 
    useEffect(() => {
       if (!data) return;
@@ -43,6 +44,10 @@ const Layout = () => {
             : ele?.classList.remove("more-width");
       });
    }, []);
+
+   useEffect(() => {
+      !accessToken && navigate("/login");
+   }, [accessToken]);
    return (
       <AntLayout hasSider>
          <Sider
