@@ -1,4 +1,4 @@
-import { Modal, Table } from "../../../libs/components";
+import { Modal } from "../../../../libs/components";
 
 import styled, { StyledComponent } from "styled-components";
 
@@ -55,7 +55,8 @@ export const StyledModalDelete = styled(Modal)`
 
 export const StyledModal = styled(Modal)`
    &.ant-modal {
-      width: 42.5rem !important;
+      width: 900px !important;
+      max-width: unset !important;
 
       .ant-typography {
          font-size: 28px;
@@ -78,20 +79,4 @@ export const ContainerTable = styled.div`
    box-shadow: 0 0 #000, 0 0 #000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 0 10px -6px rgb(0 0 0 / 0.1);
    background: ${(props) => props.theme.secondaryText};
    border-radius: 10px;
-`;
-
-export const StyledModalDetail = styled(Modal)`
-   &.ant-modal {
-      width: 75vw !important;
-      max-width: unset !important;
-
-      .ant-typography {
-         font-size: 36px !important;
-         font-weight: 700;
-      }
-
-      .ant-modal-content {
-         padding: 32px;
-      }
-   }
 `;

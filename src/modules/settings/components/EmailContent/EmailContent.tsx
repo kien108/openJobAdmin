@@ -13,7 +13,7 @@ import { BtnFunction, StyledFunctions, StyledEmailContent } from "./styles";
 
 import { useTranslation } from "react-i18next";
 
-// import { useGetTemplatesQuery } from "../../services/AccountApp";
+import Parser from "html-react-parser";
 
 import { useToggle } from "../../hooks";
 import { DeleteEmail } from "../modal";
@@ -76,7 +76,10 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
          title: t("Value"),
          dataIndex: "value",
          sorter: true,
-         render: (item: string) => (item ? <TextEllipsis data={item} length={100} /> : "-"),
+         render: (item: string) => {
+            console.log(Parser(`${item}`));
+            return item ? <TextEllipsis data={item.replace(/<[^>]*>?/gm, "")} length={100} /> : "-";
+         },
          width: "80%",
       },
       {

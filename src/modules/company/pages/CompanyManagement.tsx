@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 
+import Parser from "html-react-parser";
 import { useModal } from "../../../libs/common";
 import {
    Button,
@@ -18,7 +19,13 @@ import {
 
 import { ColumnsType } from "antd/es/table";
 import { useTranslation } from "react-i18next";
-import { BtnFunction, ContainerTable, StyledFunctions, StyledModal } from "./styles";
+import {
+   BtnFunction,
+   ContainerTable,
+   StyledFunctions,
+   StyledModal,
+   StyledModalDetail,
+} from "./styles";
 import { useDeActivateMutation, useGetCompaniesQuery } from "../services";
 import { useSearchParams } from "react-router-dom";
 import { ICompany } from "../types";
@@ -32,6 +39,7 @@ import { CreateAndEditHr } from "../components/modal";
 import { GroupButton } from "../components/modal/styles";
 import { MdOutlinePassword } from "react-icons/md";
 import EditPassword from "../components/modal/EditPassword";
+import CompanyDetail from "./../components/CompanyDetail/CompanyDetail";
 
 const CompanyManagement = () => {
    const { t } = useTranslation();
@@ -47,6 +55,12 @@ const CompanyManagement = () => {
       isOpen: isOpenDelete,
       handleClose: handleCloseDelete,
       handleOpen: handleOpenDeleteModal,
+   } = useModal();
+
+   const {
+      isOpen: isOpenDetail,
+      handleClose: handleCloseDetail,
+      handleOpen: handleOpenDetailModal,
    } = useModal();
 
    const {
@@ -101,26 +115,14 @@ const CompanyManagement = () => {
          sorter: true,
          render: (item) => (item ? item : "N/A"),
       },
-      {
-         title: t("Account Balance"),
-         dataIndex: "accountBalance",
-         key: "accountBalance",
-         sorter: true,
-      },
-      {
-         title: t("Contract End Date"),
-         dataIndex: "contractEndDate",
-         key: "contractEndDate",
-         sorter: true,
-         render: (item) => <span>{item ?? "-"}</span>,
-      },
-      {
-         title: t("Description"),
-         dataIndex: "description",
-         key: "description",
-         sorter: true,
-         render: (item) => (item ? <TextEllipsis data={item} length={50} /> : "-"),
-      },
+      // {
+      //    title: t("Description"),
+      //    dataIndex: "description",
+      //    key: "description",
+      //    sorter: true,
+      //    render: (item) =>
+      //       item ? <TextEllipsis data={Parser(`${item}`).toString()} length={50} /> : "-",
+      // },
       {
          title: t("Phone number"),
          dataIndex: "phone",
@@ -141,6 +143,15 @@ const CompanyManagement = () => {
          dataIndex: "id",
          render: (_: string, record: ICompany) => (
             <StyledFunctions>
+               <BtnFunction
+                  onClick={() => {
+                     searchParams.set("id", record?.id);
+                     setSearchParams(searchParams);
+                     handleOpenDetailModal();
+                  }}
+               >
+                  <EyeIcon />
+               </BtnFunction>
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
@@ -245,6 +256,26 @@ const CompanyManagement = () => {
          >
             <CreateAndEditHr handleClose={handleClose} />
          </StyledModal>
+
+         <StyledModalDetail
+            title={"View detail company"}
+            destroyOnClose
+            open={isOpenDetail}
+            onCancel={() => {
+               handleCloseDetail();
+               searchParams.delete("id");
+               setSearchParams(searchParams);
+            }}
+         >
+            <CompanyDetail
+               handleClose={() => {
+                  handleCloseDetail();
+                  searchParams.delete("id");
+                  setSearchParams(searchParams);
+               }}
+            />
+         </StyledModalDetail>
+
          <Modal
             type="confirm"
             open={isOpenDelete}

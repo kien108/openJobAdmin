@@ -11,7 +11,7 @@ import { Col, Row, Spin } from "antd";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCommonSelector, RootState, useGetAdminByIdQuery } from "../../../../libs/common";
 import moment from "moment";
-import { useActivateMutation, useGetByIdQuery } from "../../services";
+import { useActivateMutation, useDeActivateMutation, useGetByIdQuery } from "../../services";
 import Avatar from "react-avatar";
 import { randomColor } from "../../../../utils";
 import { v4 as uuidv4 } from "uuid";
@@ -54,6 +54,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
    });
 
    const [activate, { isLoading: loadingActivate }] = useActivateMutation();
+   const [deActivate, { isLoading: loadingDeactivate }] = useDeActivateMutation();
 
    const onSubmit = (data: any) => {
       // upload({ authProvider: "DATABASE", ...user, ...data })
@@ -70,6 +71,27 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
       //          message: t("common:ERRORS.SERVER_ERROR"),
       //       });
       //    });
+   };
+
+   const handleConfirmDeactivate = () => {
+      searchParams.get("id") &&
+         deActivate(searchParams.get("id")!)
+            .unwrap()
+            .then(() => {
+               openNotification({
+                  type: "success",
+                  message: t("Deactivate this user successfully!!!"),
+               });
+               searchParams.delete("id");
+               setSearchParams(searchParams);
+               handleClose();
+            })
+            .catch((error) => {
+               openNotification({
+                  type: "error",
+                  message: t("common:ERRORS.SERVER_ERROR"),
+               });
+            });
    };
 
    const handleActivate = () => {
@@ -137,7 +159,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                </div>
 
                <GroupButton>
-                  {!dataUser?.isActive && (
+                  {!dataUser?.isActive ? (
                      <Button
                         loading={loadingActivate}
                         onClick={(e) => {
@@ -148,6 +170,17 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                      >
                         {t("Activate")}
                      </Button>
+                  ) : (
+                     <Button
+                        loading={loadingDeactivate}
+                        onClick={(e) => {
+                           e.preventDefault();
+                           e.stopPropagation();
+                           handleConfirmDeactivate();
+                        }}
+                     >
+                        {t("Deactivate")}
+                     </Button>
                   )}
                   <Button
                      onClick={() => {
@@ -155,7 +188,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                         searchParams.delete("id");
                         setSearchParams(searchParams);
                      }}
-                     border={!dataUser?.isActive ? "outline" : "default"}
+                     border={"outline"}
                   >
                      {t("common:confirm.cancel")}
                   </Button>

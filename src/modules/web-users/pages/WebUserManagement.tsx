@@ -11,6 +11,7 @@ import {
    Modal,
    openNotification,
    SearchIcon,
+   Status,
    Switch,
    Table,
    Title,
@@ -76,8 +77,6 @@ const WebUserManagement = () => {
       }
    );
 
-   const [deActivate, { isLoading: loadingDeactivate }] = useDeActivateMutation();
-
    const columns: ColumnsType<any> = [
       {
          title: t("adminManagement.firstName"),
@@ -112,7 +111,7 @@ const WebUserManagement = () => {
          dataIndex: "isActive",
          key: "isActive",
          sorter: true,
-         render: (item) => <Switch checked={item} disabled={true} />,
+         render: (item) => <Status isActive={item} />,
       },
 
       {
@@ -123,11 +122,6 @@ const WebUserManagement = () => {
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
-               {record?.isActive && (
-                  <BtnFunction onClick={() => handleOpenDelete(record.id)}>
-                     <DeleteIcon />
-                  </BtnFunction>
-               )}
             </StyledFunctions>
          ),
       },
@@ -143,27 +137,6 @@ const WebUserManagement = () => {
       searchParams.set("id", id);
       setSearchParams(searchParams);
       handleOpenDeleteModal();
-   };
-
-   const handleConfirmDelete = () => {
-      searchParams.get("id") &&
-         deActivate(searchParams.get("id")!)
-            .unwrap()
-            .then(() => {
-               openNotification({
-                  type: "success",
-                  message: t("Deactivate this user successfully!!!"),
-               });
-               searchParams.delete("id");
-               setSearchParams(searchParams);
-               handleCloseDelete();
-            })
-            .catch((error) => {
-               openNotification({
-                  type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
-               });
-            });
    };
 
    const setValueToSearchParams = (name: string, value: any) => {
@@ -207,20 +180,6 @@ const WebUserManagement = () => {
                         }`}
                      />
                   </Col>
-                  {/* <Col>
-                     <Checkbox
-                        name="filterType"
-                        checked={checked}
-                        onChange={() => {
-                           setChecked(!checked);
-                           setValueToSearchParams("byCompany", !checked);
-
-                           setSearchParams(searchParams);
-                        }}
-                     >
-                        {t("By Company")}
-                     </Checkbox>
-                  </Col> */}
                </Row>
             </FormProvider>
             <Table
@@ -243,41 +202,6 @@ const WebUserManagement = () => {
          >
             <ContactInformation handleClose={handleClose} />
          </StyledModal>
-         <Modal
-            type="confirm"
-            open={isOpenDelete}
-            onCancel={() => {
-               searchParams.delete("id");
-               setSearchParams(searchParams);
-               handleCloseDelete();
-            }}
-            confirmIcon="?"
-            title={t("adminManagement.deleteWarning")}
-         >
-            <GroupButton>
-               <Button
-                  height={44}
-                  style={{ padding: "0 24px" }}
-                  key="back"
-                  border="outline"
-                  onClick={() => {
-                     searchParams.delete("id");
-                     setSearchParams(searchParams);
-                     handleCloseDelete();
-                  }}
-               >
-                  {t("common:confirm.cancel")}
-               </Button>
-               <Button
-                  height={44}
-                  key="submit"
-                  loading={loadingDeactivate}
-                  onClick={handleConfirmDelete}
-               >
-                  {t(t("common:confirm.ok"))}
-               </Button>
-            </GroupButton>
-         </Modal>
       </>
    );
 };

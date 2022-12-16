@@ -12,6 +12,10 @@
       "cancel": "Hủy bỏ",
       "ok": "OK"
    },
+   "status": {
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động"
+   },
    "notification": {
       "nothingFound": "Không tìm thấy...",
       "noResults": "Không có kết quả",
@@ -49,6 +53,7 @@
       "candidateManagement": "Quản lí ứng viên",
       "roleManagement": "Quản lí vai trò",
       "settings": "Cài đặt",
-      "jobs": "Quản lý công việc"
+      "jobs": "Quản lý kỹ năng",
+      "jobsManagement": "Quản lý công việc"
    }
 }

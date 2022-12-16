@@ -69,14 +69,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                ? yup.string()
                : yup.string().email(t("common:form.email")).required(t("common:form.required")),
             isActive: yup.boolean(),
-            accountBalance: yup
-               .number()
-               .transform((data) => (!data ? null : data))
-               .nullable(),
-            reports: yup
-               .number()
-               .transform((data) => (!data ? null : data))
-               .nullable(),
          })
       ),
    });
@@ -225,20 +217,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                   required
                   placeholder={t("Enter company name...")}
                />
-               <Row gutter={20}>
-                  {isEdit && (
-                     <Col span={12}>
-                        <Input disabled required label={t("Reports")} name="report" />
-                     </Col>
-                  )}
-                  <Col span={12}>
-                     <Input
-                        label={t("Account Balance")}
-                        name="accountBalance"
-                        placeholder={t("Enter account balance...")}
-                     />
-                  </Col>
-               </Row>
 
                <Switch
                   label={t("adminManagement.status")}

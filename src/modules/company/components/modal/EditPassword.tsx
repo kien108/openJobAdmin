@@ -76,14 +76,6 @@ const EditPassword: FC<IEditPassword> = ({ handleClose, id }) => {
             <Input
                required
                type="password"
-               label={t("adminManagement.password")}
-               name="password"
-               placeholder={t("adminManagement.enterPassword")}
-               message={messagePassword}
-            />
-            <Input
-               required
-               type="password"
                label={t("adminManagement.newPassword")}
                name="newPassword"
                placeholder={t("adminManagement.enterNewPassword")}

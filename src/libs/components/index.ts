@@ -20,3 +20,4 @@ export * from "./Tag2";
 export * from "./Tooltip";
 export * from "./FullCalendar";
 export * from "./TextEllipse";
+export * from "./Status";

@@ -89,13 +89,14 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const [updateAdmin, { isLoading: loadingUpdate }] = useUpdateAdminMutation();
    const [checkUsername, { isLoading: loadingCheckExistUsername }] = useCheckUsernameMutation();
    const [checkPassword, { isLoading: loadingCheckPassword }] = useCheckPasswordMutation();
-   const { data: dataAccount, isLoading: loadingAccount } = useGetByIdQuery(
-      searchParams.get("id")!,
-      {
-         skip: !searchParams.get("id"),
-         refetchOnMountOrArgChange: true,
-      }
-   );
+   const {
+      data: dataAccount,
+      isLoading: loadingAccount,
+      isFetching: fetchingAccount,
+   } = useGetByIdQuery(searchParams.get("id")!, {
+      skip: !searchParams.get("id"),
+      refetchOnMountOrArgChange: true,
+   });
 
    const handleCheckUsername = (username: string | undefined) => {
       username &&
@@ -185,7 +186,11 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    }, [dataAccount]);
 
    return (
-      <Spin spinning={loadingAccount || loadingCheckExistUsername || loadingCheckPassword}>
+      <Spin
+         spinning={
+            loadingAccount || fetchingAccount || loadingCheckExistUsername || loadingCheckPassword
+         }
+      >
          <StyledCreateAndEditAdmin>
             <FormProvider {...form}>
                <Row gutter={20}>

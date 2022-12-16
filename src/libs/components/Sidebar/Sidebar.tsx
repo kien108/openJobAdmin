@@ -6,6 +6,7 @@ import ImageLogo from "../../../assets/img/logo.png";
 import { RiAdminLine } from "react-icons/ri";
 import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome } from "react-icons/ai";
+import { GiPowerLightning } from "react-icons/gi";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -59,7 +60,14 @@ const SideBar = () => {
          <AiOutlineUser />
       ),
       getItem(true, t("sidebar.settings"), "/settings", "settings", <AiOutlineSetting />),
-      getItem(true, t("sidebar.jobs"), "/jobs", "jobs", <MdOutlinePostAdd />),
+      getItem(true, t("sidebar.jobs"), "/jobs", "jobs", <GiPowerLightning />),
+      getItem(
+         true,
+         t("sidebar.jobsManagement"),
+         "jobs-management",
+         "jobs-management",
+         <MdOutlinePostAdd />
+      ),
    ];
 
    const onOpenChange = (items: string[]) => {

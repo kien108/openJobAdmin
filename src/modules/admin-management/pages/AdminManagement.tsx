@@ -8,6 +8,7 @@ import {
    EditIcon,
    Modal,
    openNotification,
+   Status,
    Switch,
    Table,
 } from "../../../libs/components";
@@ -89,7 +90,7 @@ const AdminManagement = () => {
          dataIndex: "isActive",
          key: "isActive",
          sorter: true,
-         render: (item) => <Switch checked={item} disabled={true} />,
+         render: (item) => <Status isActive={item} />,
       },
 
       {
@@ -100,11 +101,7 @@ const AdminManagement = () => {
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
-               {record.isActive && (
-                  <BtnFunction onClick={() => handleOpenDelete(record.id)}>
-                     <DeleteIcon />
-                  </BtnFunction>
-               )}
+
                <BtnFunction onClick={() => handleEditPassword(record.id)}>
                   <MdOutlinePassword size={25} className="icon-password" />
                </BtnFunction>

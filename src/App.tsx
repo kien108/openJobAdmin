@@ -11,6 +11,7 @@ import ModulesCompany from "./modules/company/modules-company";
 import ModulesWebUsers from "./modules/web-users/modules-web-users";
 import ModulesSettings from "./modules/settings/modules-settings";
 import ModulesJobs from "./modules/jobs/modules-jobs";
+import ModulesJobsManagement from "./modules/jobs-management/modules-jobs-management";
 
 export function App() {
    return (
@@ -25,6 +26,7 @@ export function App() {
                   <Route path="candidates/*" element={<ModulesWebUsers />} />
                   <Route path="settings/*" element={<ModulesSettings />} />
                   <Route path="jobs/*" element={<ModulesJobs />} />
+                  <Route path="jobs-management/*" element={<ModulesJobsManagement />} />
                </Route>
                <Route element={<PrivateRoute />}></Route>
                <Route path="login" element={<ModulesAuth />} />

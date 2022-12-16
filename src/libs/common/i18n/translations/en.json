@@ -12,6 +12,10 @@
       "cancel": "Cancel",
       "ok": "OK"
    },
+   "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+   },
    "buttonAction": {
       "showMore": "Show More...",
       "showLess": "Show Less"
@@ -53,6 +57,7 @@
       "candidateManagement": "Candidate Management",
       "roleManagement": "Role Management",
       "settings": "Settings",
-      "jobs": "Jobs Management"
+      "jobs": "Skills Management",
+      "jobsManagement": "Jobs Management"
    }
 }
