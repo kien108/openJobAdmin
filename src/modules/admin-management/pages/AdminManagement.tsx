@@ -172,7 +172,7 @@ const AdminManagement = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={t("adminManagement.create")}
+            title={searchParams.get("id") ? t("adminManagement.edit") : t("adminManagement.create")}
             destroyOnClose
             open={isOpen}
             onCancel={() => {

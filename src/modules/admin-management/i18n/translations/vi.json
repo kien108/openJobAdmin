@@ -2,6 +2,7 @@
    "adminManagement": {
       "title": "Quản lý quản trị viên",
       "create": "Thêm mới quản trị viên",
+      "edit": "Chỉnh sửa quản trị viên",
       "editPassword": "Chỉnh sửa mật khẩu",
       "firstName": "Tên",
       "lastName": "Họ",

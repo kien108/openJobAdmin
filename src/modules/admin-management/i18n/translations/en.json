@@ -2,6 +2,7 @@
    "adminManagement": {
       "title": "Admin Management",
       "create": "Create new admin",
+      "edit": "Edit admin",
       "editPassword": "Edit password",
       "firstName": "First Name",
       "lastName": "Last Name",

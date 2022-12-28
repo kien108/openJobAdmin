@@ -104,7 +104,7 @@ const Jobs = () => {
          dataIndex: "companyName",
          key: "companyName",
          sorter: true,
-         width: "20%",
+         width: "15%",
       },
       {
          title: t("Title"),
@@ -112,7 +112,7 @@ const Jobs = () => {
          key: "title",
          sorter: true,
          render: (item) => <TextEllipsis data={item} length={100} />,
-         width: "30%",
+         width: "25%",
       },
       {
          title: t("WorkPlace"),
@@ -144,6 +144,15 @@ const Jobs = () => {
          width: "10%",
 
          render: (item) => <span>{moment(item).format("MM/DD/YYYY")}</span>,
+      },
+      {
+         title: t("Expired At"),
+         dataIndex: "expiredAt",
+         key: "expiredAt",
+         sorter: true,
+         width: "10%",
+
+         render: (item) => <span>{item ? moment(item).format("MM/DD/YYYY") : "-"}</span>,
       },
 
       {
@@ -193,11 +202,13 @@ const Jobs = () => {
    useEffect(() => {
       const data = searchParams.get("company") ? dataCompaniesJobs : dataJobs;
 
-      const dataSource = (data?.jobs ?? [])?.map((item: any) => ({
-         key: item.id,
-         companyName: item?.company?.name,
-         ...item,
-      }));
+      const dataSource = (data?.jobs ?? [])
+         .filter((item: any) => !item?.expiredAt || moment(item?.expiredAt).isAfter(moment()))
+         ?.map((item: any) => ({
+            key: item.id,
+            companyName: item?.company?.name,
+            ...item,
+         }));
 
       setDataSource(dataSource || []);
    }, [dataJobs, dataCompaniesJobs, searchParams.get("company")]);

@@ -25,7 +25,12 @@ import {
    useGetByIdQuery,
    useUpdateAdminMutation,
 } from "../../services";
-import { useDebounce, useGetAdminByIdQuery } from "../../../../libs/common";
+import {
+   RootState,
+   useCommonSelector,
+   useDebounce,
+   useGetAdminByIdQuery,
+} from "../../../../libs/common";
 import { useSearchParams } from "react-router-dom";
 
 interface ICreateAndEditAdmin {
@@ -34,6 +39,7 @@ interface ICreateAndEditAdmin {
 
 const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const { t } = useTranslation();
+   const { id: userId } = useCommonSelector((state: RootState) => state.user.user);
    const [searchParams, setSearchParams] = useSearchParams();
 
    const form = useForm({
@@ -229,23 +235,28 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                   />
                )}
                {/*_ */}
-               <Select
-                  options={options}
-                  name="role"
-                  value={"ADMIN"}
-                  required
-                  title={t("adminManagement.role")}
-               />
-               <Switch
-                  label={t("adminManagement.status")}
-                  checked={checkedStatus}
-                  onChange={(checked) => {
-                     setCheckedStatus(checked);
-                     form.setValue("isActive", checked);
-                  }}
-                  checkedLabel={t("common:form.active")}
-                  unCheckedLabel={t("common:form.inActive")}
-               />
+
+               {userId !== searchParams.get("id") && (
+                  <Select
+                     options={options}
+                     name="role"
+                     value={"ADMIN"}
+                     required
+                     title={t("adminManagement.role")}
+                  />
+               )}
+               {searchParams.get("id") && (
+                  <Switch
+                     label={t("adminManagement.status")}
+                     checked={checkedStatus}
+                     onChange={(checked) => {
+                        setCheckedStatus(checked);
+                        form.setValue("isActive", checked);
+                     }}
+                     checkedLabel={t("common:form.active")}
+                     unCheckedLabel={t("common:form.inActive")}
+                  />
+               )}
                <GroupButton>
                   <Button
                      loading={loadingCreate || loadingUpdate}
