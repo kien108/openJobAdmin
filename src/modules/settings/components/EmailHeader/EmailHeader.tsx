@@ -15,9 +15,9 @@ const EmailHeader: FC<EmailHeaderProps> = ({ handleOpenCreate }) => {
    return (
       <StyledEmailHeader>
          <Title>{t("Email templates")}</Title>
-         <Button height={44} icon={<PlusIcon />} onClick={handleOpenCreate}>
+         {/* <Button height={44} icon={<PlusIcon />} onClick={handleOpenCreate}>
             {t("Create Email")}
-         </Button>
+         </Button> */}
       </StyledEmailHeader>
    );
 };
