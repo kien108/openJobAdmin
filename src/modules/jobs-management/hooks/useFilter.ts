@@ -2,14 +2,15 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-interface Param {
+interface Params {
    keyword?: string;
-   company?: string;
+   majorId?: string;
+   specializationId?: string;
 }
 
 const useFilterSearchJob = () => {
    const [searchParams] = useSearchParams();
-   const [params, setParams] = useState<Param>({});
+   const [params, setParams] = useState<Params>({});
 
    useEffect(() => {
       searchParams.get("keyword")
@@ -21,13 +22,23 @@ const useFilterSearchJob = () => {
               delete prev.keyword;
               return { ...prev };
            });
-      searchParams.get("company")
+      searchParams.get("majorId")
          ? setParams((prev) => ({
               ...prev,
-              company: searchParams.get("company")!.trim() ?? "",
+              majorId: searchParams.get("majorId")!.trim() ?? "",
            }))
          : setParams((prev) => {
-              delete prev.company;
+              delete prev.majorId;
+              return { ...prev };
+           });
+
+      searchParams.get("specializationId")
+         ? setParams((prev) => ({
+              ...prev,
+              specializationId: searchParams.get("specializationId")!.trim() ?? "",
+           }))
+         : setParams((prev) => {
+              delete prev.specializationId;
               return { ...prev };
            });
    }, [searchParams]);

@@ -4,4 +4,6 @@ export {
    JobsAPI,
    useGetCompaniesQuery,
    useGetJobByIdQuery,
+   useGetMajorsQuery,
+   useGetSpecializationsQuery,
 } from "./JobsAPI";

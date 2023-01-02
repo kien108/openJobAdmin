@@ -4,15 +4,19 @@ import { StyledStatus, StyledText } from "./styles";
 
 export interface IStatus {
    isActive?: boolean;
+   activeMsg?: string;
+   inactiveMsg?: string;
 }
 
-const Status: FC<IStatus> = ({ isActive }) => {
+const Status: FC<IStatus> = ({ isActive, activeMsg, inactiveMsg }) => {
    const { t } = useTranslation();
 
    return (
       <StyledStatus isActive={isActive}>
          <StyledText>
-            {isActive ? t("common:status.active") : t("common:status.inactive")}
+            {isActive
+               ? activeMsg || t("common:status.active")
+               : inactiveMsg || t("common:status.inactive")}
          </StyledText>
       </StyledStatus>
    );

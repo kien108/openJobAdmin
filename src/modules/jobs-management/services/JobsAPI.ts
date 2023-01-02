@@ -33,8 +33,25 @@ export const JobsAPI = createApi({
             url: `/job/${id}`,
          }),
       }),
+      getMajors: builder.query({
+         query: (params) => ({
+            url: "/majors",
+            params,
+         }),
+      }),
+      getSpecializations: builder.query({
+         query: (id) => ({
+            url: `/specializations`,
+         }),
+      }),
    }),
 });
 
-export const { useGetCompanyJobsQuery, useGetJobsQuery, useGetCompaniesQuery, useGetJobByIdQuery } =
-   JobsAPI;
+export const {
+   useGetCompanyJobsQuery,
+   useGetJobsQuery,
+   useGetCompaniesQuery,
+   useGetJobByIdQuery,
+   useGetMajorsQuery,
+   useGetSpecializationsQuery,
+} = JobsAPI;

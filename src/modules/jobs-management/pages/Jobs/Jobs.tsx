@@ -13,6 +13,7 @@ import {
    Modal,
    openNotification,
    SearchIcon,
+   Status,
    Table,
    TextEllipsis,
    Title,
@@ -112,14 +113,14 @@ const Jobs = () => {
          key: "title",
          sorter: true,
          render: (item) => <TextEllipsis data={item} length={100} />,
-         width: "25%",
+         width: "23%",
       },
       {
          title: t("WorkPlace"),
          dataIndex: "workPlace",
          key: "workPlace",
          sorter: true,
-         width: "15%",
+         width: "12%",
          render: (item) => <span>{item.replaceAll("_", " ")}</span>,
       },
       {
@@ -143,7 +144,7 @@ const Jobs = () => {
          sorter: true,
          width: "10%",
 
-         render: (item) => <span>{moment(item).format("MM/DD/YYYY")}</span>,
+         render: (item) => <span>{moment(item).format("DD/MM/YYYY")}</span>,
       },
       {
          title: t("Expired At"),
@@ -152,7 +153,28 @@ const Jobs = () => {
          sorter: true,
          width: "10%",
 
-         render: (item) => <span>{item ? moment(item).format("MM/DD/YYYY") : "-"}</span>,
+         render: (item) => <span>{item ? moment(item).format("DD/MM/YYYY") : "-"}</span>,
+      },
+      {
+         title: t("Expired At"),
+         dataIndex: "expiredAt",
+         key: "expiredAt",
+         sorter: true,
+         width: "10%",
+
+         render: (item) => (
+            <span>
+               {item ? (
+                  <Status
+                     isActive={moment(item).isAfter(moment())}
+                     activeMsg="In-progress"
+                     inactiveMsg="Expired"
+                  />
+               ) : (
+                  <Status isActive={true} activeMsg="In-progress" inactiveMsg="Expired" />
+               )}
+            </span>
+         ),
       },
 
       {
