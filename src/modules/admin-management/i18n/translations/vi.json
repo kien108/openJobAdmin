@@ -23,7 +23,7 @@
       "editPasswordSuccessful": "Thay đổi mật khẩu thành công!!!",
 
       "deleteWarning": "Bạn có chắc chắn muốn xóa tài khoản này không?",
-      "deleteAdminSuccessful": "Vô hiệu hóa quản trị viên thành công!!!",
+      "deleteAdminSuccessful": "Xóa quản trị viên thành công!!!",
       "admin": "Quản trị viên",
       "superAdmin": "Quản trị viên cấp cao",
       "valueExists": "Tên đăng nhập đã tồn tại",

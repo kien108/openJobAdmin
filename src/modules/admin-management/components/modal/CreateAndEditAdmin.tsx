@@ -245,7 +245,7 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                      title={t("adminManagement.role")}
                   />
                )}
-               {searchParams.get("id") && (
+               {userId !== searchParams.get("id") && (
                   <Switch
                      label={t("adminManagement.status")}
                      checked={checkedStatus}

@@ -155,9 +155,9 @@ const CompanyManagement = () => {
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
-               <BtnFunction onClick={() => handleOpenDelete(record.id)}>
+               {/* <BtnFunction onClick={() => handleOpenDelete(record.id)}>
                   <DeleteIcon />
-               </BtnFunction>
+               </BtnFunction> */}
                <BtnFunction onClick={() => handleEditPassword(record.id)}>
                   <MdOutlinePassword size={25} className="icon-password" />
                </BtnFunction>
@@ -196,7 +196,7 @@ const CompanyManagement = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Deactivate this account successfully!!!"),
+                  message: t("Deactivate company successfully!!!"),
                });
                searchParams.delete("id");
                setSearchParams(searchParams);

@@ -35,6 +35,7 @@ import {
 } from "../../services";
 import useFilter from "../../hooks/useFilter";
 import { Col, Row } from "antd";
+import { GiPowerLightning } from "react-icons/gi";
 
 const Specialization = () => {
    const { t } = useTranslation();
@@ -127,7 +128,7 @@ const Specialization = () => {
                      });
                   }}
                >
-                  <EyeIcon />
+                  <GiPowerLightning size={20} />
                </BtnFunction>
                <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />

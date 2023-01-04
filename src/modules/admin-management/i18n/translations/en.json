@@ -22,7 +22,7 @@
       "updateAdminSuccessful": "Update admin successfully!!!",
       "editPasswordSuccessful": "Edit password successfully!!!",
       "deleteWarning": "Are you sure about delete this account?",
-      "deleteAdminSuccessful": "Inactive admin successfully!!!",
+      "deleteAdminSuccessful": "Delete account successfully!!!",
 
       "admin": "ADMIN",
       "superAdmin": "SUPER ADMIN",
