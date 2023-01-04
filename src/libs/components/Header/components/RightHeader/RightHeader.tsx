@@ -11,7 +11,7 @@ import { Popover } from "../Popover";
 import { useCommonDispatch, changeLang } from "../../../../common";
 import { LanguageIcon, NotificationIcon } from "../../../Icons";
 import { Image } from "../../../Avatar";
-
+import logo from "../../../../../assets/img/logo.png";
 const { Text } = Typography;
 
 interface Props {
@@ -93,11 +93,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
                }
             >
                <button className="button-header">
-                  <Image
-                     type="circle"
-                     src="https://cdn.pixabay.com/photo/2015/05/17/10/51/facebook-770688_960_720.png"
-                     width="32px"
-                  />
+                  <Image type="circle" src={logo} width="60px" />
                </button>
             </Popover>
          </div>
