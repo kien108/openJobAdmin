@@ -22,7 +22,7 @@
       "updateAdminSuccessful": "Cập nhật quản trị viên thành công!!!",
       "editPasswordSuccessful": "Thay đổi mật khẩu thành công!!!",
 
-      "deleteWarning": "Bạn có chắc chắn muốn vô hiệu hóa tài khoản này không?",
+      "deleteWarning": "Bạn có chắc chắn muốn xóa tài khoản này không?",
       "deleteAdminSuccessful": "Vô hiệu hóa quản trị viên thành công!!!",
       "admin": "Quản trị viên",
       "superAdmin": "Quản trị viên cấp cao",

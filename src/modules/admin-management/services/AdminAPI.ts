@@ -44,7 +44,7 @@ export const AdminAPI = createApi({
       }),
       deleteAdmin: builder.mutation<any, string>({
          query: (id) => ({
-            url: `/adminuser/deactivate/${id}`,
+            url: `/adminuser/delete/${id}`,
             method: "DELETE",
          }),
          invalidatesTags: ["ADMIN"],

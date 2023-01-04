@@ -101,6 +101,9 @@ const AdminManagement = () => {
                <BtnFunction onClick={() => handleOpenUpdate(record.id)}>
                   <EditIcon />
                </BtnFunction>
+               <BtnFunction onClick={() => handleOpenDelete(record.id)}>
+                  <DeleteIcon />
+               </BtnFunction>
 
                <BtnFunction onClick={() => handleEditPassword(record.id)}>
                   <MdOutlinePassword size={25} className="icon-password" />
@@ -136,15 +139,17 @@ const AdminManagement = () => {
                   type: "success",
                   message: t("adminManagement.deleteAdminSuccessful"),
                });
-               searchParams.delete("id");
-               setSearchParams(searchParams);
-               handleCloseDelete();
             })
             .catch((error) => {
                openNotification({
                   type: "error",
                   message: t("common:ERRORS.SERVER_ERROR"),
                });
+            })
+            .finally(() => {
+               searchParams.delete("id");
+               setSearchParams(searchParams);
+               handleCloseDelete();
             });
    };
 
