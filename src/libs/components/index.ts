@@ -21,3 +21,4 @@ export * from "./Tooltip";
 export * from "./FullCalendar";
 export * from "./TextEllipse";
 export * from "./Status";
+export * from "./Upload";

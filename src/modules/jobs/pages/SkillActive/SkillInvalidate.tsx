@@ -52,25 +52,26 @@ const SkillInvalidate = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Name"),
+         title: t("Tên kỹ năng"),
          dataIndex: "name",
          key: "name",
          sorter: true,
       },
       {
-         title: t("Major"),
+         title: t("Chuyên ngành"),
          dataIndex: "major",
          key: "major",
          sorter: true,
       },
       {
-         title: t("Specialization"),
+         title: "Chuyên ngành hẹp",
          dataIndex: "specialization",
          key: "specialization",
          sorter: true,
       },
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
+         align: "center",
          dataIndex: "id",
          render: (_: string, item: any) => (
             <StyledFunctions>
@@ -95,7 +96,7 @@ const SkillInvalidate = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Validate this skill successfully!!!"),
+                  message: t("Xác thực kỹ năng thành công !!!"),
                });
                setSelectedId(undefined);
                handleCloseDelete();
@@ -119,7 +120,7 @@ const SkillInvalidate = () => {
    }, [dataSkills]);
    return (
       <>
-         <Title>Invalidate Skill Management</Title>
+         <Title>Quản lý xác thực kỹ năng</Title>
          <ContainerTable>
             <Table
                columns={columns}
@@ -140,7 +141,7 @@ const SkillInvalidate = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title={t("Do to want to validate this skill?")}
+            title={t("Bạn có muốn xác thực kỹ năng này không ?")}
          >
             <GroupButton>
                <Button
@@ -161,7 +162,7 @@ const SkillInvalidate = () => {
                   loading={loadingValidate}
                   onClick={handleConfirmDelete}
                >
-                  {t(t("Validate"))}
+                  Xác thực
                </Button>
             </GroupButton>
          </Modal>

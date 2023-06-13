@@ -54,8 +54,13 @@ export const StyledModalDelete = styled(Modal)`
 `;
 
 export const StyledModal = styled(Modal)`
+   h1 {
+      margin-bottom: 40px !important;
+      /* text-align: center; */
+   }
+
    &.ant-modal {
-      width: 42.5rem !important;
+      /* width: 42.5rem !important; */
 
       .ant-typography {
          font-size: 28px;
@@ -64,6 +69,10 @@ export const StyledModal = styled(Modal)`
 
       .ant-modal-content {
          padding: 32px;
+
+         .ql-container {
+            height: 300px;
+         }
       }
    }
 `;
@@ -82,7 +91,6 @@ export const ContainerTable = styled.div`
 
 export const StyledModalDetail = styled(Modal)`
    &.ant-modal {
-      width: 75vw !important;
       max-width: unset !important;
 
       .ant-typography {
@@ -91,7 +99,11 @@ export const StyledModalDetail = styled(Modal)`
       }
 
       .ant-modal-content {
-         padding: 32px;
+         padding: 32px 40px;
+
+         .ql-container {
+            height: 300px !important;
+         }
       }
    }
 `;

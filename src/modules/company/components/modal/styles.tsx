@@ -9,6 +9,12 @@ export const StyledCreateAndEditHr = styled.div`
    .avatar {
       margin: 30px 0;
    }
+
+   .history {
+      font-style: italic;
+      font-weight: 400;
+      color: #777777;
+   }
 `;
 
 export const StyledEditPassword = styled.div`
@@ -23,7 +29,7 @@ export const GroupButton = styled.div`
    align-items: center;
    justify-content: center;
    gap: 20px;
-   margin-top: 12px;
+   margin-top: 20px;
 `;
 
 export const StyledNotFound = styled.div`

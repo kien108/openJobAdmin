@@ -65,7 +65,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, major }) => 
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Create major successfully"),
+                    message: t("Cập nhật chuyên ngành thành công"),
                  });
                  handleClose();
               })
@@ -80,7 +80,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, major }) => 
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Create major successfully"),
+                    message: t("Tạo mới chuyên ngành thành công"),
                  });
                  handleClose();
               })

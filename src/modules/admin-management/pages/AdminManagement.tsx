@@ -60,33 +60,33 @@ const AdminManagement = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("adminManagement.firstName"),
+         title: "Tên",
          dataIndex: "firstName",
          key: "firstName",
          sorter: true,
          render: (item) => (item ? item : "-"),
       },
       {
-         title: t("adminManagement.lastName"),
+         title: "Họ tên",
          dataIndex: "lastName",
          key: "lastName",
          sorter: true,
          render: (item) => (item ? item : "-"),
       },
       {
-         title: t("adminManagement.role"),
+         title: "Vai trò",
          dataIndex: "role",
          key: "role",
          sorter: true,
       },
       {
-         title: t("adminManagement.username"),
+         title: "Tên đăng nhập",
          dataIndex: "username",
          key: "username",
          sorter: true,
       },
       {
-         title: t("adminManagement.active"),
+         title: "Trạng thái",
          dataIndex: "isActive",
          key: "isActive",
          sorter: true,
@@ -94,7 +94,8 @@ const AdminManagement = () => {
       },
 
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
+         align: "center",
          dataIndex: "id",
          render: (_: string, record: IAdminDetail) => (
             <StyledFunctions>

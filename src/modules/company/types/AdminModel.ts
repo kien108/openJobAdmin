@@ -4,17 +4,44 @@ export interface ICompanies {
    totalPages: number;
 }
 
-export interface ICompany {
+export interface IUnapproveds {
+   content: IUnapproved[];
+   totalElements: 0;
+   totalPages: 0;
+}
+
+export interface IUnapproved {
+   companyName: string;
+   createdAt?: string;
+   createdBy?: string;
+   email: string;
+   headHunterName: string;
    id: string;
-   accountBalance: number;
-   contractEndDate: string;
-   name: string;
-   address: string;
    phone: string;
-   totalEmployee: 0;
-   description: string;
-   logoUrl: string;
-   wallpaperUrl: string;
+   position: string;
+   updatedAt?: string;
+   updatedBy?: string;
+}
+
+export interface ICompany {
+   id: any;
+   name: any;
+   address: any;
+   phone: any;
+   totalEmployee: any;
+   description: any;
+   logoUrl: any;
+   wallpaperUrl: any;
+   imageUrls: any[];
+   isActive: true;
+   companyType: any;
+   memberType: any;
+   scope: any;
+   updatedAt: any;
+   accountBalance: any;
+   imageUrlsString: any;
+   createdAt: any;
+   updatedBy: any;
 }
 
 export interface IHrs {
@@ -34,4 +61,6 @@ export interface IHr {
    company: ICompany;
    password: string;
    reports: number;
+   phone: any;
+   position: any;
 }

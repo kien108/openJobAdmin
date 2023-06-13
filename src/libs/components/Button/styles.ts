@@ -21,7 +21,7 @@ export const StyledButton: StyledComponent<any, any> = styled(Button)<ButtonProp
       border: none;
       text-align: center;
       box-sizing: border-box;
-      height: ${(props) => (props.height ? `${props.height}px` : "57px")};
+      height: ${(props) => (props.height ? `${props.height}px` : "50px")};
       border-radius: 10px;
       font-size: 15px;
 
@@ -31,73 +31,68 @@ export const StyledButton: StyledComponent<any, any> = styled(Button)<ButtonProp
 
       ${(props) =>
          props.icon !== undefined &&
-         css`
-            span {
-               position: relative;
-               top: ${props.loading ? "0" : "-3px"};
-            }
-         `}
+         `
+        span{
+          position: relative;
+          top: ${props.loading ? "0" : "-3px"};
+        }
+      `}
       ${(props) =>
          props.border === "default" &&
-         css`
-            background-color: ${props.theme.yellow};
-            padding: ${props.size === "large"
-               ? `0 100px`
-               : props.size === "middle"
-               ? `0 64px`
-               : `0 36px`};
-            color: ${props.theme.primaryText};
-            font-weight: 700;
-            cursor: ${props.disabled ? "not-allowed" : "pointer"};
-            transition: 0.2s linear;
-            :hover {
-               opacity: 0.9;
-            }
-            :active {
-               background-color: ${props.theme.activeBlue};
-            }
-            &.ant-btn[disabled],
-            &.ant-btn[disabled]:hover,
-            &.ant-btn[disabled]:active {
-               color: ${props.theme.secondaryText};
-               border-color: ${props.theme.strongGray};
-               background: ${props.theme.strongGray};
-               ${disabledCss}
-            }
-            svg {
-               ${svgCss}
-               top: ${props.loading ? "0" : "4px"};
-            }
-         `}
+         `
+        background-color: ${props.theme.strongBlue};
+        padding: ${
+           props.size === "large" ? `0 100px` : props.size === "middle" ? `0 64px` : `0 36px`
+        };
+        color: ${props.theme.secondaryText};
+        font-weight: 700;
+        cursor: ${props.disabled ? "not-allowed" : "pointer"};
+        :hover {
+          background-color: ${props.theme.deepBlue};
+        }
+        :active {
+          background-color: ${props.theme.activeBlue};
+        }
+        &.ant-btn[disabled],
+        &.ant-btn[disabled]:hover,
+        &.ant-btn[disabled]:active {
+          color: ${props.theme.secondaryText};
+          border-color: ${props.theme.strongGray};
+          background: ${props.theme.strongGray};
+          ${disabledCss}
+        }
+        svg {
+          ${svgCss}
+          top: ${props.loading ? "0" : "4px"};
+        }
+      `}
     ${(props) =>
          props.border === "outline" &&
-         css`
-            background-color: ${props.theme.secondaryText};
-            padding: ${props.size === "large"
-               ? `0 100px`
-               : props.size === "middle"
-               ? `0 64px`
-               : `0 36px`};
-            color: ${props.theme.black};
-            font-weight: 600;
-            border: ${props.loading ? `solid 2px` : `solid 2px ${props.theme.strongYellow}`};
-            cursor: ${props.disabled ? "not-allowed" : "pointer"};
-            &.ant-btn[disabled],
-            &.ant-btn[disabled]:hover,
-            &.ant-btn[disabled]:active {
-               ${disabledCss}
-               color: ${props.theme.strongGray};
-               border-color: ${props.theme.strongGray};
-               background-color: ${props.theme.secondaryText};
-            }
-            svg {
-               ${svgCss}
-               top: ${props.loading ? "0" : "4px"};
-               path {
-                  fill: ${props.disabled ? props.theme.strongGray : props.theme.strongBlue};
-               }
-            }
-         `}
+         `
+        background-color: ${props.theme.secondaryText};
+        padding: ${
+           props.size === "large" ? `0 100px` : props.size === "middle" ? `0 64px` : `0 36px`
+        };
+        color: ${props.theme.strongBlue};
+        font-weight: 600;
+        border: ${props.loading ? `solid 2px` : `solid 2px ${props.theme.strongBlue}`};
+        cursor: ${props.disabled ? "not-allowed" : "pointer"};
+        &.ant-btn[disabled],
+        &.ant-btn[disabled]:hover,
+        &.ant-btn[disabled]:active {
+          ${disabledCss}
+          color: ${props.theme.strongGray};
+          border-color: ${props.theme.strongGray};
+          background-color: ${props.theme.secondaryText};
+        }
+        svg {
+          ${svgCss}
+          top: ${props.loading ? "0" : "4px"};
+          path {
+            fill: ${props.disabled ? props.theme.strongGray : props.theme.strongBlue};
+          }
+        }
+      `}
 
     ${(props) =>
          props.border === "borderless" &&

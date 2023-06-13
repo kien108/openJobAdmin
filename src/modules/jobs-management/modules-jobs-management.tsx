@@ -19,7 +19,7 @@ export function ModulesJobsManagement() {
       <Provider store={store}>
          <I18nextProvider i18n={i18n}>
             <Routes>
-               <Route path="/" element={<Jobs />} />
+               <Route path="/*" element={<Jobs />} />
             </Routes>
          </I18nextProvider>
       </Provider>

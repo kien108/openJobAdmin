@@ -108,17 +108,18 @@ const Specialization = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Name"),
+         title: t("Tên chuyên ngành hẹp"),
          dataIndex: "name",
          key: "name",
          sorter: true,
       },
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
          dataIndex: "id",
+         align: "center",
          render: (_: string, item: any) => (
             <StyledFunctions>
-               <BtnFunction
+               {/* <BtnFunction
                   onClick={() => {
                      searchParams.set("specName", item.name);
                      setSelectedSpecialization(searchParams);
@@ -129,7 +130,7 @@ const Specialization = () => {
                   }}
                >
                   <GiPowerLightning size={20} />
-               </BtnFunction>
+               </BtnFunction> */}
                <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />
                </BtnFunction>
@@ -169,7 +170,7 @@ const Specialization = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Delete this Specialization successfully!!!"),
+                  message: t("Xóa chuyên ngành hẹp thành công!!!"),
                });
                setSelectedSpecialization(undefined);
                handleCloseDelete();
@@ -177,7 +178,7 @@ const Specialization = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("Specialization already in use and can't be deleted"),
+                  message: t("Chuyên ngành hẹp đang được sử dụng, không thể xóa"),
                });
                handleCloseDelete();
             });
@@ -215,26 +216,15 @@ const Specialization = () => {
    }, [dataMajors]);
    return (
       <>
-         <Header handleOpenCreate={handleOpen} title="Specialization Management" />
+         <Header handleOpenCreate={handleOpen} title="Quản lý chuyên ngành hẹp" />
          <ContainerTable>
             <FormProvider {...form}>
                <Row gutter={[32, 32]}>
-                  {/* <Col span={12}>
-                     <Input
-                        icons={<SearchIcon />}
-                        name="keyword"
-                        onChange={(e) => {
-                           form.setValue("keyword", e.target.value);
-                           handleOnChange("keyword", e.target.value);
-                        }}
-                        placeholder="Search by specialization name"
-                     />
-                  </Col> */}
                   <Col span={24}>
                      <Select
                         options={options}
                         name="majorId"
-                        label={t("Major")}
+                        label="Chuyên ngành"
                         onSelect={(value: any) => {
                            setValueToSearchParams("majorId", value);
                            form.setValue("majorId", value);
@@ -255,7 +245,9 @@ const Specialization = () => {
          </ContainerTable>
          <StyledModal
             title={
-               selectedSpecialization ? t("Update Specialization") : t("Create new Specialization")
+               selectedSpecialization
+                  ? t("Cập nhật chuyên ngành hẹp")
+                  : t("Tạo mới chuyên ngành hẹp")
             }
             destroyOnClose
             open={isOpen}
@@ -281,7 +273,7 @@ const Specialization = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title={t("Do to want to delete this specialization?")}
+            title={t("Bạn có chắc chắn muốn xóa chuyên ngành hẹp không?")}
          >
             <GroupButton>
                <Button

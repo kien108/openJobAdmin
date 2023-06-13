@@ -218,46 +218,51 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                   </Col>
                </Row>
                <Input
-                  label={t("adminManagement.username")}
+                  label="Tên đăng nhập"
                   name="username"
                   required
-                  placeholder={t("adminManagement.enterUsername")}
+                  placeholder="Nhập tên đăng nhập"
                   message={message}
                />
                {!searchParams.get("id") && (
                   <Input
                      required
                      type="password"
-                     label={t("adminManagement.password")}
+                     label="Mật khẩu"
                      name="password"
-                     placeholder={t("adminManagement.enterPassword")}
+                     placeholder="Nhập mật khẩu"
                      message={messagePassword}
                   />
                )}
                {/*_ */}
 
                {userId !== searchParams.get("id") && (
-                  <Select
-                     options={options}
-                     name="role"
-                     value={"ADMIN"}
-                     required
-                     title={t("adminManagement.role")}
-                  />
+                  <Select options={options} name="role" value={"ADMIN"} required title="Vai trò" />
                )}
                {userId !== searchParams.get("id") && (
                   <Switch
-                     label={t("adminManagement.status")}
+                     label="Trạng thái"
                      checked={checkedStatus}
                      onChange={(checked) => {
                         setCheckedStatus(checked);
                         form.setValue("isActive", checked);
                      }}
-                     checkedLabel={t("common:form.active")}
-                     unCheckedLabel={t("common:form.inActive")}
+                     checkedLabel="Kích hoạt"
+                     unCheckedLabel="Vô hiệu hóa"
                   />
                )}
                <GroupButton>
+                  <Button
+                     onClick={() => {
+                        handleClose();
+                        searchParams.delete("id");
+                        setSearchParams(searchParams);
+                     }}
+                     border="outline"
+                  >
+                     Hủy bỏ
+                  </Button>
+
                   <Button
                      loading={loadingCreate || loadingUpdate}
                      disabled={!!message || !!messagePassword}
@@ -267,17 +272,7 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                         form.handleSubmit(onSubmit)();
                      }}
                   >
-                     {t("common:confirm.save")}
-                  </Button>
-                  <Button
-                     onClick={() => {
-                        handleClose();
-                        searchParams.delete("id");
-                        setSearchParams(searchParams);
-                     }}
-                     border="outline"
-                  >
-                     {t("common:confirm.cancel")}
+                     Lưu
                   </Button>
                </GroupButton>
             </FormProvider>

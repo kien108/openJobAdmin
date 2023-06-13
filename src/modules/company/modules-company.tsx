@@ -6,7 +6,7 @@ import { store } from "./redux/store";
 
 import i18n from "./i18n/config";
 import { PermissionRoute, ROLE_ENUM, RootState, useCommonSelector } from "../../libs/common";
-import { CompanyManagement, HrsManagement } from "./pages";
+import { CompanyManagement, HrsManagement, Registration } from "./pages";
 
 export function ModulesCompany() {
    const { lang } = useCommonSelector((state: RootState) => state.lang);
@@ -26,6 +26,15 @@ export function ModulesCompany() {
                      <PermissionRoute
                         roles={[ROLE_ENUM.SUPER_ADMIN, ROLE_ENUM.ADMIN]}
                         component={<CompanyManagement />}
+                     />
+                  }
+               />
+               <Route
+                  path="/registration"
+                  element={
+                     <PermissionRoute
+                        roles={[ROLE_ENUM.SUPER_ADMIN, ROLE_ENUM.ADMIN]}
+                        component={<Registration />}
                      />
                   }
                />

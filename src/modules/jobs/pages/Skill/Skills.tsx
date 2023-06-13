@@ -29,9 +29,10 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { debounce } from "lodash";
 import CreateAndEditSkill from "../../components/modal/CreateAndEditSkill";
 import { GroupButton } from "../../components/modal/styles";
-import { useDeleteSkillMutation, useGetSkillByIdQuery } from "../../services";
+import { useDeleteSkillMutation, useGetSkillByIdQuery, useGetSkillsQuery } from "../../services";
 import useFilter from "../../hooks/useFilter";
 import { Col, Row } from "antd";
+import { FilterSkill } from "../../components";
 
 const Skills = () => {
    const { t } = useTranslation();
@@ -50,7 +51,6 @@ const Skills = () => {
    const form = useForm({
       defaultValues: {
          keyword: searchParams.get("keyword"),
-         majorId: searchParams.get("majorId"),
       },
       resolver: yupResolver(
          yup.object({
@@ -69,14 +69,12 @@ const Skills = () => {
       data: dataSkills,
       isLoading: loadingSkills,
       isFetching: fetchingSkills,
-   } = useGetSkillByIdQuery(
+   } = useGetSkillsQuery(
       {
-         id,
          ...tableInstance.params,
          ...useFilter(),
       },
       {
-         skip: !id,
          refetchOnMountOrArgChange: true,
       }
    );
@@ -86,22 +84,23 @@ const Skills = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Name"),
+         title: "Tên kỹ năng",
          dataIndex: "name",
          key: "name",
          sorter: true,
       },
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
          dataIndex: "id",
+         align: "center",
          render: (_: string, item: any) => (
             <StyledFunctions>
-               {/* <BtnFunction onClick={() => handleOpenUpdate(item)}>
+               <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />
-               </BtnFunction> */}
-               <BtnFunction onClick={() => handleOpenDelete(item)}>
-                  <DeleteIcon />
                </BtnFunction>
+               {/* <BtnFunction onClick={() => handleOpenDelete(item)}>
+                  <DeleteIcon />
+               </BtnFunction> */}
             </StyledFunctions>
          ),
       },
@@ -129,7 +128,6 @@ const Skills = () => {
    const handleOnChange = debounce(setValueToSearchParams, 500);
 
    const handleConfirmDelete = () => {
-      console.log(selectedSkill?.name);
       selectedSkill &&
          deleteSpecialization(selectedSkill?.name)
             .unwrap()
@@ -151,49 +149,21 @@ const Skills = () => {
    };
 
    useEffect(() => {
-      if (!dataSkills) return;
-
-      dataSkills &&
-         setDataSource(
-            dataSkills.map((item: any) => ({
-               key: item.id,
-               ...item,
-            }))
-         );
+      setDataSource(
+         (dataSkills?.content ?? [])?.map((item: any) => ({
+            key: item.id,
+            ...item,
+         }))
+      );
    }, [dataSkills]);
 
    return (
       <>
-         <StyledHeader>
-            {searchParams.get("specName") && (
-               <Title>{`Manage skill of ${searchParams.get("specName")}`}</Title>
-            )}
-            <Button height={44} icon={<PlusIcon />} onClick={handleOpen}>
-               {t("Create new skill")}
-            </Button>
-            <Button
-               className="btn-close"
-               onClick={() => {
-                  navigate({
-                     pathname: `/jobs/specializations`,
-                  });
-               }}
-            >
-               <CloseIcon />
-            </Button>
-         </StyledHeader>
+         <Header handleOpenCreate={handleOpen} title="Quản lý kỹ năng" />
 
          <ContainerTable>
             <FormProvider {...form}>
-               {/* <Input
-                  icons={<SearchIcon />}
-                  name="keyword"
-                  onChange={(e) => {
-                     form.setValue("keyword", e.target.value);
-                     handleOnChange("keyword", e.target.value);
-                  }}
-                  placeholder="Search by skill name"
-               /> */}
+               <FilterSkill />
             </FormProvider>
             <Table
                columns={columns}

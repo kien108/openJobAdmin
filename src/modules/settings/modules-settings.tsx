@@ -19,8 +19,7 @@ export function ModulesSettings() {
       <Provider store={store}>
          <I18nextProvider i18n={i18n}>
             <Routes>
-               <Route index element={<Navigate to={"default"} />} />
-               <Route path="/default" element={<DefaultSettings />} />
+               <Route index element={<Navigate to={"email-templates"} />} />
                <Route path="/email-templates" element={<EmailTemplates />} />
                {/* <Route
                   path="/default"

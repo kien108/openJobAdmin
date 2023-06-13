@@ -72,13 +72,14 @@ const Major = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Name"),
+         title: t("Tên chuyên ngành"),
          dataIndex: "name",
          key: "name",
          sorter: true,
       },
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
+         align: "center",
          dataIndex: "id",
          render: (_: string, item: any) => (
             <StyledFunctions>
@@ -121,7 +122,7 @@ const Major = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Delete this major successfully!!!"),
+                  message: t("Xóa chuyên ngành thành công!!!"),
                });
                setSelectedMajor(undefined);
                handleCloseDelete();
@@ -129,7 +130,7 @@ const Major = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("Major already in use and can't be deleted"),
+                  message: t("Chuyên ngành đang được sử dụng, không thể xóa"),
                });
                handleCloseDelete();
             });
@@ -148,19 +149,8 @@ const Major = () => {
    }, [dataMajors]);
    return (
       <>
-         <Header handleOpenCreate={handleOpen} title="Major Management" />
+         <Header handleOpenCreate={handleOpen} title="Quản lý chuyên ngành" />
          <ContainerTable>
-            <FormProvider {...form}>
-               {/* <Input
-                  icons={<SearchIcon />}
-                  name="keyword"
-                  onChange={(e) => {
-                     form.setValue("keyword", e.target.value);
-                     handleOnChange("keyword", e.target.value);
-                  }}
-                  placeholder="Search by major name"
-               /> */}
-            </FormProvider>
             <Table
                columns={columns}
                dataSource={dataSource}
@@ -171,7 +161,7 @@ const Major = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={selectedMajor ? t("Update major") : t("Create new major")}
+            title={selectedMajor ? t("Cập nhật chuyên ngành") : t("Tạo chuyên ngành")}
             destroyOnClose
             open={isOpen}
             onCancel={() => {
@@ -196,7 +186,7 @@ const Major = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title={t("Do to want to delete this major?")}
+            title={t("Bạn có chắn chắn muốn xóa chuyên ngành này không?")}
          >
             <GroupButton>
                <Button

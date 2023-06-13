@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from "antd";
+import { Menu, MenuProps, Tooltip } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { StyledSidebar, StyledImage, StyledLogo } from "./styles";
 import ImageLogo from "../../../assets/img/logo.png";
@@ -11,6 +11,7 @@ import { GiPowerLightning } from "react-icons/gi";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ROLE_ENUM, useRole } from "../../common";
+import "./styles.scss";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -26,10 +27,24 @@ const SideBar = () => {
       path: string,
       key: React.Key,
       icon?: React.ReactNode,
-      children?: MenuItem[]
+      children?: MenuItem[],
+      popupClassName?: string
    ): MenuItem => {
-      return isShow
-         ? ({
+      return popupClassName
+         ? {
+              key,
+              icon,
+              children,
+              label: (
+                 <Tooltip title={label} placement="right">
+                    <Link className="link-sidebar" to={path}>
+                       {label}
+                    </Link>
+                 </Tooltip>
+              ),
+              popupClassName,
+           }
+         : ({
               key,
               icon,
               children,
@@ -38,36 +53,28 @@ const SideBar = () => {
                     {label}
                  </Link>
               ),
-           } as MenuItem)
-         : null;
+           } as MenuItem);
    };
 
    const items: MenuItem[] = [
       // getItem(true, t("sidebar.overview"), "/overview", "overview", <AiOutlineHome />),
       getItem(
-         useRole([ROLE_ENUM.SUPER_ADMIN]),
-         t("sidebar.adminManagement"),
+         // useRole([ROLE_ENUM.SUPER_ADMIN]),
+         true,
+         "Quản lý quản trị viên",
          "/admin",
          "admin",
          <RiAdminLine />
       ),
-      getItem(true, t("sidebar.companyManagement"), "/company", "company", <MdWorkOutline />),
-      getItem(
-         true,
-         t("sidebar.candidateManagement"),
-         "/candidates",
-         "candidates",
-         <AiOutlineUser />
-      ),
-      getItem(true, t("sidebar.settings"), "/settings", "settings", <AiOutlineSetting />),
-      getItem(true, t("sidebar.jobs"), "/jobs", "jobs", <GiPowerLightning />),
-      getItem(
-         true,
-         t("sidebar.jobsManagement"),
-         "jobs-management",
-         "jobs-management",
-         <MdOutlinePostAdd />
-      ),
+      getItem(true, "Quản lý công ty", "/company", "company", <MdWorkOutline />),
+      getItem(true, "Quản lý người dùng", "/candidates", "candidates", <AiOutlineUser />),
+      getItem(true, "Quản lý cấu hình", "/settings", "settings", <AiOutlineSetting />),
+      getItem(true, "Quản lý dịch vụ", "#", "jobs", <GiPowerLightning size={21} />, [
+         getItem(true, "Quản lý chuyên ngành", "/jobs/majors", "jobs/majors"),
+         getItem(true, "Quản lý chuyên ngành hẹp", "/jobs/specializations", "jobs/specializations"),
+         getItem(true, "Quản lý kỹ năng", "/jobs/skills/skills", "jobs/skills"),
+      ]),
+      getItem(true, "Phân tích", "jobs-management", "jobs-management", <MdOutlinePostAdd />),
    ];
 
    const onOpenChange = (items: string[]) => {
@@ -77,10 +84,9 @@ const SideBar = () => {
    useEffect(() => {
       const paths = pathname.split("/");
 
-      if (pathname.includes("admin")) {
-         setSelectedKey(paths[1]);
-         setOpenKey(["admin"]);
-         document.querySelectorAll(".custom-menu")[0] as HTMLElement;
+      if (pathname.includes("jobs")) {
+         setSelectedKey(paths.slice(1, 3).join("/"));
+         setOpenKey(["jobs"]);
       } else {
          setSelectedKey(paths[1]);
          setOpenKey([]);
@@ -123,6 +129,7 @@ const SideBar = () => {
             openKeys={openKey}
             items={items}
             onOpenChange={onOpenChange}
+            triggerSubMenuAction="click"
          />
       </StyledSidebar>
    );

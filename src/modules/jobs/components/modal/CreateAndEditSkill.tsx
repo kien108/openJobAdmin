@@ -28,6 +28,8 @@ import {
    useCreateSkillMutation,
    useCreateSpecializationMutation,
    useGetMajorsQuery,
+   useGetSpecializationsByIdQuery,
+   useGetSpecializationsQuery,
    useUpdateMajorMutation,
    useUpdateSkillMutation,
    useUpdateSpecializationMutation,
@@ -57,10 +59,15 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
    const [isEdit, setEdit] = useState<boolean>(false);
 
    const {
-      data: dataMajors,
-      isLoading: loadingMajors,
-      isFetching: fetchingMajors,
-   } = useGetMajorsQuery({});
+      data: dataFilterSpec,
+      isLoading: loadingFilterSpec,
+      isFetching: fetchingFilterSpec,
+   } = useGetSpecializationsQuery(
+      {},
+      {
+         refetchOnMountOrArgChange: true,
+      }
+   );
 
    const [createSkill, { isLoading: loadingCreate }] = useCreateSkillMutation();
    const [updateSkill, { isLoading: loadingUpdate }] = useUpdateSkillMutation();
@@ -77,9 +84,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
    });
 
    useEffect(() => {
-      if (!dataMajors) return;
-
-      const options = dataMajors.map((item: any) => ({
+      const options = (dataFilterSpec ?? []).map((item: any) => ({
          key: item.id,
          label: item.name,
          value: item.id,
@@ -87,7 +92,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
       }));
 
       setOptions(options);
-   }, [dataMajors]);
+   }, [dataFilterSpec]);
    const onSubmit = (data: any) => {
       skill
          ? updateSkill({
@@ -110,7 +115,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                  });
               })
          : createSkill({
-              specializationId: id,
+              specializationId: data?.specializationId,
               skill: {
                  name: data.name,
                  isVerified: true,
@@ -133,7 +138,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
    };
 
    return (
-      <Spin spinning={false}>
+      <Spin spinning={loadingFilterSpec}>
          <StyledCreateAndEditMajor>
             <FormProvider {...form}>
                <Input
@@ -142,6 +147,16 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                   name="name"
                   placeholder={t("Enter skill...")}
                />
+               {!skill && (
+                  <Select
+                     name="specializationId"
+                     title="Chuyên ngành hẹp"
+                     required
+                     style={{ fontWeight: "400" }}
+                     options={options || []}
+                     placeholder="Chọn chuyên ngành hẹp"
+                  />
+               )}
                <GroupButton>
                   <Button
                      loading={loadingCreate || loadingUpdate}

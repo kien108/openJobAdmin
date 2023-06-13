@@ -1,10 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { ICompanies, IHr, IHrs } from "../types";
+import { ICompanies, IHr, IHrs, IUnapproveds } from "../types";
 import { baseQuery } from "./baseQuery";
+import { AdminAPI } from "./../../jobs/services/AdminAPI";
 
 export const HrAPI = createApi({
    reducerPath: "HrAPI",
-   tagTypes: ["COMPANY", "HRS"],
+   tagTypes: ["COMPANY", "HRS", "UNAPPROVED"],
    baseQuery,
    endpoints: (builder) => ({
       getCompanies: builder.query<ICompanies, any>({
@@ -36,7 +37,7 @@ export const HrAPI = createApi({
       }),
       updateHr: builder.mutation<any, any>({
          query: (body) => ({
-            url: `/company/${body.company.id}/hr/update?updatePassword=${body.updatePassword}`,
+            url: `/company/${body.company.id}/hr/update`,
             body,
             method: "POST",
          }),
@@ -56,6 +57,25 @@ export const HrAPI = createApi({
          }),
          invalidatesTags: ["COMPANY"],
       }),
+      getProvinces: builder.query({
+         query: (params) => ({
+            url: "/location/search-province",
+            params,
+         }),
+      }),
+      getListDistricts: builder.query({
+         query: (params) => ({
+            url: "/location/search-district",
+            params,
+         }),
+      }),
+      getUnapprovedCompanies: builder.query<IUnapproveds, any>({
+         query: (params) => ({
+            url: "/company/unapproved",
+            params,
+         }),
+         providesTags: ["UNAPPROVED"],
+      }),
    }),
 });
 
@@ -67,4 +87,7 @@ export const {
    useActivateMutation,
    useDeActivateMutation,
    useUpdateHrMutation,
+   useGetProvincesQuery,
+   useGetListDistrictsQuery,
+   useGetUnapprovedCompaniesQuery,
 } = HrAPI;

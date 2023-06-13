@@ -6,16 +6,21 @@ import StyledModal from "./styles";
 export interface ModalProps extends AntdModalProps {
    type?: "default" | "confirm";
    confirmIcon?: ReactNode;
-   width?: string;
+   width?: string | number;
+   maskStyle?: React.CSSProperties;
 }
 
-const Modal = ({ type = "default", ...props }: ModalProps) => {
+const Modal = ({
+   type = "default",
+   maskStyle = { backgroundColor: "rgb(0 0 0 / 75%)" },
+   ...props
+}: ModalProps) => {
    return (
       <StyledModal
          {...props}
          width={props.width}
          centered
-         maskStyle={{ backgroundColor: "rgb(0 0 0 / 75%)" }}
+         maskStyle={maskStyle}
          footer={null}
          transitionName=""
          title={null}

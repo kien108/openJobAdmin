@@ -5,6 +5,7 @@ import {
    useCommonDispatch,
    useCommonSelector,
    useGetAdminByIdQuery,
+   changeSidebar,
 } from "../../../common";
 import { Layout as AntLayout } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -13,6 +14,8 @@ import "./styles.scss";
 import { decodeToken } from "react-jwt";
 import { saveUser } from "../../../common";
 import { Header } from "../../Header";
+
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 const { Content, Sider } = AntLayout;
 
@@ -26,6 +29,7 @@ const Layout = () => {
    const navigate = useNavigate();
    const { data, isLoading } = useGetAdminByIdQuery(id, { skip: !id });
    const accessToken = getToken();
+   const { isOpen } = useCommonSelector((state: RootState) => state.sidebarSlice);
 
    useEffect(() => {
       if (!data) return;
@@ -45,9 +49,9 @@ const Layout = () => {
       });
    }, []);
 
-   useEffect(() => {
-      !accessToken && navigate("/login");
-   }, [accessToken]);
+   // useEffect(() => {
+   //    !accessToken && navigate("/login");
+   // }, [accessToken]);
    return (
       <AntLayout hasSider>
          <Sider
@@ -56,22 +60,39 @@ const Layout = () => {
             className="custom-sidebar"
             style={{
                height: "100vh",
-               position: "fixed",
+               position: "sticky",
                left: 0,
                top: 0,
                bottom: 0,
+               transition: "all 0.3s",
+               zIndex: 999,
             }}
+            collapsible
+            collapsed={isOpen}
+            onCollapse={() => {
+               dispatch(changeSidebar());
+            }}
+            breakpoint="xl"
+            collapsedWidth="80"
          >
             <Sidebar />
          </Sider>
-         <AntLayout style={{ marginLeft: 272, height: "100vh" }}>
+         <AntLayout style={{ height: "100vh", background: "rgb(250 250 251)" }}>
             <Header />
-            <Content
-               className="site-layout-content"
-               style={{ padding: 24, background: "rgb(250 250 251)" }}
+            <Scrollbars
+               id="scroll-main"
+               renderTrackVertical={(props) => (
+                  <div {...props} className="track-vertical" id="track-vertical-main" />
+               )}
+               renderThumbVertical={(props) => <div {...props} className="thumb-vertical" />}
             >
-               <Outlet />
-            </Content>
+               <Content
+                  className="site-layout-content"
+                  style={{ padding: 24, background: "rgb(250 250 251)" }}
+               >
+                  <Outlet />
+               </Content>
+            </Scrollbars>
          </AntLayout>
       </AntLayout>
    );

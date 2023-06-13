@@ -13,6 +13,13 @@ export interface ICompany {
    description: string;
    logoUrl: string;
    wallpaperUrl: string;
+   imageUrls: string[];
+   isActive: true;
+   companyType: string;
+   memberType: string;
+   scope: number;
+   updatedAt: string;
+   updatedBy: string;
 }
 
 export interface IHrs {

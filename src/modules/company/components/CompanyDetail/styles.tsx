@@ -1,80 +1,53 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-   max-width: 1000px;
-   margin: 40px auto 0;
-   background-color: #fff;
+export const StyledCreateAndEditHr = styled.div`
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   margin-top: 20px;
 
-   .company-header {
-      padding: 20px;
-      border-radius: 4px;
-      background-color: #fff;
+   .avatar {
+      margin: 30px 0;
+   }
 
-      box-shadow: 0 0 1px #ccc;
+   .history {
+      font-style: italic;
+      font-weight: 400;
+      color: #777777;
+   }
+`;
 
-      .header {
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         gap: 20px;
-         margin-bottom: 10px;
+export const StyledEditPassword = styled.div`
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   margin-top: 20px;
+`;
 
-         .right {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
+export const GroupButton = styled.div`
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 20px;
+   margin-top: 20px;
+`;
 
-            .name {
-               font-size: 36px;
-               font-weight: 600;
-            }
+export const StyledNotFound = styled.div`
+   display: flex;
+   align-items: center;
+   padding: 10px 12px;
+   height: 50px;
+   font-weight: normal;
+   font-size: 15px;
+   color: rgba(0, 0, 0, 0.25);
+`;
 
-            .content {
-               width: 100%;
-            }
-         }
+export const StyledExtendOption = styled<any>(StyledNotFound)`
+   cursor: pointer;
+   transition: background 0.2s ease;
+   color: ${(props) => props.theme.textDefault};
 
-         .logo {
-            width: 160px;
-            height: 160px;
-            object-fit: cover;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            overflow: hidden;
-            flex-shrink: 0;
-
-            img {
-               display: block;
-               width: 100%;
-               height: 100%;
-            }
-         }
-      }
-
-      .item {
-         margin-top: 10px;
-         display: flex;
-         align-items: center;
-         gap: 10px;
-         color: ${(props) => props.theme.textDefault};
-         font-weight: 400;
-      }
-
-      .description {
-         margin-top: 40px;
-
-         .title {
-            display: block;
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 10px;
-         }
-
-         img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-         }
-      }
+   &:hover {
+      background-color: ${(props) => props.theme.baseGray02};
    }
 `;

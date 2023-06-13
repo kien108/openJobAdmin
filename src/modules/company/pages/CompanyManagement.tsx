@@ -12,6 +12,7 @@ import {
    Modal,
    openNotification,
    SearchIcon,
+   Status,
    Table,
    TextEllipsis,
    Title,
@@ -33,13 +34,15 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
-import { useFilter } from "../hooks";
+import { useFilter, useFilterCompany } from "../hooks";
 import { debounce } from "lodash";
-import { CreateAndEditHr } from "../components/modal";
+import { CreateAndEditHr, CreateCompany } from "../components";
 import { GroupButton } from "../components/modal/styles";
 import { MdOutlinePassword } from "react-icons/md";
 import EditPassword from "../components/modal/EditPassword";
 import CompanyDetail from "./../components/CompanyDetail/CompanyDetail";
+import { FilterCompany } from "../components";
+import moment from "moment";
 
 const CompanyManagement = () => {
    const { t } = useTranslation();
@@ -48,6 +51,11 @@ const CompanyManagement = () => {
    const [selectedId, setSelectedId] = useState<string | undefined>("");
 
    const { isOpen, handleOpen, handleClose } = useModal();
+   const {
+      isOpen: openEdit,
+      handleOpen: handleOpenEdit,
+      handleClose: handleCloseEdit,
+   } = useModal();
 
    const [searchParams, setSearchParams] = useSearchParams();
 
@@ -87,7 +95,7 @@ const CompanyManagement = () => {
    } = useGetCompaniesQuery(
       {
          ...tableInstance.params,
-         ...useFilter(),
+         ...useFilterCompany(),
       },
       {
          refetchOnMountOrArgChange: true,
@@ -103,43 +111,58 @@ const CompanyManagement = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Name"),
+         title: "Tên công ty",
          dataIndex: "name",
          key: "name",
          sorter: true,
+         width: "12%",
       },
       {
-         title: t("Address"),
+         title: "Ngày tạo",
+         dataIndex: "created_at",
+         key: "createdAt",
+         sorter: true,
+         width: "10%",
+      },
+      {
+         title: "Địa chỉ",
          dataIndex: "address",
          key: "address",
          sorter: true,
-         render: (item) => (item ? item : "N/A"),
-      },
-      // {
-      //    title: t("Description"),
-      //    dataIndex: "description",
-      //    key: "description",
-      //    sorter: true,
-      //    render: (item) =>
-      //       item ? <TextEllipsis data={Parser(`${item}`).toString()} length={50} /> : "-",
-      // },
-      {
-         title: t("Phone number"),
-         dataIndex: "phone",
-         key: "phone",
-         sorter: true,
-         render: (item) => (item ? item : "N/A"),
+         render: (item) => (item ? <TextEllipsis data={item} length={50} /> : "-"),
       },
       {
-         title: t("Employees"),
-         dataIndex: "totalEmployee",
-         key: "totalEmployee",
-         sorter: true,
-         render: (item) => (item ? item : "N/A"),
+         title: "Loại công ty",
+         dataIndex: "company_type",
+         key: "company_type",
+      },
+      {
+         title: "Loại thành viên",
+         dataIndex: "member_type",
+         key: "member_type",
+      },
+      {
+         title: "Trạng thái",
+         dataIndex: "isActive",
+         key: "isActive",
+         render: (value) => <Status isActive={value} />,
       },
 
       {
-         title: t("adminManagement.actions"),
+         title: "Số điện thoại",
+         dataIndex: "phone",
+         key: "phone",
+         render: (item) => (item ? item : "-"),
+      },
+      {
+         title: "Email",
+         dataIndex: "email",
+         key: "email",
+         render: (item) => (item ? item : "-"),
+      },
+
+      {
+         title: "Hành động",
          dataIndex: "id",
          render: (_: string, record: ICompany) => (
             <StyledFunctions>
@@ -158,9 +181,6 @@ const CompanyManagement = () => {
                {/* <BtnFunction onClick={() => handleOpenDelete(record.id)}>
                   <DeleteIcon />
                </BtnFunction> */}
-               <BtnFunction onClick={() => handleEditPassword(record.id)}>
-                  <MdOutlinePassword size={25} className="icon-password" />
-               </BtnFunction>
             </StyledFunctions>
          ),
       },
@@ -179,7 +199,7 @@ const CompanyManagement = () => {
    const handleOpenUpdate = (id: string) => {
       searchParams.set("id", id);
       setSearchParams(searchParams);
-      handleOpen();
+      handleOpenEdit();
    };
 
    const handleOpenDelete = (id: string) => {
@@ -216,26 +236,22 @@ const CompanyManagement = () => {
             dataCompanies.companies.map((item) => ({
                key: item.id,
                ...item,
+               member_type: item?.memberType,
+               company_type: item?.companyType,
+               created_at: item?.createdAt ? moment(item?.createdAt).format("DD/MM/YYYY") : "-",
             }))
          );
    }, [dataCompanies]);
 
    return (
       <>
-         <Header handleOpenCreate={handleOpen} title="Companies" />
+         <Header handleOpenCreate={handleOpen} title="Quản lý công ty" />
          <ContainerTable>
             <FormProvider {...form}>
-               <Input
-                  icons={<SearchIcon />}
-                  name="keyword"
-                  onChange={(e) => {
-                     form.setValue("keyword", e.target.value);
-                     handleOnChange("keyword", e.target.value);
-                  }}
-                  placeholder="Search by companyName"
-               />
+               <FilterCompany />
             </FormProvider>
             <Table
+               size="middle"
                columns={columns}
                dataSource={dataSource}
                tableInstance={tableInstance}
@@ -245,20 +261,38 @@ const CompanyManagement = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={searchParams.get("id") ? t("Update head hunter") : t("Create new head hunter")}
+            width={800}
+            title={"Thêm mới công ty"}
             destroyOnClose
             open={isOpen}
+            onCancel={handleClose}
+         >
+            <CreateCompany handleClose={handleClose} />
+         </StyledModal>
+
+         <StyledModal
+            width={"75%"}
+            title={"Cập nhật công ty"}
+            destroyOnClose
+            open={openEdit}
             onCancel={() => {
-               handleClose();
+               handleCloseEdit();
                searchParams.delete("id");
                setSearchParams(searchParams);
             }}
          >
-            <CreateAndEditHr handleClose={handleClose} />
+            <CreateAndEditHr
+               handleClose={() => {
+                  handleCloseEdit();
+                  searchParams.delete("id");
+                  setSearchParams(searchParams);
+               }}
+            />
          </StyledModal>
 
          <StyledModalDetail
-            title={"View detail company"}
+            width={"75%"}
+            title={"Xem chi tiết công ty"}
             destroyOnClose
             open={isOpenDetail}
             onCancel={() => {

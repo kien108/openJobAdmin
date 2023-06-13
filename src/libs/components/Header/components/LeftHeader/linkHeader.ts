@@ -4,18 +4,18 @@ export const navLinks = (openLink: string) => {
          return [
             {
                path: "/company/companies",
-               display: "Companies",
+               display: "Danh sách công ty",
                key: "/company/companies",
+            },
+            {
+               path: "/company/registration",
+               display: "Danh sách công ty đăng ký",
+               key: "/company/registration",
             },
          ];
       }
       case "settings": {
          return [
-            {
-               path: "/settings/default",
-               display: "Settings",
-               key: "/settings/default",
-            },
             {
                path: "/settings/email-templates",
                display: "Email Templates",
@@ -23,22 +23,17 @@ export const navLinks = (openLink: string) => {
             },
          ];
       }
-      case "jobs": {
+      case "jobs/skills": {
          return [
             {
-               path: "/jobs/majors",
-               display: "Majors",
-               key: "/jobs/majors",
+               path: "/jobs/skills/skills",
+               display: "Quản lý kỹ năng",
+               key: "/jobs/skills/skills",
             },
             {
-               path: "/jobs/specializations",
-               display: "Specializations",
-               key: "/jobs/specializations",
-            },
-            {
-               path: "/jobs/skills-invalidate",
-               display: "Invalidate skill",
-               key: "/jobs/skills-invalidate",
+               path: "/jobs/skills/skills-invalidate",
+               display: "Phê duyệt kỹ năng",
+               key: "/jobs/skills/skills-invalidate",
             },
          ];
       }

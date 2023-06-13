@@ -12,14 +12,17 @@ const useFilter = () => {
    };
 
    useEffect(() => {
-      searchParams.get("keyword")
-         ? setParams((prev: any) => ({ ...prev, keyword: searchParams.get("keyword") }))
-         : setParams((prev: any) => objectWithoutKey(prev, "keyword"));
+      searchParams.get("name")
+         ? setParams((prev: any) => ({ ...prev, name: searchParams.get("name") }))
+         : setParams((prev: any) => objectWithoutKey(prev, "name"));
 
-      searchParams.get("majorId")
-         ? setParams((prev: any) => ({ ...prev, majorId: searchParams.get("majorId") }))
-         : setParams((prev: any) => objectWithoutKey(prev, "majorId"));
-   }, [searchParams]);
+      searchParams.get("specialization")
+         ? setParams((prev: any) => ({
+              ...prev,
+              speId: searchParams.get("specialization"),
+           }))
+         : setParams((prev: any) => objectWithoutKey(prev, "specialization"));
+   }, [searchParams.toString()]);
 
    return params;
 };

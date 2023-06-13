@@ -6,6 +6,7 @@ export const StyledFunctions: StyledComponent<any, any> = styled.div`
    display: flex;
    align-items: center;
    gap: 12px;
+   justify-content: center;
 `;
 
 export const BtnFunction: StyledComponent<any, any> = styled.div`
@@ -57,7 +58,7 @@ export const StyledModal = styled(Modal)`
    &.ant-modal {
       width: 42.5rem !important;
 
-      .ant-typography {
+      .h1 {
          font-size: 28px;
          font-weight: 700;
       }

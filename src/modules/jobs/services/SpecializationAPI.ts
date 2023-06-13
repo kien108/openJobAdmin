@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { IAdmin, IAdminDetail } from "../types";
 import { baseQuery } from "./baseQuery";
+import { IResSkills } from "../types/Skill";
 
 export const SpecializationAPI = createApi({
    reducerPath: "SpecializationAPI",
@@ -56,7 +57,7 @@ export const SpecializationAPI = createApi({
             url: `/skill/byspecialization/${id}`,
             params,
          }),
-         providesTags: ["SKILLS"],
+         // providesTags: ["SKILLS"],
       }),
       getSkillInvalidate: builder.query<any, any>({
          query: (params) => ({
@@ -95,6 +96,14 @@ export const SpecializationAPI = createApi({
          }),
          invalidatesTags: ["SKILLS"],
       }),
+
+      getSkills: builder.query<IResSkills, any>({
+         query: (params) => ({
+            url: "/skills",
+            params,
+         }),
+         providesTags: ["SKILLS"],
+      }),
    }),
 });
 
@@ -110,4 +119,5 @@ export const {
    useGetSkillInvalidateQuery,
    useValidateSkillMutation,
    useGetSpecializationsByIdQuery,
+   useGetSkillsQuery,
 } = SpecializationAPI;

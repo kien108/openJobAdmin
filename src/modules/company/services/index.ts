@@ -7,4 +7,7 @@ export {
    useActivateMutation,
    useDeActivateMutation,
    useUpdateHrMutation,
+   useGetProvincesQuery,
+   useGetListDistrictsQuery,
+   useGetUnapprovedCompaniesQuery,
 } from "./HrAPI";

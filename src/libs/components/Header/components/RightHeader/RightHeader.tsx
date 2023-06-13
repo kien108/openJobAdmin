@@ -31,7 +31,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
 
    return (
       <StyledRightHeader>
-         <div className="dropdown">
+         {/* <div className="dropdown">
             <Popover
                overlayClassName="styled-header-popover"
                trigger="click"
@@ -60,7 +60,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
                   <LanguageIcon width="30px" height="36px" />
                </button>
             </Popover>
-         </div>
+         </div> */}
          {/* <div className="notification">
             <Popover
                overlayClassName="styled-header-popover"

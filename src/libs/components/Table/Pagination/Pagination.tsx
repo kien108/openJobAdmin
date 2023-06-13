@@ -1,5 +1,5 @@
 import { Pagination as PaginationAntd, PaginationProps as AntPaginationProps, Popover } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyledPagination } from "./styles";
 
 import "./styles.scss";
@@ -7,6 +7,7 @@ import { CheckIcon } from "../../../components";
 import { theme } from "../../../common";
 import { TableInstanceProps } from "../Table";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 interface PaginationProps extends AntPaginationProps {
    totalElements: number;
@@ -18,7 +19,8 @@ const optionsShowPage: number[] = [10, 20, 50, 100];
 export default function Pagination({ tableInstance, ...props }: PaginationProps) {
    const { t } = useTranslation();
    const [visible, setVisible] = useState(false);
-   const [numberActive, setNumberActive] = useState<number>(0);
+   const [numberActive, setNumberActive] = useState<number>(10);
+   const [searchParams, setSearchParams] = useSearchParams();
 
    const selectOption = (size: number) => {
       setNumberActive(size);
@@ -43,6 +45,10 @@ export default function Pagination({ tableInstance, ...props }: PaginationProps)
       setVisible(false);
    };
 
+   useEffect(() => {
+      searchParams.set("size", numberActive.toString());
+      setSearchParams(searchParams);
+   }, [numberActive]);
    const handleVisibleChange = (newVisible: boolean) => {
       setVisible(newVisible);
    };

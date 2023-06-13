@@ -48,7 +48,7 @@ export const Contact = styled.p`
 
    a {
       font-weight: 600;
-      color: ${(props) => props.theme.strongYellow};
+      color: ${(props) => props.theme.strongBlue};
    }
 `;
 export const StyledButton = styled.div`

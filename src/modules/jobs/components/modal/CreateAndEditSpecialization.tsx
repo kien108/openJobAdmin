@@ -65,12 +65,12 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
    const form = useForm({
       defaultValues: {
          name: (specialization && specialization.name) || "",
-         majorId: "",
+         major_id: "",
       },
       resolver: yupResolver(
          yup.object({
             name: yup.string().trim().required(t("common:form.required")),
-            majorId: !specialization
+            major_id: !specialization
                ? yup.string().trim().required(t("common:form.required"))
                : yup.string(),
          })
@@ -99,7 +99,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Create major successfully"),
+                    message: t("Cập nhật chuyên ngành hẹp thành công"),
                  });
                  handleClose();
               })
@@ -110,7 +110,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
                  });
               })
          : createSpecialization({
-              majorId: data.majorId,
+              majorId: data.major_id,
               specialization: {
                  name: data.name,
               },
@@ -119,7 +119,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Create major successfully"),
+                    message: t("Tạo mới chuyên ngành hẹp thành công"),
                  });
                  handleClose();
               })
@@ -136,11 +136,11 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
          <StyledCreateAndEditMajor>
             <FormProvider {...form}>
                {!specialization && (
-                  <Select options={options} name="majorId" required title={t("Major")} />
+                  <Select options={options} name="major_id" required title={t("Chuyên ngành")} />
                )}
                <Input
                   required
-                  label={t("Specialization Name")}
+                  label={t("Tên chuyên ngành hẹp")}
                   name="name"
                   placeholder={t("Enter specialization name...")}
                />

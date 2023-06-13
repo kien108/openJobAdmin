@@ -9,6 +9,12 @@ export const StyledCreateAndEditMajor = styled.div`
    .avatar {
       margin: 30px 0;
    }
+
+   font-size: 16px;
+
+   label {
+      font-size: 16px;
+   }
 `;
 
 export const StyledEditPassword = styled.div`

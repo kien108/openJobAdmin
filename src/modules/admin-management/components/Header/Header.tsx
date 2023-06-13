@@ -15,10 +15,10 @@ const Header: FC<HeaderProps> = ({ handleOpenCreate, isCreate }) => {
 
    return (
       <StyledHeader>
-         <Title>{t("adminManagement.title")}</Title>
+         <Title>Quản lý quản trị viên</Title>
          {isCreate && (
             <Button height={44} icon={<PlusIcon />} onClick={handleOpenCreate}>
-               {t("adminManagement.create")}
+               Thêm quản trị viên
             </Button>
          )}
       </StyledHeader>

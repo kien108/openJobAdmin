@@ -39,7 +39,25 @@ export function ModulesJobs() {
                      />
                   }
                ></Route>
-               <Route path="specializations/:id" element={<Skills />} />
+
+               <Route
+                  path="skills/skills"
+                  element={
+                     <PermissionRoute
+                        roles={[ROLE_ENUM.SUPER_ADMIN, ROLE_ENUM.ADMIN]}
+                        component={<Skills />}
+                     />
+                  }
+               ></Route>
+               <Route
+                  path="skills/skills-invalidate"
+                  element={
+                     <PermissionRoute
+                        roles={[ROLE_ENUM.SUPER_ADMIN, ROLE_ENUM.ADMIN]}
+                        component={<SkillInvalidate />}
+                     />
+                  }
+               ></Route>
                <Route
                   path="skills-invalidate"
                   element={
