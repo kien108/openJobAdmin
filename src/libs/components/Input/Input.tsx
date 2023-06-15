@@ -1,9 +1,9 @@
 import { InputProps, Popover } from "antd";
 import { TextAreaProps } from "antd/lib/input";
-import { FC, ReactNode, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { Controller, get, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ContentCopyIcon, EyeIcon, EyePwIcon } from "../Icons";
+import { ContentCopyIcon, EyeIcon, EyePwIcon } from "../../components";
 
 import {
    Container,
@@ -13,20 +13,25 @@ import {
    StyledIconDefault,
    StyledIconInput,
    StyledInput,
-   StyledInputNumber,
    StyledInputTextarea,
    SubLabel,
 } from "./style";
 import "./style.scss";
 
 interface IInput extends InputProps {
-   type?: "password" | "textarea" | "copy" | "macAddress" | "time" | "number";
+   type?: "password" | "textarea" | "copy" | "macAddress" | "time" | "number" | "numberFloat";
    label?: string;
    height?: string;
    message?: string;
    icons?: ReactNode;
    subLabel?: string;
    inputType?: string;
+   decimal?: number;
+   minimum?: number;
+   maximum?: number;
+   placementicon?: "left" | "right";
+   isFieldArray?: boolean;
+   parentName?: string;
 }
 
 const Input: FC<IInput & TextAreaProps> = ({
@@ -37,13 +42,19 @@ const Input: FC<IInput & TextAreaProps> = ({
    icons,
    subLabel,
    inputType,
+   decimal,
+   minimum,
+   placementicon,
+   maximum,
+   isFieldArray,
+   parentName,
    ...props
 }) => {
    const { t } = useTranslation();
    const [show, setShow] = useState(false);
    const [isShowSubLabel, setIsShowSubLabel] = useState(false);
    const [isCopy, setIsCopy] = useState("copy");
-
+   const inputNumberRef = useRef(null as any);
    const {
       control,
       register,
@@ -51,18 +62,24 @@ const Input: FC<IInput & TextAreaProps> = ({
       watch,
       formState: { errors },
    } = useFormContext();
-
-   const errorMessage: any = message || (errors && props.name ? errors[props.name]?.message : "");
-
+   let errorMessage: any = "";
+   if (isFieldArray && parentName) {
+      errorMessage =
+         message || (errors && props.name ? get(errors, `${props.name}.message`, undefined) : "");
+   } else {
+      errorMessage =
+         message || (errors && props.name ? get(errors, `${props.name}.message`, undefined) : "");
+   }
    const maskCPF = (value: string) => {
       return value
-         .replace(/\D/g, "")
-         .replace(/(\d{2})(\d)/, "$1-$2")
-         .replace(/(\d{2})(\d)/, "$1-$2")
-         .replace(/(\d{2})(\d)/, "$1-$2")
-         .replace(/(\d{2})(\d)/, "$1-$2")
-         .replace(/(\d{2})(\d)/, "$1-$2")
-         .replace(/(-\d{2})\d+?$/, "$1");
+         .toUpperCase()
+         .replace(/[^A-F0-9]/gi, "")
+         .replace(/([A-F0-9]{2})([A-F0-9])/, "$1-$2")
+         .replace(/([A-F0-9]{2})([A-F0-9])/, "$1-$2")
+         .replace(/([A-F0-9]{2})([A-F0-9])/, "$1-$2")
+         .replace(/([A-F0-9]{2})([A-F0-9])/, "$1-$2")
+         .replace(/([A-F0-9]{2})([A-F0-9])/, "$1-$2")
+         .replace(/(-[A-F0-9]{2})[A-F0-9]+?$/, "$1");
    };
 
    const timeCPF = (value: string) => {
@@ -94,6 +111,41 @@ const Input: FC<IInput & TextAreaProps> = ({
       return result;
    };
 
+   useEffect(() => {
+      if (type === "number") {
+         const input = inputNumberRef.current.getElementsByTagName("input")[0];
+         if (input) {
+            input.addEventListener("keydown", (e) => {
+               if (e.keyCode !== 8) {
+                  if ((e.keyCode < 47 || e.keyCode > 57) && (e.keyCode > 105 || e.keyCode < 95)) {
+                     e.preventDefault();
+                  }
+
+                  if (e.shiftKey) {
+                     e.preventDefault();
+                  }
+               }
+            });
+
+            input.addEventListener("keyup", (e) => {
+               if (e.keyCode !== 8) {
+                  if (
+                     (e.keyCode < 47 || e.keyCode > 57) &&
+                     (e.keyCode > 105 || e.keyCode < 95) &&
+                     e.keyCode < 109
+                  ) {
+                     e.preventDefault();
+                  }
+
+                  if (e.shiftKey) {
+                     e.preventDefault();
+                  }
+               }
+            });
+         }
+      }
+   }, [type, inputNumberRef.current]);
+
    return (
       <Container className="container-input">
          {label && (
@@ -102,7 +154,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                {props.required ? <span className="required-mark">*</span> : null}
             </Label>
          )}
-         <ContainerInput>
+         <ContainerInput ref={inputNumberRef}>
             {type === "textarea" ? (
                <Controller
                   name={`${props.name}`}
@@ -195,7 +247,9 @@ const Input: FC<IInput & TextAreaProps> = ({
                </>
             ) : type === "macAddress" ? (
                <>
-                  {icons && <StyledIconDefault>{icons}</StyledIconDefault>}
+                  {icons && (
+                     <StyledIconDefault placementicon={placementicon}>{icons}</StyledIconDefault>
+                  )}
                   <Controller
                      name={`${props.name}`}
                      control={control}
@@ -210,6 +264,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                            onFocus={() => setIsShowSubLabel(true)}
                            onBlur={() => setIsShowSubLabel(false)}
                            on={subLabel}
+                           placementicon={placementicon}
                            onChange={(e: any) => {
                               onChange(maskCPF(e.target.value));
                               props.onChange;
@@ -224,6 +279,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                         className="sub-label"
                         icons={icons}
                         isShow={getValues(`${props.name}`) || isShowSubLabel}
+                        placementicon={placementicon}
                      >
                         {subLabel}
                      </SubLabel>
@@ -231,12 +287,15 @@ const Input: FC<IInput & TextAreaProps> = ({
                </>
             ) : type === "number" ? (
                <>
-                  {icons && <StyledIconDefault>{icons}</StyledIconDefault>}
+                  {icons && (
+                     <StyledIconDefault placementicon={placementicon}>{icons}</StyledIconDefault>
+                  )}
                   <Controller
                      name={`${props.name}`}
                      control={control}
                      render={({ field: { value, onChange, ...field } }) => (
-                        <StyledInputNumber
+                        <StyledInput
+                           className="input-number"
                            {...field}
                            {...register(`${props.name}`)}
                            value={getValues(`${props.name}`)}
@@ -246,6 +305,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                            onFocus={() => setIsShowSubLabel(true)}
                            onBlur={() => setIsShowSubLabel(false)}
                            on={subLabel}
+                           placementicon={placementicon}
                            onChange={(value: number) => {
                               onChange(value);
                               props.onChange;
@@ -260,6 +320,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                         className="sub-label"
                         icons={icons}
                         isShow={getValues(`${props.name}`) || isShowSubLabel}
+                        placementicon={placementicon}
                      >
                         {subLabel}
                      </SubLabel>
@@ -267,7 +328,11 @@ const Input: FC<IInput & TextAreaProps> = ({
                </>
             ) : type === "time" ? (
                <>
-                  {icons && <StyledIconDefault>{icons}</StyledIconDefault>}
+                  {icons && (
+                     <StyledIconDefault className="input-time" placementicon={placementicon}>
+                        {icons}
+                     </StyledIconDefault>
+                  )}
                   <Controller
                      name={`${props.name}`}
                      control={control}
@@ -275,7 +340,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                         <StyledInput
                            {...field}
                            {...register(`${props.name}`)}
-                           value={getValues(`${props.name}`)}
+                           value={watch(`${props.name}`)}
                            pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$"
                            placeholder="HH:MM"
                            icons={icons}
@@ -284,6 +349,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                            onFocus={() => setIsShowSubLabel(true)}
                            onBlur={() => setIsShowSubLabel(false)}
                            on={subLabel}
+                           placementicon={placementicon}
                            onChange={({ target: { value } }) => {
                               onChange(timeCPF(value));
                               props.onChange;
@@ -298,6 +364,69 @@ const Input: FC<IInput & TextAreaProps> = ({
                         className="sub-label"
                         icons={icons}
                         isShow={watch(`${props.name}`) || isShowSubLabel}
+                        placementicon={placementicon}
+                     >
+                        {subLabel}
+                     </SubLabel>
+                  )}
+               </>
+            ) : type === "numberFloat" ? (
+               <>
+                  {icons && (
+                     <StyledIconDefault placementicon={placementicon}>{icons}</StyledIconDefault>
+                  )}
+                  <Controller
+                     name={`${props.name}`}
+                     control={control}
+                     render={({ field: { value, onChange, ...field } }) => (
+                        <StyledInput
+                           {...field}
+                           {...register(`${props.name}`)}
+                           value={getValues(`${props.name}`)}
+                           icons={icons}
+                           height={height}
+                           error={errorMessage}
+                           onFocus={() => setIsShowSubLabel(true)}
+                           type={inputType}
+                           on={subLabel}
+                           placementicon={placementicon}
+                           onChange={(e: any) => {
+                              let value = e.target.value.replace(",", ".");
+                              if (decimal) {
+                                 value = value.replace(/[^0-9.]/g, "");
+                                 if (value[0] === ".") {
+                                    value = "0" + value;
+                                 }
+                              } else {
+                                 value = value.replace(/[^0-9]/g, "");
+                              }
+                              if (value[0] === "0" && value.length > 1 && value[1] !== ".") {
+                                 value = value.substring(1);
+                              }
+
+                              if (value.split(".").length < 3) {
+                                 const dec = value.split(".")[1];
+                                 const float = decimal ? Math.pow(10, decimal) : 0;
+                                 if (!dec || parseInt(dec) < float) {
+                                    onChange(value);
+                                 }
+                              } else if (!value) {
+                                 onChange(value);
+                              }
+
+                              props.onChange;
+                           }}
+                           {...props}
+                        />
+                     )}
+                  />
+
+                  {subLabel && (
+                     <SubLabel
+                        className="sub-label"
+                        icons={icons}
+                        isShow={getValues(`${props.name}`) || isShowSubLabel}
+                        placementicon={placementicon}
                      >
                         {subLabel}
                      </SubLabel>
@@ -305,7 +434,9 @@ const Input: FC<IInput & TextAreaProps> = ({
                </>
             ) : (
                <>
-                  {icons && <StyledIconDefault>{icons}</StyledIconDefault>}
+                  {icons && (
+                     <StyledIconDefault placementicon={placementicon}>{icons}</StyledIconDefault>
+                  )}
                   <Controller
                      name={`${props.name}`}
                      control={control}
@@ -321,6 +452,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                            onBlur={() => setIsShowSubLabel(false)}
                            type={inputType}
                            on={subLabel}
+                           placementicon={placementicon}
                            onChange={(e: any) => {
                               onChange(e.target.value);
                               props.onChange;
@@ -335,6 +467,7 @@ const Input: FC<IInput & TextAreaProps> = ({
                         className="sub-label"
                         icons={icons}
                         isShow={getValues(`${props.name}`) || isShowSubLabel}
+                        placementicon={placementicon}
                      >
                         {subLabel}
                      </SubLabel>

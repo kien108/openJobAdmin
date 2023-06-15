@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Button } from "../../../../libs/components";
+import { Button, openNotification } from "../../../../libs/components";
 
 import { Container, GroupButton } from "./styles";
 
@@ -9,6 +9,7 @@ import { Col, Row } from "antd";
 
 import { InputDetail } from "../InputDetail";
 import { IUnapproved } from "../../types";
+import { useReviewRegistrationMutation } from "../../services";
 
 interface ICreateAndEditAdmin {
    handleClose: () => void;
@@ -17,6 +18,30 @@ interface ICreateAndEditAdmin {
 
 const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose, data }) => {
    const { t } = useTranslation();
+
+   const [review, { isLoading: loadingReview }] = useReviewRegistrationMutation();
+
+   const handleBulkRegistration = (status: boolean) => {
+      const payload = {
+         approved: status,
+         companyRegistrationList: [data],
+      };
+      review(payload)
+         .unwrap()
+         .then(() => {
+            openNotification({
+               type: "success",
+               message: t("Thao tác thành công !!!"),
+            });
+            handleClose && handleClose();
+         })
+         .catch((error) => {
+            openNotification({
+               type: "error",
+               message: t("INTERNAL SERVER ERROR"),
+            });
+         });
+   };
 
    return (
       <Container>
@@ -39,8 +64,14 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose, data }) => {
          </Row>
 
          <GroupButton>
-            <Button onClick={(e) => {}}>Chấp nhận</Button>
-            <Button onClick={handleClose} border="outline">
+            <Button loading={loadingReview} onClick={(e) => handleBulkRegistration(true)}>
+               Chấp nhận
+            </Button>
+            <Button
+               loading={loadingReview}
+               onClick={() => handleBulkRegistration(false)}
+               border="outline"
+            >
                Từ chối
             </Button>
          </GroupButton>

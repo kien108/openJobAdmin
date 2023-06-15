@@ -86,9 +86,9 @@ const Major = () => {
                <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />
                </BtnFunction>
-               <BtnFunction onClick={() => handleOpenDelete(item)}>
+               {/* <BtnFunction onClick={() => handleOpenDelete(item)}>
                   <DeleteIcon />
-               </BtnFunction>
+               </BtnFunction> */}
             </StyledFunctions>
          ),
       },

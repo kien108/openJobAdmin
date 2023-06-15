@@ -134,9 +134,9 @@ const Specialization = () => {
                <BtnFunction onClick={() => handleOpenUpdate(item)}>
                   <EditIcon />
                </BtnFunction>
-               <BtnFunction onClick={() => handleOpenDelete(item)}>
+               {/* <BtnFunction onClick={() => handleOpenDelete(item)}>
                   <DeleteIcon />
-               </BtnFunction>
+               </BtnFunction> */}
             </StyledFunctions>
          ),
       },
@@ -200,7 +200,7 @@ const Specialization = () => {
             }))
          );
       }
-   }, [dataSpecializations, dataFilterSpec]);
+   }, [dataSpecializations, dataFilterSpec, form.watch("majorId")]);
 
    useEffect(() => {
       if (!dataMajors) return;
@@ -220,7 +220,7 @@ const Specialization = () => {
          <ContainerTable>
             <FormProvider {...form}>
                <Row gutter={[32, 32]}>
-                  <Col span={24}>
+                  <Col span={12}>
                      <Select
                         options={options}
                         name="majorId"

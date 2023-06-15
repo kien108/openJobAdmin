@@ -7,10 +7,10 @@ import { RiAdminLine } from "react-icons/ri";
 import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome } from "react-icons/ai";
 import { GiPowerLightning } from "react-icons/gi";
+import { SiBitcoinsv } from "react-icons/si";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ROLE_ENUM, useRole } from "../../common";
 import "./styles.scss";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -69,12 +69,19 @@ const SideBar = () => {
       getItem(true, "Quản lý công ty", "/company", "company", <MdWorkOutline />),
       getItem(true, "Quản lý người dùng", "/candidates", "candidates", <AiOutlineUser />),
       getItem(true, "Quản lý cấu hình", "/settings", "settings", <AiOutlineSetting />),
-      getItem(true, "Quản lý dịch vụ", "#", "jobs", <GiPowerLightning size={21} />, [
+      getItem(true, "Quản lý kỹ năng", "#", "jobs", <GiPowerLightning size={21} />, [
          getItem(true, "Quản lý chuyên ngành", "/jobs/majors", "jobs/majors"),
          getItem(true, "Quản lý chuyên ngành hẹp", "/jobs/specializations", "jobs/specializations"),
          getItem(true, "Quản lý kỹ năng", "/jobs/skills/skills", "jobs/skills"),
       ]),
-      getItem(true, "Phân tích", "jobs-management", "jobs-management", <MdOutlinePostAdd />),
+      getItem(
+         true,
+         "Quản lý tin đăng tuyển",
+         "posts-management",
+         "posts-management",
+         <MdOutlinePostAdd />
+      ),
+      getItem(true, "Dịch vụ công ty", "business", "business", <SiBitcoinsv />),
    ];
 
    const onOpenChange = (items: string[]) => {
@@ -105,15 +112,15 @@ const SideBar = () => {
       }
    }, [openKey]);
 
-   useEffect(() => {
-      document.addEventListener("mousemove", function (e) {
-         const ele = document.querySelectorAll(".custom-menu")[0] as HTMLElement;
-         const distance = ele?.offsetLeft + ele?.offsetWidth - e.pageX;
-         distance < 8 && distance > 0
-            ? ele?.classList.add("more-width")
-            : ele?.classList.remove("more-width");
-      });
-   }, []);
+   // useEffect(() => {
+   //    document.addEventListener("mousemove", function (e) {
+   //       const ele = document.querySelectorAll(".custom-menu")[0] as HTMLElement;
+   //       const distance = ele?.offsetLeft + ele?.offsetWidth - e.pageX;
+   //       distance < 8 && distance > 0
+   //          ? ele?.classList.add("more-width")
+   //          : ele?.classList.remove("more-width");
+   //    });
+   // }, []);
 
    return (
       <StyledSidebar>

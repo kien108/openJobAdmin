@@ -10,4 +10,5 @@ export {
    useGetProvincesQuery,
    useGetListDistrictsQuery,
    useGetUnapprovedCompaniesQuery,
+   useReviewRegistrationMutation,
 } from "./HrAPI";

@@ -23,9 +23,34 @@ export const StyledSidebar = styled.div`
    }
 
    .custom-menu {
-      overflow: visible;
+      overflow: auto;
       height: inherit;
       padding: 8px 16px;
+
+      &:hover {
+         overflow: overlay;
+      }
+      &::-webkit-scrollbar {
+         width: 4px;
+      }
+
+      /* Track */
+      &::-webkit-scrollbar-track {
+         background: #fff;
+         border-radius: 100px;
+      }
+
+      /* Handle */
+      &::-webkit-scrollbar-thumb {
+         background: #d2d2d8;
+         border-radius: 100px;
+      }
+
+      &.more-width {
+         &::-webkit-scrollbar {
+            width: 6px;
+         }
+      }
 
       .ant-menu-item {
          padding-left: 20px !important;

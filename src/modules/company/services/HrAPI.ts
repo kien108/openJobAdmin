@@ -76,6 +76,14 @@ export const HrAPI = createApi({
          }),
          providesTags: ["UNAPPROVED"],
       }),
+      reviewRegistration: builder.mutation<any, any>({
+         query: (body) => ({
+            url: `/company/review-registration`,
+            method: "POST",
+            body,
+         }),
+         invalidatesTags: ["UNAPPROVED"],
+      }),
    }),
 });
 
@@ -90,4 +98,6 @@ export const {
    useGetProvincesQuery,
    useGetListDistrictsQuery,
    useGetUnapprovedCompaniesQuery,
+
+   useReviewRegistrationMutation,
 } = HrAPI;

@@ -14,15 +14,15 @@ const useFilter = () => {
    useEffect(() => {
       searchParams.get("name")
          ? setParams((prev: any) => ({ ...prev, name: searchParams.get("name") }))
-         : setParams((prev: any) => objectWithoutKey(prev, "name"));
+         : setParams((prev: any) => delete params["name"]);
 
       searchParams.get("specialization")
          ? setParams((prev: any) => ({
               ...prev,
               speId: searchParams.get("specialization"),
            }))
-         : setParams((prev: any) => objectWithoutKey(prev, "specialization"));
-   }, [searchParams.toString()]);
+         : setParams((prev: any) => delete params["specialization"]);
+   }, [searchParams.toString(), searchParams.get("specialization")]);
 
    return params;
 };

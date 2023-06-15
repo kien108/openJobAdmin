@@ -24,6 +24,7 @@ const FilterSkill = () => {
    );
 
    const setValueToSearchParams = (name: string, value: string) => {
+      console.log({ value });
       if (value) {
          searchParams.set(name, value);
          setSearchParams(searchParams);
@@ -45,7 +46,7 @@ const FilterSkill = () => {
                   name="name"
                   onChange={(e: any) => {
                      form.setValue("name", e.target.value);
-                     handleOnChange("name", e.target.value);
+                     handleOnChange("name", e.target.value.trim());
                   }}
                />
             </Col>
@@ -55,6 +56,7 @@ const FilterSkill = () => {
                   name="specialization"
                   label="Chuyên ngành hẹp"
                   required
+                  loading={fetchingFilterSpec}
                   options={(dataFilterSpec ?? []).map((item: any) => ({
                      key: item.id,
                      label: item.name,

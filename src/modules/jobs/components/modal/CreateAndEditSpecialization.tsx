@@ -136,7 +136,14 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
          <StyledCreateAndEditMajor>
             <FormProvider {...form}>
                {!specialization && (
-                  <Select options={options} name="major_id" required title={t("Chuyên ngành")} />
+                  <Select
+                     options={options}
+                     name="major_id"
+                     required
+                     title={t("Chuyên ngành")}
+                     style={{ fontWeight: "400" }}
+                     placeholder="Chọn chuyên ngành"
+                  />
                )}
                <Input
                   required

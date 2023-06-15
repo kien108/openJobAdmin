@@ -37,7 +37,7 @@ const FilterCompany = () => {
 
    const defaultValues = useMemo(
       () => ({
-         name: searchParams.get("name"),
+         companyName: searchParams.get("companyName"),
          address: searchParams.get("address"),
          languages: searchParams.get("languages"),
          dates: searchParams.get("dates"),
@@ -147,10 +147,10 @@ const FilterCompany = () => {
                   title={t("companyName")}
                   placeholder="Tên công ty"
                   icons={<SearchIcon width={20} />}
-                  name="name"
+                  name="companyName"
                   onChange={(e: any) => {
-                     form.setValue("name", e.target.value);
-                     handleOnChange("name", e.target.value);
+                     form.setValue("companyName", e.target.value);
+                     handleOnChange("companyName", e.target.value);
                   }}
                />
             </Col>

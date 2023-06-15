@@ -98,7 +98,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
          ? updateSkill({
               name: data.name,
               id: skill?.id,
-              isVerified: true,
+              //   isVerified: true,
            })
               .unwrap()
               .then(() => {
@@ -141,12 +141,6 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
       <Spin spinning={loadingFilterSpec}>
          <StyledCreateAndEditMajor>
             <FormProvider {...form}>
-               <Input
-                  required
-                  label={t("Skill Name")}
-                  name="name"
-                  placeholder={t("Enter skill...")}
-               />
                {!skill && (
                   <Select
                      name="specializationId"
@@ -157,6 +151,13 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                      placeholder="Chọn chuyên ngành hẹp"
                   />
                )}
+               <Input
+                  required
+                  label={t("Skill Name")}
+                  name="name"
+                  placeholder={t("Enter skill...")}
+               />
+
                <GroupButton>
                   <Button
                      loading={loadingCreate || loadingUpdate}

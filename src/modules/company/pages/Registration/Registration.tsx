@@ -31,6 +31,7 @@ import {
    useDeActivateMutation,
    useGetCompaniesQuery,
    useGetUnapprovedCompaniesQuery,
+   useReviewRegistrationMutation,
 } from "../../services";
 import { useSearchParams } from "react-router-dom";
 import { ICompany, IUnapproved } from "../../types";
@@ -48,6 +49,7 @@ import {
 } from "../../components";
 import { GroupButton } from "../../components/modal/styles";
 import moment from "moment";
+import { GroupBtns, StyledHeader } from "./styles";
 
 const CompanyManagement = () => {
    const { t } = useTranslation();
@@ -55,6 +57,8 @@ const CompanyManagement = () => {
    const [dataSource, setDataSource] = useState<IUnapproved[]>([]);
    const [selectedId, setSelectedId] = useState<string | undefined>("");
    const [selectedRecord, setSelectedRecord] = useState<IUnapproved | undefined>(undefined);
+   const [selectedKeys, setSelectedKeys] = useState<any>([]);
+   const [selectedRecords, setSelectedRecords] = useState<any>([]);
 
    const [searchParams, setSearchParams] = useSearchParams();
 
@@ -71,6 +75,12 @@ const CompanyManagement = () => {
    } = useModal();
 
    const {
+      isOpen: isOpenReject,
+      handleClose: handleCloseReject,
+      handleOpen: handleOpenReject,
+   } = useModal();
+
+   const {
       data: dataCompanies,
       isLoading: loadingCompanies,
       isFetching: fetchingCompanies,
@@ -83,6 +93,8 @@ const CompanyManagement = () => {
          refetchOnMountOrArgChange: true,
       }
    );
+
+   const [review, { isLoading: loadingReview }] = useReviewRegistrationMutation();
 
    const columns: ColumnsType<any> = [
       {
@@ -139,14 +151,14 @@ const CompanyManagement = () => {
                >
                   <EyeIcon />
                </BtnFunction>
-               <BtnFunction
+               {/* <BtnFunction
                   onClick={() => {
                      setSelectedId(record?.id);
                      handleOpenDelete();
                   }}
                >
                   <DeleteIcon />
-               </BtnFunction>
+               </BtnFunction> */}
             </StyledFunctions>
          ),
       },
@@ -158,25 +170,61 @@ const CompanyManagement = () => {
          ...item,
       }));
 
-      const temp = [
-         ...dataSource,
-         {
-            key: 1,
-            companyName: "asdf",
-            createdAt: "2023-06-12T14:03:14.622Z",
-            email: "abc@gmail.com",
-            headHunterName: "Nguyen Van A",
-            id: "123123123",
-            phone: "0923423423",
-            position: "CEO",
-         },
-      ];
-      setDataSource(temp);
-   }, []);
+      setDataSource(dataSource);
+   }, [dataCompanies]);
 
+   const rowSelection = {
+      selectedKeys,
+      onChange: (selectedRowKeys: React.Key[], selectedRows) => {
+         setSelectedKeys(selectedRowKeys);
+         setSelectedRecords(selectedRows);
+      },
+   };
+
+   const handleBulkRegistration = (status: boolean) => {
+      const payload = {
+         approved: status,
+         companyRegistrationList: selectedRecords,
+      };
+      review(payload)
+         .unwrap()
+         .then(() => {
+            openNotification({
+               type: "success",
+               message: t("Thao tác thành công !!!"),
+            });
+
+            setSelectedRecords([]);
+            setSelectedKeys([]);
+
+            if (status) {
+               handleCloseDelete();
+            } else {
+               handleCloseReject();
+            }
+         })
+         .catch((error) => {
+            openNotification({
+               type: "error",
+               message: t("INTERNAL SERVER ERROR"),
+            });
+            handleCloseDelete();
+            handleCloseReject();
+         });
+   };
    return (
       <>
-         <Header title="Quản lý công ty" />
+         <StyledHeader>
+            <Header title="Quản lý đăng ký công ty" />
+            <GroupBtns>
+               <Button disabled={selectedKeys.length === 0} onClick={handleOpenDelete}>
+                  Xác thực hàng loạt
+               </Button>
+               <Button disabled={selectedKeys.length === 0} onClick={handleOpenReject}>
+                  Từ chối hàng loạt
+               </Button>
+            </GroupBtns>
+         </StyledHeader>
          <ContainerTable>
             <FilterRegistration />
             <Table
@@ -187,6 +235,8 @@ const CompanyManagement = () => {
                loading={loadingCompanies || fetchingCompanies}
                totalElements={dataCompanies?.totalElements || 0}
                totalPages={dataCompanies?.totalPages || 0}
+               rowKey={(row) => row?.key}
+               rowSelection={rowSelection}
             />
          </ContainerTable>
 
@@ -218,7 +268,7 @@ const CompanyManagement = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title="Bạn có chắc chắn muốn xóa yêu cầu đăng ký công ty này không ?"
+            title="Xác thực hàng loạt ?"
          >
             <GroupButton>
                <Button
@@ -226,18 +276,48 @@ const CompanyManagement = () => {
                   style={{ padding: "0 24px" }}
                   key="back"
                   border="outline"
-                  onClick={() => {
-                     setSelectedId(undefined);
-                     handleCloseDelete();
-                  }}
+                  loading={loadingReview}
+                  onClick={handleCloseDelete}
                >
                   Hủy bỏ
                </Button>
                <Button
                   height={44}
                   key="submit"
-                  // loading={loadingDeleteCompany}
-                  // onClick={handleConfirmDelete}
+                  onClick={() => handleBulkRegistration(true)}
+                  loading={loadingReview}
+               >
+                  Đồng ý
+               </Button>
+            </GroupButton>
+         </Modal>
+
+         <Modal
+            type="confirm"
+            open={isOpenReject}
+            onCancel={() => {
+               setSelectedId(undefined);
+               handleCloseDelete();
+            }}
+            confirmIcon="?"
+            title="Từ chối hàng loạt ?"
+         >
+            <GroupButton>
+               <Button
+                  height={44}
+                  style={{ padding: "0 24px" }}
+                  key="back"
+                  border="outline"
+                  loading={loadingReview}
+                  onClick={handleCloseReject}
+               >
+                  Hủy bỏ
+               </Button>
+               <Button
+                  height={44}
+                  key="submit"
+                  onClick={() => handleBulkRegistration(false)}
+                  loading={loadingReview}
                >
                   Đồng ý
                </Button>

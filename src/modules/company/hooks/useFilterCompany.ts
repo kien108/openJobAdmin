@@ -11,6 +11,7 @@ interface ParamsDate {
    memberType?: any;
    companyType?: any;
    isActive?: any;
+   companyName?: any;
 }
 
 const useFilterCompany = () => {
@@ -59,6 +60,16 @@ const useFilterCompany = () => {
            }))
          : setParams((prev) => {
               delete prev.name;
+              return { ...prev };
+           });
+
+      searchParams.get("companyName")
+         ? setParams((prev) => ({
+              ...prev,
+              companyName: searchParams.get("companyName"),
+           }))
+         : setParams((prev) => {
+              delete prev.companyName;
               return { ...prev };
            });
 

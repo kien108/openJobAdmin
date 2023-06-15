@@ -33,6 +33,7 @@ import { useDeleteSkillMutation, useGetSkillByIdQuery, useGetSkillsQuery } from 
 import useFilter from "../../hooks/useFilter";
 import { Col, Row } from "antd";
 import { FilterSkill } from "../../components";
+import moment from "moment";
 
 const Skills = () => {
    const { t } = useTranslation();
@@ -79,6 +80,8 @@ const Skills = () => {
       }
    );
 
+   console.log(useFilter());
+
    const [deleteSpecialization, { isLoading: loadingDeleteSpecialization }] =
       useDeleteSkillMutation();
 
@@ -88,6 +91,30 @@ const Skills = () => {
          dataIndex: "name",
          key: "name",
          sorter: true,
+      },
+      {
+         title: "Ngày tạo",
+         dataIndex: "createdAt",
+         key: "createdAt",
+         sorter: true,
+         render: (value) => (value ? moment(value).format("DD/MM/YYYY") : "-"),
+      },
+      {
+         title: "Người tạo",
+         dataIndex: "createdBy",
+         key: "createdBy",
+      },
+      {
+         title: "Ngày chỉnh sửa",
+         dataIndex: "updatedAt",
+         key: "updatedAt",
+         sorter: true,
+         render: (value) => (value ? moment(value).format("DD/MM/YYYY") : "-"),
+      },
+      {
+         title: "Người chỉnh sửa",
+         dataIndex: "updatedBy",
+         key: "updatedBy",
       },
       {
          title: "Chức năng",
@@ -162,16 +189,15 @@ const Skills = () => {
          <Header handleOpenCreate={handleOpen} title="Quản lý kỹ năng" />
 
          <ContainerTable>
-            <FormProvider {...form}>
-               <FilterSkill />
-            </FormProvider>
+            <FilterSkill />
+
             <Table
                columns={columns}
                dataSource={dataSource}
                tableInstance={tableInstance}
                loading={loadingSkills || fetchingSkills}
-               totalElements={0}
-               totalPages={0}
+               totalElements={dataSkills?.totalElements || 0}
+               totalPages={dataSkills?.totalPages || 0}
             />
          </ContainerTable>
          <StyledModal

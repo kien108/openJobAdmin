@@ -11,6 +11,7 @@ import ModulesWebUsers from "./modules/web-users/modules-web-users";
 import ModulesSettings from "./modules/settings/modules-settings";
 import ModulesJobs from "./modules/jobs/modules-jobs";
 import ModulesJobsManagement from "./modules/jobs-management/modules-jobs-management";
+import ModulesBusiness from "./modules/business/modules-business";
 
 import "./style.scss";
 import "antd/dist/antd.css";
@@ -29,7 +30,8 @@ export function App() {
                      <Route path="candidates/*" element={<ModulesWebUsers />} />
                      <Route path="settings/*" element={<ModulesSettings />} />
                      <Route path="jobs/*" element={<ModulesJobs />} />
-                     <Route path="jobs-management/*" element={<ModulesJobsManagement />} />
+                     <Route path="posts-management/*" element={<ModulesJobsManagement />} />
+                     <Route path="business/*" element={<ModulesBusiness />} />
                   </Route>
                </Route>
                <Route path="login" element={<ModulesAuth />} />

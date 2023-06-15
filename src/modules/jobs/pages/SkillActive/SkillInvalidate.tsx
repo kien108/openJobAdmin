@@ -7,6 +7,7 @@ import {
    DeleteIcon,
    EditIcon,
    EyeIcon,
+   Header,
    Input,
    Modal,
    openNotification,
@@ -26,6 +27,7 @@ import { GroupButton } from "../../components/modal/styles";
 import { useGetSkillInvalidateQuery, useValidateSkillMutation } from "../../services";
 
 import { BsCheckCircle } from "react-icons/bs";
+import { StyledHeader } from "./styles";
 
 const SkillInvalidate = () => {
    const { t } = useTranslation();
@@ -33,6 +35,7 @@ const SkillInvalidate = () => {
    const [selectedId, setSelectedId] = useState<any>(undefined);
    const [searchParams, setSearchParams] = useSearchParams();
    const [dataSource, setDataSource] = useState<any>([]);
+   const [selectedKeys, setSelectedKeys] = useState<any>([]);
 
    const tableInstance = Table.useTable();
 
@@ -91,7 +94,7 @@ const SkillInvalidate = () => {
 
    const handleConfirmDelete = () => {
       selectedId &&
-         validate(selectedId)
+         validate({ skillIds: [selectedId] })
             .unwrap()
             .then(() => {
                openNotification({
@@ -118,17 +121,54 @@ const SkillInvalidate = () => {
 
       setDataSource(dataSources);
    }, [dataSkills]);
+
+   const rowSelection = {
+      selectedKeys,
+      onChange: (selectedRowKeys: React.Key[], selectedRows) => {
+         setSelectedKeys(selectedRowKeys);
+      },
+   };
+
+   const handleBulkValidate = () => {
+      validate({
+         skillIds: selectedKeys,
+      })
+         .unwrap()
+         .then(() => {
+            openNotification({
+               type: "success",
+               message: t("Xác thực kỹ năng hàng loạt thành công !!!"),
+            });
+            setSelectedId(undefined);
+            handleCloseDelete();
+         })
+         .catch((error) => {
+            openNotification({
+               type: "error",
+               message: t("INTERNAL SERVER ERROR"),
+            });
+            handleCloseDelete();
+         });
+   };
+
    return (
       <>
-         <Title>Quản lý xác thực kỹ năng</Title>
+         <StyledHeader>
+            <Title>Quản lý xác thực kỹ năng</Title>
+            <Button disabled={selectedKeys.length === 0} onClick={handleBulkValidate}>
+               Xác thực hàng loạt
+            </Button>
+         </StyledHeader>
          <ContainerTable>
             <Table
                columns={columns}
                dataSource={dataSource}
                tableInstance={tableInstance}
                loading={loadingMajors || fetchingMajors}
-               totalElements={0}
-               totalPages={0}
+               totalElements={dataSkills?.totalElements || 0}
+               totalPages={dataSkills?.totalPages || 0}
+               rowKey={(row) => row?.key}
+               rowSelection={rowSelection}
             />
          </ContainerTable>
 

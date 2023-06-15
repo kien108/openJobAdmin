@@ -67,9 +67,10 @@ export const SpecializationAPI = createApi({
          providesTags: ["SKILLS_VERIFY"],
       }),
       validateSkill: builder.mutation<any, any>({
-         query: (id) => ({
-            url: `/verify-skill/${id}`,
+         query: (body) => ({
+            url: `/verify-skills`,
             method: "POST",
+            body,
          }),
          invalidatesTags: ["SKILLS_VERIFY"],
       }),
@@ -82,10 +83,10 @@ export const SpecializationAPI = createApi({
          invalidatesTags: ["SKILLS"],
       }),
       updateSkill: builder.mutation<any, any>({
-         query: (body) => ({
-            url: "/skill/update",
-            body,
-            method: "PUT",
+         query: ({ id, name }) => ({
+            url: `/skill/update/${id}/${name}`,
+            // body,
+            method: "POST",
          }),
          invalidatesTags: ["SKILLS"],
       }),
