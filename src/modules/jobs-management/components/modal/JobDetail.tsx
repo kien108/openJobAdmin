@@ -83,23 +83,31 @@ const CreateJob: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          title: t("Name"),
          dataIndex: "name",
          key: "name",
-         width: "45%",
+         width: "40%",
          render: (item) => item,
       },
       {
-         title: t("EXP"),
-         dataIndex: "experience",
-         key: "experience",
-         width: "45%",
+         title: t("Mức độ ưu tiên"),
+         dataIndex: "weight",
+         key: "weight",
+         width: "30%",
+         render: (item) => item,
+      },
+      {
+         title: t("Trạng thái"),
+         dataIndex: "required",
+         key: "required",
+         width: "30%",
          render: (item) => item,
       },
    ];
 
    useEffect(() => {
-      const data = (dataJob?.jobSkills ?? [])?.map((item: any) => ({
+      const data = (dataJob?.jobSkills ?? [])?.map((item) => ({
          key: item?.id,
          name: item?.skill?.name,
-         experience: item?.skill?.experience.replaceAll("_", " "),
+         required: item?.required,
+         weight: item?.weight,
       }));
 
       setDataSources(data);
@@ -120,13 +128,13 @@ const CreateJob: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                         <Col span={12}>
                            <div className="title-container">
                               <span className="label">Major:</span>
-                              <span className="value">{dataJob?.major?.name}</span>
+                              <span className="value">{"major"}</span>
                            </div>
                         </Col>
                         <Col span={12}>
                            <div className="title-container">
                               <span className="label">Specialization:</span>
-                              <span className="value">{dataJob?.specialization?.name}</span>
+                              <span className="value">{"spe"}</span>
                            </div>
                         </Col>
                      </Row>
@@ -163,7 +171,7 @@ const CreateJob: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                <Col span={12}>
                   <div className="title-container">
                      <span className="label">Salary:</span>
-                     <span className="value">{dataJob?.salary}</span>
+                     {/* <span className="value">{dataJob?.salary}</span> */}
                   </div>
                </Col>
                <Col span={12}>
@@ -174,7 +182,7 @@ const CreateJob: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                </Col>
                <Col span={24}>
                   <span className="label">Description</span>
-                  {Parser(`${dataJob?.description}`)}
+                  {Parser(`${dataJob?.description}` || "-")}
                </Col>
             </Row>
 

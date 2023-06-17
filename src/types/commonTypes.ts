@@ -6,8 +6,8 @@ export enum ECompanyType {
 
 export enum EWorkPlace {
    ONSITE = "Tại công ty",
-   REMOTE = "Từ xa",
-   FLEXIBLE = "Linh hoạt",
+   WORK_FROM_HOME = "Từ xa",
+   HYBRID = "Linh hoạt",
 }
 
 export enum EWorkingLanguages {
@@ -36,14 +36,13 @@ export enum EJobTypes {
 }
 
 export enum EJobLevels {
-   INTERN = "Thực tập",
+   INTERNSHIP = "Thực tập",
    FRESHER = "Fresher",
    JUNIOR = "Junior",
    MIDDLE = "Middle",
    SENIOR = "Senior",
    LEADER = "Trưởng nhóm",
-   MANAGER = "Quán lý dự án",
-   HIGHER_LEVEL = "Vị trí cao câp",
+   HIGH_LEVEL_EXECUTIVE = "Vị trí cao cấp",
 }
 
 export enum EFileCompany {
@@ -65,4 +64,11 @@ export enum ERoles {
 export enum EMemberTypes {
    DEFAULT = "DEFAULT",
    PREMIUM = "PREMIUM",
+}
+
+export enum EJobStatus {
+   NEW = "NEW",
+   REJECTED = "REJECTED",
+   APPROVED = "APPROVED",
+   HIDDEN = "HIDDEN",
 }

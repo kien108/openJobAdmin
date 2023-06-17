@@ -1,4 +1,11 @@
-import { Button, Input, SearchIcon, Select } from "../../../../libs/components";
+import {
+   Button,
+   Checkbox,
+   DateRangePicker,
+   Input,
+   SearchIcon,
+   Select,
+} from "../../../../libs/components";
 import { Col, Row, Spin } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
@@ -8,12 +15,19 @@ import { useSearchParams } from "react-router-dom";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { useDebounce } from "../../../../libs/common";
+import { convertEnumToArrayWithoutNumber, useDebounce } from "../../../../libs/common";
 import {
    useGetCompaniesQuery,
    useGetMajorsQuery,
+   useGetProvincesQuery,
    useGetSpecializationsQuery,
 } from "../../services";
+import moment from "moment";
+import { EJobLevels, EJobStatus, EJobTypes, EWorkPlace } from "../../../../types";
+import { convertPrice, revertPrice } from "../../../../utils";
+import { Container } from "./styles";
+
+const formatDate = "DD/MM/YYYY";
 
 const FilterCompany = () => {
    const { t } = useTranslation();
@@ -25,23 +39,24 @@ const FilterCompany = () => {
    const [specializations, setSpecializations] = useState<any>([]);
    const [searchLocation, setSearchLocation] = useState<any>("");
 
+   const [checked, setChecked] = useState<boolean>(false);
+
    const searchProvinceDebounce = useDebounce(searchLocation, 300);
 
-   const defaultValues = useMemo(
-      () => ({
-         keyword: searchParams.get("keyword"),
-         company: searchParams.get("company"),
-         majorId: searchParams.get("majorId"),
-         specializationId: searchParams.get("specializationId"),
-      }),
-      [searchParams]
-   );
-
-   const {
-      data: dataCompanies,
-      isLoading: loadingCompanies,
-      isFetching: fetchingCompanies,
-   } = useGetCompaniesQuery({ page: 0, size: 99 });
+   const defaultValues = {
+      keyword: searchParams.get("keyword"),
+      company: searchParams.get("company"),
+      majorId: searchParams.get("majorId"),
+      specializationId: "",
+      dates: searchParams.get("dates"),
+      address: searchParams.get("address"),
+      jobLevel: searchParams.get("jobLevel"),
+      jobType: searchParams.get("jobType"),
+      workplace: searchParams.get("workplace"),
+      minSalary: searchParams.get("minSalary"),
+      maxSalary: searchParams.get("maxSalary"),
+      jobStatus: searchParams.get("jobStatus"),
+   };
 
    const form = useForm({ defaultValues });
 
@@ -61,6 +76,15 @@ const FilterCompany = () => {
       }
    );
 
+   const {
+      data: dataProvinces,
+      isLoading: loadingProvince,
+      isFetching: fetchingProvinces,
+   } = useGetProvincesQuery(
+      { keyword: searchProvinceDebounce },
+      { refetchOnMountOrArgChange: true }
+   );
+
    const setValueToSearchParams = (name: string, value: string) => {
       if (value) {
          searchParams.set(name, value);
@@ -75,7 +99,7 @@ const FilterCompany = () => {
 
    useEffect(() => {
       const options = dataMajors?.map((item: any) => ({
-         key: item.id,
+         key: +item.id,
          label: item.name,
          value: item.id,
          render: () => <span>{item?.name}</span>,
@@ -86,8 +110,8 @@ const FilterCompany = () => {
 
    useEffect(() => {
       const options = dataSpecializations?.map((item: any) => ({
-         key: item.id,
-         label: item.name,
+         key: +item.id,
+         label: item.id,
          value: item.id,
          render: () => <span>{item?.name}</span>,
       }));
@@ -96,34 +120,178 @@ const FilterCompany = () => {
    }, [dataSpecializations]);
 
    useEffect(() => {
-      if (!dataCompanies) return;
-
-      const options = (dataCompanies?.companies ?? [])?.map((item: any) => ({
+      const options = (dataProvinces ?? []).map((item: any) => ({
          key: item.id,
          label: item.name,
-         value: item.id,
+         value: item.name,
          render: () => <span>{item?.name}</span>,
       }));
 
       setProvinces(options);
-   }, [dataCompanies]);
+   }, [dataProvinces]);
+
+   const handleChangeDate = (key: string, value: any) => {
+      let dateFormat;
+      if (value) {
+         dateFormat = value?.map((item: any) => moment(item._d).format(formatDate));
+         searchParams.set(key, encodeURI(dateFormat.join(" - ")));
+         setSearchParams(searchParams);
+      }
+
+      if (!value || value.length === 0) {
+         searchParams.delete(key);
+         setSearchParams(searchParams);
+      }
+   };
+
+   const jobLevels = useMemo(() => {
+      return convertEnumToArrayWithoutNumber(EJobLevels)?.map((item) => ({
+         key: item.id,
+         label: item.value,
+         value: item.key,
+         render: () => item.value,
+      }));
+   }, []);
+
+   const jobTypes = useMemo(() => {
+      return convertEnumToArrayWithoutNumber(EJobTypes)?.map((item) => ({
+         key: item.id,
+         label: item.value,
+         value: item.key,
+         render: () => item.value,
+      }));
+   }, []);
+
+   const workPlaces = useMemo(() => {
+      return convertEnumToArrayWithoutNumber(EWorkPlace)?.map((item) => ({
+         key: item.id,
+         label: item.value,
+         value: item.key,
+         render: () => item.value,
+      }));
+   }, []);
+
+   const statuses = useMemo(() => {
+      return convertEnumToArrayWithoutNumber(EJobStatus)?.map((item) => ({
+         key: item.id,
+         label: item.value,
+         value: item.key,
+         render: () => item.value,
+      }));
+   }, []);
+
+   useEffect(() => {
+      form.reset({
+         ...defaultValues,
+         specializationId: form.getValues("specializationId"),
+      });
+
+      setChecked(searchParams.get("isVerified") === "true");
+   }, [searchParams.toString()]);
+
    return (
-      <FormProvider {...form}>
-         <Row gutter={[30, 30]} align="middle">
-            <Col span={8}>
-               <Input
-                  className="search"
-                  title={t("companyName")}
-                  placeholder="Company name, job title"
-                  icons={<SearchIcon width={20} />}
-                  name="keyword"
-                  onChange={(e: any) => {
-                     form.setValue("keyword", e.target.value);
-                     handleOnChange("keyword", e.target.value);
-                  }}
-               />
-            </Col>
-            <Col span={8}>
+      <Container>
+         <FormProvider {...form}>
+            <Row gutter={[20, 20]} align="middle">
+               <Col span={8}>
+                  <Input
+                     className="search"
+                     title={t("companyName")}
+                     placeholder="Tên công ty, tiêu đề"
+                     icons={<SearchIcon width={20} />}
+                     name="keyword"
+                     onChange={(e: any) => {
+                        form.setValue("keyword", e.target.value);
+                        handleOnChange("keyword", e.target.value);
+                     }}
+                  />
+               </Col>
+               <Col span={8}>
+                  <DateRangePicker
+                     format={formatDate}
+                     name="dates"
+                     label={"Ngày đăng"}
+                     value={
+                        form.getValues("dates")
+                           ? [
+                                moment(form.getValues("dates")?.split("%20-%20")[0], formatDate),
+                                moment(form.getValues("dates")?.split("%20-%20")[1], formatDate),
+                             ]
+                           : undefined
+                     }
+                     onChange={(value) => {
+                        const dateFormat = value
+                           ? value.map((item: any) => moment(item._d).format(formatDate))
+                           : null;
+                        form.setValue(
+                           "dates",
+                           dateFormat ? encodeURI(`${dateFormat[0]} - ${dateFormat[1]}`) : null
+                        );
+                        handleChangeDate("dates", value);
+                     }}
+                  />
+               </Col>
+
+               <Col span={8}>
+                  <Spin spinning={false}>
+                     <Select
+                        name="address"
+                        label="Địa chỉ"
+                        required
+                        options={provinces || []}
+                        onChange={(value) => {
+                           setValueToSearchParams("address", value);
+                           form.setValue("address", value);
+                        }}
+                     />
+                  </Spin>
+               </Col>
+               <Col span={6}>
+                  <Spin spinning={false}>
+                     <Select
+                        name="jobLevel"
+                        label="Vị trí"
+                        required
+                        options={jobLevels}
+                        onChange={(value) => {
+                           setValueToSearchParams("jobLevel", value);
+                           form.setValue("jobLevel", value);
+                        }}
+                     />
+                  </Spin>
+               </Col>
+
+               <Col span={6}>
+                  <Spin spinning={false}>
+                     <Select
+                        name="jobType"
+                        label="Loaị công việc"
+                        required
+                        options={jobTypes}
+                        onChange={(value) => {
+                           setValueToSearchParams("jobType", value);
+                           form.setValue("jobType", value);
+                        }}
+                     />
+                  </Spin>
+               </Col>
+
+               <Col span={6}>
+                  <Spin spinning={false}>
+                     <Select
+                        name="workplace"
+                        label="Nơi làm việc"
+                        required
+                        options={workPlaces}
+                        onChange={(value) => {
+                           setValueToSearchParams("workplace", value);
+                           form.setValue("workplace", value);
+                        }}
+                     />
+                  </Spin>
+               </Col>
+
+               {/* <Col span={6}>
                <Spin spinning={loadingMajors || fetchingMajors}>
                   <Select
                      name="majorId"
@@ -137,36 +305,60 @@ const FilterCompany = () => {
                      }}
                   />
                </Spin>
-            </Col>
-            <Col span={8}>
-               <Spin spinning={loadingSpecializations || fetchingSpecializations}>
+            </Col> */}
+               <Col span={6}>
                   <Select
                      required
                      name="specializationId"
-                     label="Specialization"
+                     label="Chuyên ngành hẹp"
                      options={specializations || []}
                      loading={loadingSpecializations || fetchingSpecializations}
                      onChange={(value) => {
-                        setValueToSearchParams("specializationId", value);
                         form.setValue("specializationId", value);
+                        setValueToSearchParams("specializationId", value);
                      }}
                   />
-               </Spin>
-            </Col>
-            {/* <Col span={6}>
-               <Select
-                  name="company"
-                  label={t("Company")}
-                  required
-                  showSearch
-                  options={provinces || []}
-                  onSearch={(value) => setSearchLocation(value)}
-                  onChange={(value) => handleOnChange("company", value)}
-                  loading={loadingCompanies || fetchingCompanies}
-               />
-            </Col> */}
-         </Row>
-      </FormProvider>
+               </Col>
+
+               <Col span={6}>
+                  <Input
+                     className="minSalary"
+                     placeholder="Lương tối thiểu"
+                     name="minSalary"
+                     onChange={(e: any) => {
+                        form.setValue("minSalary", convertPrice(e.target.value));
+                        handleOnChange("minSalary", convertPrice(e.target.value));
+                     }}
+                     allowClear
+                  />
+               </Col>
+               <Col span={6}>
+                  <Input
+                     className="maxSalary"
+                     placeholder="Lương tối đa"
+                     name="maxSalary"
+                     onChange={(e: any) => {
+                        form.setValue("maxSalary", convertPrice(e.target.value));
+                        handleOnChange("maxSalary", convertPrice(e.target.value));
+                     }}
+                     allowClear
+                  />
+               </Col>
+               <Col span={6}>
+                  <Select
+                     required
+                     name="jobStatus"
+                     label="Trạng thái"
+                     options={statuses || []}
+                     onChange={(value) => {
+                        form.setValue("jobStatus", value);
+                        setValueToSearchParams("jobStatus", value);
+                     }}
+                  />
+               </Col>
+            </Row>
+         </FormProvider>
+      </Container>
    );
 };
 

@@ -1,13 +1,15 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ICompanies, IHr, IHrs } from "../types";
 import { baseQuery } from "./baseQuery";
+import { IJob, IResJobs } from "../types/JobType";
+import { IParamsCommon } from "../../../types";
 
 export const JobsAPI = createApi({
    reducerPath: "JobsAPI",
    tagTypes: ["JOBS", "COMPANY_JOBS"],
    baseQuery,
    endpoints: (builder) => ({
-      getJobs: builder.query<any, any>({
+      getJobs: builder.query<IResJobs, IParamsCommon>({
          query: (params) => ({
             url: "/jobs",
             params,
@@ -28,7 +30,7 @@ export const JobsAPI = createApi({
          }),
          // providesTags: ["COMPANY"],
       }),
-      getJobById: builder.query<any, string>({
+      getJobById: builder.query<IJob, string>({
          query: (id) => ({
             url: `/job/${id}`,
          }),
@@ -44,6 +46,12 @@ export const JobsAPI = createApi({
             url: `/specializations`,
          }),
       }),
+      getProvinces: builder.query({
+         query: (params) => ({
+            url: "/location/search-province",
+            params,
+         }),
+      }),
    }),
 });
 
@@ -54,4 +62,5 @@ export const {
    useGetJobByIdQuery,
    useGetMajorsQuery,
    useGetSpecializationsQuery,
+   useGetProvincesQuery,
 } = JobsAPI;

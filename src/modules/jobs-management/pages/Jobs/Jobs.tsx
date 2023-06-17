@@ -21,7 +21,7 @@ import {
 
 import { ColumnsType } from "antd/es/table";
 import { useTranslation } from "react-i18next";
-import { BtnFunction, ContainerTable, StyledFunctions, StyledModal } from "./styles";
+import { BtnFunction, Container, ContainerTable, StyledFunctions, StyledModal } from "./styles";
 // import { useDeActivateMutation, useGetCompaniesQuery } from "../services";
 import { useNavigate, useSearchParams } from "react-router-dom";
 // import { ICompany } from "../types";
@@ -36,6 +36,8 @@ import { useGetCompanyJobsQuery, useGetJobsQuery } from "../../services";
 import { useFilter } from "../../hooks";
 import { FilterJobs } from "../../components/FilterJobs";
 import { JobDetail } from "../../components/modal";
+import { IJob } from "../../types/JobType";
+import { convertPrice } from "../../../../utils";
 
 // import { useDeleteJobMutation, useGetJobCompanyQuery } from "../../services/JobAPI";
 
@@ -64,18 +66,6 @@ const Jobs = () => {
    const [searchParams, setSearchParams] = useSearchParams();
 
    const {
-      data: dataCompaniesJobs,
-      isLoading: loadingCompanyJobs,
-      isFetching: fetchingCompanyJobs,
-   } = useGetCompanyJobsQuery(
-      { ...tableInstance.params, ...useFilter() },
-      {
-         refetchOnMountOrArgChange: true,
-         skip: !searchParams.get("company"),
-      }
-   );
-
-   const {
       data: dataJobs,
       isLoading: loadingJobs,
       isFetching: fetchingJobs,
@@ -101,86 +91,57 @@ const Jobs = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Company"),
-         dataIndex: "companyName",
-         key: "companyName",
-         sorter: true,
-         width: "15%",
-      },
-      {
-         title: t("Title"),
+         title: t("Tiêu đề"),
          dataIndex: "title",
          key: "title",
          sorter: true,
-         render: (item) => <TextEllipsis data={item} length={100} />,
-         width: "23%",
+         width: "20%",
+         render: (item) => <TextEllipsis className="name" data={item} length={50} />,
       },
       {
-         title: t("WorkPlace"),
-         dataIndex: "workPlace",
-         key: "workPlace",
-         sorter: true,
-         width: "12%",
-         render: (item) => <span>{item.replaceAll("_", " ")}</span>,
+         title: t("Vị trí"),
+         dataIndex: "jobLevel",
+         key: "jobLevel",
+         width: "8%",
       },
       {
-         title: t("Salary"),
-         dataIndex: "salary",
-         key: "salary",
-         sorter: true,
-         width: "10%",
-      },
-      {
-         title: t("Quantity"),
+         title: t("Số lượng"),
          dataIndex: "quantity",
          key: "quantity",
-         sorter: true,
-         width: "10%",
       },
+
       {
-         title: t("Created At"),
+         title: t("Lương"),
+         dataIndex: "salary",
+         key: "salary",
+         render: (item) => <span className="salary">{item}</span>,
+      },
+
+      {
+         title: t("Ngày đăng"),
          dataIndex: "createdAt",
          key: "createdAt",
          sorter: true,
-         width: "10%",
 
          render: (item) => <span>{moment(item).format("DD/MM/YYYY")}</span>,
       },
       {
-         title: t("Expired At"),
+         title: t("Ngày hết hạn"),
          dataIndex: "expiredAt",
          key: "expiredAt",
          sorter: true,
-         width: "10%",
 
          render: (item) => <span>{item ? moment(item).format("DD/MM/YYYY") : "-"}</span>,
       },
       {
-         title: t("Expired At"),
-         dataIndex: "expiredAt",
-         key: "expiredAt",
-         sorter: true,
-         width: "10%",
-
-         render: (item) => (
-            <span>
-               {item ? (
-                  <Status
-                     isActive={moment(item).isAfter(moment())}
-                     activeMsg="In-progress"
-                     inactiveMsg="Expired"
-                  />
-               ) : (
-                  <Status isActive={true} activeMsg="In-progress" inactiveMsg="Expired" />
-               )}
-            </span>
-         ),
+         title: t("Trạng thái"),
+         dataIndex: "jobStatus",
+         key: "jobStatus",
       },
 
       {
          title: t("Action"),
          dataIndex: "id",
-         width: "10%",
 
          render: (_: string, record: any) => (
             <StyledFunctions>
@@ -219,43 +180,36 @@ const Jobs = () => {
       handleOpenDeleteModal();
    };
 
-   const handleOnChange = debounce(setValueToSearchParams, 500);
-
    useEffect(() => {
-      const data = searchParams.get("company") ? dataCompaniesJobs : dataJobs;
-
-      const dataSource = (data?.jobs ?? [])
+      const dataSource = (dataJobs?.jobs ?? [])
          .filter((item: any) => !item?.expiredAt || moment(item?.expiredAt).isAfter(moment()))
-         ?.map((item: any) => ({
+         ?.map((item: IJob) => ({
             key: item.id,
-            companyName: item?.company?.name,
             ...item,
+            salary: !item?.salaryInfo?.negotiable
+               ? "Thỏa thuận"
+               : `${convertPrice(item?.salaryInfo?.min)} - ${convertPrice(
+                    item?.salaryInfo?.max
+                 )} (${item?.salaryInfo?.salaryType})`,
          }));
 
       setDataSource(dataSource || []);
-   }, [dataJobs, dataCompaniesJobs, searchParams.get("company")]);
+   }, [dataJobs]);
 
    return (
-      <>
-         <Title>Jobs Management</Title>
+      <Container>
+         <Title>Quản lý tin tuyển dụng</Title>
          <ContainerTable>
             <FilterJobs />
 
             <Table
+               size="small"
                columns={columns}
                dataSource={dataSource}
                tableInstance={tableInstance}
-               loading={loadingJobs || fetchingJobs || loadingCompanyJobs || fetchingCompanyJobs}
-               totalElements={
-                  searchParams.get("company")
-                     ? dataCompaniesJobs?.totalElements
-                     : dataJobs?.totalElements
-               }
-               totalPages={
-                  searchParams.get("company")
-                     ? dataCompaniesJobs?.totalElements
-                     : dataJobs?.totalPages
-               }
+               loading={loadingJobs || fetchingJobs}
+               totalElements={dataJobs?.totalElements || 0}
+               totalPages={dataJobs?.totalPages || 0}
             />
          </ContainerTable>
          <Modal
@@ -275,7 +229,7 @@ const Jobs = () => {
                }}
             />
          </Modal>
-      </>
+      </Container>
    );
 };
 

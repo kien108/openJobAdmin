@@ -149,7 +149,7 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
 
    const [updateHr, { isLoading: loadingUpdate }] = useUpdateHrMutation();
 
-   const { data: dataAccount, isLoading: loadingAccount } = useGetByIdQuery(
+   const { data: dataAccount, isFetching: loadingAccount } = useGetByIdQuery(
       searchParams.get("id")!,
       {
          skip: !searchParams.get("id"),

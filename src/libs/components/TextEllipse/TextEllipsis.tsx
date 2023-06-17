@@ -7,6 +7,7 @@ interface TextEllipsisProps {
    data: string;
    length?: number;
    haveShowMore?: boolean;
+   className?: string;
 }
 
 const TextEllipsis = (props: TextEllipsisProps) => {
@@ -16,13 +17,13 @@ const TextEllipsis = (props: TextEllipsisProps) => {
    const [isShowMore, setIsShowMore] = useState<boolean>(true);
 
    if (data?.length < length) {
-      return <Text>{data}</Text>;
+      return <Text className={props.className}> {data}</Text>;
    } else {
       return (
          <StyledTextEllipsis>
             {isShowMore ? (
                <>
-                  <Text>
+                  <Text className={props.className}>
                      {data?.slice(0, length)}
                      {!haveShowMore && <span>...</span>}
                   </Text>
@@ -39,7 +40,7 @@ const TextEllipsis = (props: TextEllipsisProps) => {
                </>
             ) : (
                <>
-                  <Text>{data}</Text>
+                  <Text className={props.className}>{data}</Text>
                   <button
                      className="btnShow"
                      onClick={() => {

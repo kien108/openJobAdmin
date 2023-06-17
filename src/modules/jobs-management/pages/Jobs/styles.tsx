@@ -80,3 +80,16 @@ export const ContainerTable = styled.div`
    background: ${(props) => props.theme.secondaryText};
    border-radius: 10px;
 `;
+
+export const Container = styled.div`
+   .name {
+      font-weight: 600;
+      color: ${(props) => props.theme.strongBlue};
+      text-transform: uppercase;
+   }
+
+   .salary {
+      color: ${(props) => props.theme.strongBlue};
+      font-weight: 700;
+   }
+`;

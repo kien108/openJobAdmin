@@ -15,3 +15,9 @@ export const convertEnumToArray = (enumVariable: {
       return acc;
    }, []);
 };
+
+export const convertEnumToArrayWithoutNumber = (enumVariable: {
+   [k: string]: string | number;
+}): { id: string; key: string; value: any }[] => {
+   return Object.keys(enumVariable).map((key) => ({ id: uuidv4(), key, value: enumVariable[key] }));
+};

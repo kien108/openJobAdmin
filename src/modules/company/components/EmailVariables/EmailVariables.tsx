@@ -77,7 +77,7 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
             control={control}
             render={({ field: { onChange, ...field } }) => (
                <QuillEditor
-                  disabled={true}
+                  disabled={disabled}
                   {...field}
                   {...register(`${name}`)}
                   editorRef={editorRef}
