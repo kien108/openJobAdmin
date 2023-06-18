@@ -7,4 +7,6 @@ export {
    useGetMajorsQuery,
    useGetSpecializationsQuery,
    useGetProvincesQuery,
+   useGetByIdQuery,
+   useReviewJobMutation,
 } from "./JobsAPI";

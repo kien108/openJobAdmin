@@ -167,7 +167,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const onSubmit = (data: any) => {
       const { companyName, ...dataBody } = data;
 
-      console.log({ imgs });
       const base64Imgs = imgs?.filter((item: any) => isBase64(item?.url || item?.thumbUrl));
       const existImgs = imgs?.filter((item: any) => !isBase64(item?.url || item?.thumbUrl));
       const payload = {
@@ -196,7 +195,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          phone: data?.phone,
       };
 
-      console.log({ payload });
       updateHr(payload)
          .unwrap()
          .then(() => {

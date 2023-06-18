@@ -15,6 +15,23 @@ export const StyledCreateAndEditHr = styled.div`
       font-weight: 400;
       color: #777777;
    }
+
+   .row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      .label {
+         font-weight: 500;
+         font-size: 13px;
+      }
+
+      .imgs {
+         display: flex;
+         align-items: center;
+         flex-wrap: wrap;
+         gap: 10px;
+      }
+   }
 `;
 
 export const StyledEditPassword = styled.div`

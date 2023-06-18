@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import loginBg from "../../assets/background.png";
+import loginBg from "../../assets/login-bg.svg";
 
 export const ContainerLogin = styled.div`
    position: relative;

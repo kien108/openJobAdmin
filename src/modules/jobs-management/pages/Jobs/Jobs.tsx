@@ -32,39 +32,41 @@ import * as yup from "yup";
 import { debounce } from "lodash";
 import { GroupButton } from "../../components/modal/styles";
 import { MdOutlinePassword } from "react-icons/md";
-import { useGetCompanyJobsQuery, useGetJobsQuery } from "../../services";
+import { useGetCompanyJobsQuery, useGetJobsQuery, useReviewJobMutation } from "../../services";
 import { useFilter } from "../../hooks";
 import { FilterJobs } from "../../components/FilterJobs";
 import { JobDetail } from "../../components/modal";
 import { IJob } from "../../types/JobType";
 import { convertPrice } from "../../../../utils";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { Popover } from "../../components";
+import { EJobStatus } from "../../../../types";
 
-// import { useDeleteJobMutation, useGetJobCompanyQuery } from "../../services/JobAPI";
-
-type FormType = {
-   listSkill: any;
-   objective: string;
-   education: string;
-   experience: string;
-   certificate: string;
-   majorId: string;
-   specializationId: string;
-   title: string;
-};
+enum EConfirmType {
+   OK = "OK",
+   REJECT = "REJECT",
+}
 
 const Jobs = () => {
    const { t } = useTranslation();
    const tableInstance = Table.useTable();
    const [dataSource, setDataSource] = useState<any>([]);
    const [selectedId, setSelectedId] = useState<string | undefined>("");
-
-   const navigate = useNavigate();
-
-   const { user } = useCommonSelector((state: RootState) => state.user);
-   const { isOpen, handleOpen, handleClose } = useModal();
+   const [selectedRecord, setSelectedRecord] = useState<any>(undefined);
+   const [confirmType, setConfirmType] = useState<EConfirmType>(EConfirmType.OK);
 
    const [searchParams, setSearchParams] = useSearchParams();
 
+   const form = useForm({
+      resolver: yupResolver(
+         yup.object({
+            rejectReasons:
+               confirmType === EConfirmType.OK
+                  ? yup.string()
+                  : yup.string().required("Trường này không được để trống").nullable().trim(),
+         })
+      ),
+   });
    const {
       data: dataJobs,
       isLoading: loadingJobs,
@@ -77,6 +79,8 @@ const Jobs = () => {
       }
    );
 
+   const [reviewJob, { isLoading: loadingReviewJob }] = useReviewJobMutation();
+
    const {
       isOpen: isOpenDetail,
       handleClose: handleCloseDetail,
@@ -84,9 +88,15 @@ const Jobs = () => {
    } = useModal();
 
    const {
-      isOpen: isOpenDelete,
-      handleClose: handleCloseDelete,
-      handleOpen: handleOpenDeleteModal,
+      isOpen: isOpenModalConfirm,
+      handleClose: handleCloseConfirm,
+      handleOpen: handleOpenConfirm,
+   } = useModal();
+
+   const {
+      isOpen: isOpenValidate,
+      handleClose: handleCloseValidate,
+      handleOpen: handleOpenValidate,
    } = useModal();
 
    const columns: ColumnsType<any> = [
@@ -148,37 +158,60 @@ const Jobs = () => {
                <BtnFunction
                   onClick={() => {
                      searchParams.set("id", record?.id);
+
                      setSearchParams(searchParams);
                      handleOpenDetailModal();
                   }}
                >
                   <EyeIcon />
                </BtnFunction>
+
+               {record?.jobStatus === EJobStatus.NEW && (
+                  <BtnFunction
+                     onClick={() => (isOpenValidate ? handleCloseValidate() : handleOpenValidate())}
+                  >
+                     <Popover
+                        overlayClassName="styled-header-popover"
+                        trigger="click"
+                        visible={isOpenValidate}
+                        onVisibleChange={(value) => {
+                           return isOpenValidate ? handleCloseValidate() : handleOpenValidate();
+                        }}
+                        content={
+                           <div className="dropdown-group-btn">
+                              <span
+                                 className="button-content"
+                                 onClick={() => {
+                                    setSelectedRecord(record);
+                                    setConfirmType(EConfirmType.OK);
+                                    handleOpenConfirm();
+                                 }}
+                              >
+                                 Đồng ý
+                              </span>
+                              <span
+                                 className="button-content"
+                                 onClick={() => {
+                                    setSelectedRecord(record);
+                                    setConfirmType(EConfirmType.REJECT);
+                                    handleOpenConfirm();
+                                 }}
+                              >
+                                 Từ chối
+                              </span>
+                           </div>
+                        }
+                     >
+                        <button className="button-header hover">
+                           <BsThreeDotsVertical size={23} />
+                        </button>
+                     </Popover>
+                  </BtnFunction>
+               )}
             </StyledFunctions>
          ),
       },
    ];
-
-   const setValueToSearchParams = (name: string, value: string) => {
-      if (value) {
-         searchParams.set(name, value);
-         setSearchParams(searchParams);
-      } else {
-         searchParams.delete(name);
-         setSearchParams(searchParams);
-      }
-   };
-
-   const handleOpenUpdate = (id: string) => {
-      searchParams.set("id", id);
-      setSearchParams(searchParams);
-      handleOpen();
-   };
-
-   const handleOpenDelete = (id: string) => {
-      setSelectedId(id);
-      handleOpenDeleteModal();
-   };
 
    useEffect(() => {
       const dataSource = (dataJobs?.jobs ?? [])
@@ -186,15 +219,42 @@ const Jobs = () => {
          ?.map((item: IJob) => ({
             key: item.id,
             ...item,
-            salary: !item?.salaryInfo?.negotiable
+            salary: item?.salaryInfo?.isSalaryNegotiable
                ? "Thỏa thuận"
-               : `${convertPrice(item?.salaryInfo?.min)} - ${convertPrice(
-                    item?.salaryInfo?.max
+               : `${convertPrice(item?.salaryInfo?.minSalary)} - ${convertPrice(
+                    item?.salaryInfo?.maxSalary
                  )} (${item?.salaryInfo?.salaryType})`,
          }));
 
       setDataSource(dataSource || []);
    }, [dataJobs]);
+
+   const handleValidate = (data: any) => {
+      const payload = {
+         isApprove: confirmType === EConfirmType.OK,
+         jobs: [selectedRecord],
+         ...(confirmType === EConfirmType.REJECT && {
+            rejectReasons: [data?.rejectReasons],
+         }),
+      };
+
+      reviewJob(payload)
+         .unwrap()
+         .then((res) => {
+            openNotification({
+               type: "success",
+               message: "Kiểm duyệt hoàn tất",
+            });
+
+            handleCloseConfirm();
+         })
+         .catch((error) => {
+            openNotification({
+               type: "error",
+               message: t("common:ERRORS.SERVER_ERROR"),
+            });
+         });
+   };
 
    return (
       <Container>
@@ -213,7 +273,7 @@ const Jobs = () => {
             />
          </ContainerTable>
          <Modal
-            title="Job Detail"
+            title="Tin tuyển dụng"
             visible={isOpenDetail}
             onCancel={() => {
                handleCloseDetail();
@@ -228,6 +288,45 @@ const Jobs = () => {
                   setSearchParams(searchParams);
                }}
             />
+         </Modal>
+
+         <Modal
+            title={`Bạn có chắc chắn muốn ${
+               confirmType === EConfirmType.OK ? "đồng ý" : "từ chối"
+            } đơn đăng ký này không ?`}
+            visible={isOpenModalConfirm}
+            onCancel={() => {
+               handleCloseConfirm();
+               setSelectedRecord(undefined);
+               form.reset({});
+            }}
+            type="confirm"
+            confirmIcon="?"
+            destroyOnClose
+         >
+            {confirmType === EConfirmType.REJECT && (
+               <FormProvider {...form}>
+                  <Input type="textarea" required label="Lý do từ chối" name="rejectReasons" />
+               </FormProvider>
+            )}
+            <GroupButton style={{ marginTop: "30px" }}>
+               <Button
+                  loading={loadingReviewJob}
+                  onClick={() => form.handleSubmit(handleValidate)()}
+               >
+                  Đồng ý
+               </Button>
+               <Button
+                  border="outline"
+                  onClick={() => {
+                     handleCloseConfirm();
+                     setSelectedRecord(undefined);
+                     form.reset({});
+                  }}
+               >
+                  Hủy bỏ
+               </Button>
+            </GroupButton>
          </Modal>
       </Container>
    );

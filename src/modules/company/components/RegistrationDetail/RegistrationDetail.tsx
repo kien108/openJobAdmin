@@ -5,7 +5,7 @@ import { Button, openNotification } from "../../../../libs/components";
 import { Container, GroupButton } from "./styles";
 
 import { useTranslation } from "react-i18next";
-import { Col, Row } from "antd";
+import { Col, Row, Spin } from "antd";
 
 import { InputDetail } from "../InputDetail";
 import { IUnapproved } from "../../types";
@@ -44,38 +44,34 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose, data }) => {
    };
 
    return (
-      <Container>
-         <Row gutter={[20, 20]}>
-            <Col span={24}>
-               <InputDetail label="Tên công ty" value={data?.companyName} />
-            </Col>
-            <Col span={24}>
-               <InputDetail label="Họ và tên người đại diện" value={data?.headHunterName} />
-            </Col>
-            <Col span={24}>
-               <InputDetail label="Chức vụ" value={data?.position} />
-            </Col>
-            <Col span={24}>
-               <InputDetail label="Số điện thoại" value={data?.phone} />
-            </Col>
-            <Col span={24}>
-               <InputDetail label="Email" value={data?.email} />
-            </Col>
-         </Row>
+      <Spin spinning={loadingReview}>
+         <Container>
+            <Row gutter={[20, 20]}>
+               <Col span={24}>
+                  <InputDetail label="Tên công ty" value={data?.companyName} />
+               </Col>
+               <Col span={24}>
+                  <InputDetail label="Họ và tên người đại diện" value={data?.headHunterName} />
+               </Col>
+               <Col span={24}>
+                  <InputDetail label="Chức vụ" value={data?.position} />
+               </Col>
+               <Col span={24}>
+                  <InputDetail label="Số điện thoại" value={data?.phone} />
+               </Col>
+               <Col span={24}>
+                  <InputDetail label="Email" value={data?.email} />
+               </Col>
+            </Row>
 
-         <GroupButton>
-            <Button loading={loadingReview} onClick={(e) => handleBulkRegistration(true)}>
-               Chấp nhận
-            </Button>
-            <Button
-               loading={loadingReview}
-               onClick={() => handleBulkRegistration(false)}
-               border="outline"
-            >
-               Từ chối
-            </Button>
-         </GroupButton>
-      </Container>
+            <GroupButton>
+               <Button onClick={(e) => handleBulkRegistration(true)}>Chấp nhận</Button>
+               <Button onClick={() => handleBulkRegistration(false)} border="outline">
+                  Từ chối
+               </Button>
+            </GroupButton>
+         </Container>
+      </Spin>
    );
 };
 

@@ -52,6 +52,19 @@ export const JobsAPI = createApi({
             params,
          }),
       }),
+      getById: builder.query<IHr, string>({
+         query: (id) => ({
+            url: `company/${id}/hr`,
+         }),
+      }),
+      reviewJob: builder.mutation({
+         query: ({ isApprove, ...body }) => ({
+            url: `/job/review/${isApprove}`,
+            body,
+            method: "POST",
+         }),
+         invalidatesTags: ["JOBS"],
+      }),
    }),
 });
 
@@ -63,4 +76,6 @@ export const {
    useGetMajorsQuery,
    useGetSpecializationsQuery,
    useGetProvincesQuery,
+   useGetByIdQuery,
+   useReviewJobMutation,
 } = JobsAPI;

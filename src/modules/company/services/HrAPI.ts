@@ -27,14 +27,6 @@ export const HrAPI = createApi({
             url: `company/${id}/hr`,
          }),
       }),
-      createHeadHunter: builder.mutation<any, any>({
-         query: (body) => ({
-            url: "/company/create",
-            body,
-            method: "POST",
-         }),
-         invalidatesTags: ["COMPANY"],
-      }),
       updateHr: builder.mutation<any, any>({
          query: (body) => ({
             url: `/company/${body.company.id}/hr/update`,
@@ -43,6 +35,15 @@ export const HrAPI = createApi({
          }),
          invalidatesTags: ["COMPANY"],
       }),
+      createHeadHunter: builder.mutation<any, any>({
+         query: (body) => ({
+            url: "/company/create",
+            body,
+            method: "POST",
+         }),
+         invalidatesTags: ["COMPANY"],
+      }),
+
       activate: builder.mutation<any, string>({
          query: (id) => ({
             url: `/hr/activate/${id}`,

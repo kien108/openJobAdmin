@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 
 import {
    Button,
+   GetImage,
    Input,
    openNotification,
    OptionType,
@@ -165,7 +166,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const onSubmit = (data: any) => {
       const { companyName, ...dataBody } = data;
 
-      console.log({ imgs });
       const base64Imgs = imgs?.filter((item: any) => isBase64(item?.url || item?.thumbUrl));
       const existImgs = imgs?.filter((item: any) => !isBase64(item?.url || item?.thumbUrl));
       const payload = {
@@ -194,7 +194,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          phone: data?.phone,
       };
 
-      console.log({ payload });
       updateHr(payload)
          .unwrap()
          .then(() => {
@@ -288,14 +287,11 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                   {moment(dataAccount?.company?.updatedAt).format("HH:mm, DD/MM/YYYY")}
                </span>
                <Title title="Thông tin công ty" icon={<HiInformationCircle size={28} />} />
-               <UploadSingle
-                  name="avatar"
-                  setFile={setAvatar}
-                  label="Ảnh đại diện"
-                  files={avatar}
-                  maxCount={1}
-                  disabled
-               />
+               <Col span={12} className="row">
+                  <span className="label">Ảnh đại diện</span>
+                  <GetImage url={dataAccount?.company?.logoUrl} width={150} />
+               </Col>
+
                <Row gutter={[15, 15]}>
                   <Col span={24}>
                      <Input
@@ -437,18 +433,14 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                      />
                   </Col>
 
-                  <Col span={24}>
-                     <UploadMultiple
-                        name="imgs"
-                        setFile={setImgs}
-                        label="Danh sách ảnh"
-                        multiple
-                        maxCount={5}
-                        count={form.watch("imgs")?.length}
-                        files={imgs}
-                        remove={remove}
-                        disabled
-                     />
+                  <Col span={24} className="row">
+                     <span className="label">Danh sách ảnh</span>
+
+                     <div className="imgs">
+                        {(dataAccount?.company?.imageUrls ?? [])?.map((item) => (
+                           <GetImage url={item} />
+                        ))}
+                     </div>
                   </Col>
 
                   <Col span={24}>

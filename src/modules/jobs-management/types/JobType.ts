@@ -16,15 +16,23 @@ export interface IJob {
    jobType: string;
    quantity: number;
    salaryInfo: {
-      max: number;
-      min: number;
-      negotiable: boolean;
+      isSalaryNegotiable: boolean;
+      maxSalary: number;
+      minSalary: number;
       salaryType: string;
    };
    title: string;
    updatedAt: string;
    updatedBy: string;
    workPlace: string;
+   major: {
+      id: number;
+      name: string;
+   };
+   specialization: {
+      id: number;
+      name: string;
+   };
 }
 
 export interface IJobSkill {
@@ -39,6 +47,7 @@ export interface IJobSkill {
       updatedAt: string;
       updatedBy: string;
    };
+   yoe: string;
    weight: number;
 }
 

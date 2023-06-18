@@ -51,6 +51,11 @@ export const StyledCreateAndEditHr = styled.div`
 
    .value {
       font-size: 17px;
+
+      &.primary {
+         color: ${(props) => props.theme.strongBlue};
+         font-weight: 500;
+      }
    }
 
    .go-to-cvs {
