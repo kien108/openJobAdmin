@@ -12,7 +12,7 @@ interface Params {
    address?: any;
    jobLevel?: any;
    jobType?: any;
-   workplace?: any;
+   workPlace?: any;
    minSalary?: any;
    maxSalary?: any;
    jobStatus?: any;
@@ -117,10 +117,10 @@ const useFilterSearchJob = () => {
       searchParams.get("workplace")
          ? setParams((prev) => ({
               ...prev,
-              workplace: searchParams.get("workplace")!.trim() ?? "",
+              workPlace: searchParams.get("workplace")!.trim() ?? "",
            }))
          : setParams((prev) => {
-              delete prev.workplace;
+              delete prev.workPlace;
               return { ...prev };
            });
 

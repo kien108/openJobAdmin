@@ -60,7 +60,7 @@ export const StyledSidebar = styled.div`
          margin-top: 0;
          margin-bottom: 0 !important;
          font-size: 14px;
-         font-weight: 600;
+         font-weight: 500;
          line-height: 20px;
          border-radius: 10px;
          min-height: 44px;

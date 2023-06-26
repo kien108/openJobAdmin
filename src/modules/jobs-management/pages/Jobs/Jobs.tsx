@@ -67,6 +67,7 @@ const Jobs = () => {
          })
       ),
    });
+
    const {
       data: dataJobs,
       isLoading: loadingJobs,
@@ -167,15 +168,13 @@ const Jobs = () => {
                </BtnFunction>
 
                {record?.jobStatus === EJobStatus.NEW && (
-                  <BtnFunction
-                     onClick={() => (isOpenValidate ? handleCloseValidate() : handleOpenValidate())}
-                  >
+                  <BtnFunction onClick={() => setSelectedId(record?.id)}>
                      <Popover
                         overlayClassName="styled-header-popover"
                         trigger="click"
-                        visible={isOpenValidate}
+                        visible={selectedId === record?.id}
                         onVisibleChange={(value) => {
-                           return isOpenValidate ? handleCloseValidate() : handleOpenValidate();
+                           return selectedId ? setSelectedId(undefined) : setSelectedId(record?.id);
                         }}
                         content={
                            <div className="dropdown-group-btn">
