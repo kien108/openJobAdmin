@@ -51,7 +51,7 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
    useEffect(() => {
       if (!dataSettings) return;
 
-      const dataSource = dataSettings.filter((item) => item.extraValue);
+      const dataSource = dataSettings.filter((item) => item);
       setDataSource(dataSource);
    }, [dataSettings]);
 
@@ -67,23 +67,22 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
 
    const columns = [
       {
-         title: t("Name"),
+         title: "Tên",
          dataIndex: "name",
          sorter: true,
-         width: "20%",
+         width: "35%",
       },
       {
-         title: t("Value"),
+         title: "Nội dung",
          dataIndex: "value",
          sorter: true,
          render: (item: string) => {
-            console.log(Parser(`${item}`));
             return item ? <TextEllipsis data={item.replace(/<[^>]*>?/gm, "")} length={100} /> : "-";
          },
-         width: "80%",
+         width: "65%",
       },
       {
-         title: t("Functions"),
+         title: "Chức năng",
          dataIndex: "email",
          render: (_: string, email: ISetting) => (
             <StyledFunctions>
@@ -105,9 +104,8 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
             tableInstance={tableInstance}
             columns={columns}
             dataSource={dataSource}
-            totalItems={0}
-            totalPages={0}
-            totalElements={0}
+            totalPages={1}
+            totalElements={dataSettings?.length || 0}
             loading={isLoadTemplates || isFetchTemplates}
          />
          <Modal
@@ -115,7 +113,7 @@ const EmailContent: FC<EmailContentProps> = ({ selectedEmail, handleOpenEdit }) 
             visible={openDelete}
             onCancel={toggleOpenDelete}
             confirmIcon="?"
-            title={t("Are you sure to delete this email")}
+            title={"Bạn có chắc chắn muốn xóa email này không ?"}
          >
             <DeleteEmail handleClose={toggleOpenDelete} id={selectedWorkFlowId} />
          </Modal>

@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
-import { Button, Checkbox, Input } from "../../../../../../libs/components";
+import { Button, Checkbox, Input, openNotification } from "../../../../../../libs/components";
 import { useLoginMutation } from "../../services";
 import { AuthResponse } from "../../types/Responses";
 import logo from "../../../../../../assets/img/logo.png";
@@ -74,8 +74,17 @@ const Login = () => {
             localStorage.setItem("refresh_token", data["refresh-token"]);
             navigate(from, { replace: true });
          })
-         .catch((e) => {
-            setError(true);
+         .catch((error) => {
+            if (error?.data?.errorMessage === "Bad credentials") {
+               setError(true);
+            } else {
+               setError(false);
+               openNotification({
+                  type: "error",
+                  message: error?.data?.message,
+                  duration: 5,
+               });
+            }
          });
    };
 
@@ -103,20 +112,24 @@ const Login = () => {
             <StyledForm>
                <StyledLogo src={logo} />
                <Input
-                  label={t("login.username")}
-                  placeholder={t("login.enterUsername")}
+                  label={"Tên đăng nhập"}
+                  placeholder={"Nhập tên đăng nhập"}
                   name="username"
                   required
                />
                <br />
                <Input
-                  label={t("login.password")}
-                  placeholder={t("login.enterPassword")}
+                  label="Mật khẩu"
+                  placeholder="Nhập mật khẩu"
                   type="password"
                   name="password"
                   required
                />
-               {error && <InputMessageStyled>{t("form.error")}</InputMessageStyled>}
+               {error && (
+                  <InputMessageStyled>
+                     Tên đăng nhập hoặc mật khẩu không chính xác
+                  </InputMessageStyled>
+               )}
                <StyledGroupRemembers>
                   <Checkbox
                      id="remember"
@@ -124,7 +137,7 @@ const Login = () => {
                         setIsRememberMe(e.target.checked);
                      }}
                   />
-                  <LabelRemember htmlFor="remember">{t("login.remember")}</LabelRemember>
+                  <LabelRemember htmlFor="remember">Nhớ mật khẩu</LabelRemember>
                </StyledGroupRemembers>
                <Contact>
                   <Trans
@@ -142,7 +155,7 @@ const Login = () => {
                </Contact>
                <StyledButton>
                   <Button loading={isLoading} onClick={() => form.handleSubmit(onSubmit)()}>
-                     {t("login.btn")}
+                     Đăng nhập
                   </Button>
                </StyledButton>
             </StyledForm>

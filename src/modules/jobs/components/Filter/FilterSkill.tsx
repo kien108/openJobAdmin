@@ -54,7 +54,7 @@ const FilterSkill = () => {
             <Col span={8}>
                <Select
                   name="specialization"
-                  label="Chuyên ngành hẹp"
+                  label="Chuyên môn"
                   required
                   loading={fetchingFilterSpec}
                   options={(dataFilterSpec ?? []).map((item: any) => ({

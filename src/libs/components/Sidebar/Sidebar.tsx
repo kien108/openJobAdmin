@@ -8,6 +8,7 @@ import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome } from "react-icons/ai";
 import { GiPowerLightning } from "react-icons/gi";
 import { SiBitcoinsv } from "react-icons/si";
+import { MdAnalytics } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -57,7 +58,8 @@ const SideBar = () => {
    };
 
    const items: MenuItem[] = [
-      // getItem(true, t("sidebar.overview"), "/overview", "overview", <AiOutlineHome />),
+      getItem(true, "Phân tích", "/analytics", "analytics", <MdAnalytics />),
+
       getItem(
          // useRole([ROLE_ENUM.SUPER_ADMIN]),
          true,

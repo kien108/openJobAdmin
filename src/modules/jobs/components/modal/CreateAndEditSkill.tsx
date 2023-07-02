@@ -144,19 +144,14 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                {!skill && (
                   <Select
                      name="specializationId"
-                     title="Chuyên ngành hẹp"
+                     title="Chuyên môn"
                      required
                      style={{ fontWeight: "400" }}
                      options={options || []}
-                     placeholder="Chọn chuyên ngành hẹp"
+                     placeholder="Chọn chuyên môn"
                   />
                )}
-               <Input
-                  required
-                  label={t("Skill Name")}
-                  name="name"
-                  placeholder={t("Enter skill...")}
-               />
+               <Input required label={"Tên kỹ năng"} name="name" placeholder="Nhập tên kỹ năng" />
 
                <GroupButton>
                   <Button
@@ -167,7 +162,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                         form.handleSubmit(onSubmit)();
                      }}
                   >
-                     {t("common:confirm.save")}
+                     Lưu
                   </Button>
                   <Button
                      onClick={() => {
@@ -175,7 +170,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
                      }}
                      border="outline"
                   >
-                     {t("common:confirm.cancel")}
+                     Hủy bỏ
                   </Button>
                </GroupButton>
             </FormProvider>

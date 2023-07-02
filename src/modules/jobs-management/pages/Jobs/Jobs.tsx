@@ -151,7 +151,7 @@ const Jobs = () => {
       },
 
       {
-         title: t("Action"),
+         title: "Chức năng",
          dataIndex: "id",
 
          render: (_: string, record: any) => (

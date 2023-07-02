@@ -80,8 +80,6 @@ const Skills = () => {
       }
    );
 
-   console.log(useFilter());
-
    const [deleteSpecialization, { isLoading: loadingDeleteSpecialization }] =
       useDeleteSkillMutation();
 
@@ -201,7 +199,7 @@ const Skills = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={selectedSkill ? t("Update skill") : t("Create new skill")}
+            title={selectedSkill ? "Chỉnh sửa kỹ năng" : "Tạo mới kỹ năng"}
             destroyOnClose
             open={isOpen}
             onCancel={() => {

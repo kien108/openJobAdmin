@@ -99,7 +99,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Cập nhật chuyên ngành hẹp thành công"),
+                    message: t("Cập nhật chuyên môn thành công"),
                  });
                  handleClose();
               })
@@ -119,7 +119,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("Tạo mới chuyên ngành hẹp thành công"),
+                    message: t("Tạo mới chuyên môn thành công"),
                  });
                  handleClose();
               })
@@ -147,7 +147,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, specializati
                )}
                <Input
                   required
-                  label={t("Tên chuyên ngành hẹp")}
+                  label={t("Tên chuyên môn")}
                   name="name"
                   placeholder={t("Enter specialization name...")}
                />

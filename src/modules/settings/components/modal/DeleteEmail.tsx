@@ -43,11 +43,11 @@ const DeleteEmail: FC<IDeleteEmail> = ({ handleClose, id }) => {
    return (
       <StyledDeleteEmail>
          <GroupButton>
-            <Button height={44} key="back" border="outline" onClick={handleClose}>
-               {t("cancel")}
-            </Button>
             <Button height={44} key="submit" loading={loadingDelete} onClick={handleConfirmDelete}>
-               {t("ok")}
+               Đồng ý
+            </Button>
+            <Button height={44} key="back" border="outline" onClick={handleClose}>
+               Từ chối
             </Button>
          </GroupButton>
       </StyledDeleteEmail>

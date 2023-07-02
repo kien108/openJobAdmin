@@ -79,14 +79,14 @@ const WebUserManagement = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("adminManagement.firstName"),
+         title: "Tên",
          dataIndex: "firstName",
          key: "firstName",
          sorter: true,
          render: (item) => (item ? item : "-"),
       },
       {
-         title: t("adminManagement.lastName"),
+         title: "Họ tên",
          dataIndex: "lastName",
          key: "lastName",
          sorter: true,
@@ -100,14 +100,14 @@ const WebUserManagement = () => {
          render: (item) => (item ? item : "-"),
       },
       {
-         title: t("adminManagement.role"),
+         title: "Vai trò",
          dataIndex: "role",
          key: "role",
          sorter: true,
          render: (item) => (item ? item : "-"),
       },
       {
-         title: t("adminManagement.active"),
+         title: "Trạng thái",
          dataIndex: "isActive",
          key: "isActive",
          sorter: true,
@@ -115,7 +115,7 @@ const WebUserManagement = () => {
       },
 
       {
-         title: t("adminManagement.actions"),
+         title: "Chức năng",
          dataIndex: "id",
          render: (_: string, record: any) => (
             <StyledFunctions>
@@ -163,7 +163,7 @@ const WebUserManagement = () => {
 
    return (
       <>
-         <Title>Web Users Management</Title>
+         <Title>Người dùng</Title>
          <ContainerTable>
             <FormProvider {...form}>
                <Row align={"middle"} gutter={[10, 10]}>
@@ -175,9 +175,7 @@ const WebUserManagement = () => {
                            form.setValue("keyword", e.target.value);
                            handleOnChange("keyword", e.target.value);
                         }}
-                        placeholder={`${
-                           checked ? "Search by company" : "Search by firstName, lastName"
-                        }`}
+                        placeholder={`Tìm kiếm thông qua tên`}
                      />
                   </Col>
                </Row>

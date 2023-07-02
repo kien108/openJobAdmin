@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 import { Tag2, Tooltip } from "../../../../libs/components";
 
@@ -29,7 +29,9 @@ interface IEmailVariables {
 const BlockEmbed = Quill.import("blots/embed");
 
 const EmailVariables: FC<IEmailVariables> = (props) => {
-   const { label, name, required, toolbar, data, delta, editorRef } = props;
+   const { label, name, required, toolbar, data } = props;
+
+   const editorRef = useRef<any>(null);
 
    const {
       control,
@@ -47,8 +49,6 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
 
    const [curIndex, setCurIndex] = useState("");
 
-   // const { data: variables } = useGetTempVariablesQuery();
-
    const createElementVariable = (name: string, marker: string, format = false) => {
       class Variable extends BlockEmbed {
          static create(value: any) {
@@ -58,11 +58,11 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
             return node;
          }
 
-         static value(node: any) {
+         static value(node) {
             const spanElement = node.querySelector("span");
             return {
                name: spanElement.innerText,
-               marker: "[[" + spanElement.innerText + "]]",
+               marker: "[[{" + spanElement.innerText + "}]]",
                text: spanElement.innerText,
             };
          }
@@ -93,50 +93,63 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
       return result;
    };
 
-   const formatVariables = (data: string, delta: string) => {
-      const markers = JSON.parse(delta).ops.filter(
-         (item: any) => item.insert?.TemplateVariable?.marker
-      );
+   const getMarkers = (content: string) => {
+      const regex = /\[\[([^\]]+)\]\]/g;
+      const matches: any = [];
+      let match;
 
+      while ((match = regex.exec(content)) !== null) {
+         matches.push({
+            name: match[1],
+            marker: match[0],
+         });
+      }
+      return matches;
+   };
+   const formatVariables = (data: string) => {
+      const markers = getMarkers(data);
       let formattedData = data;
-      console.log(data);
 
-      markers.forEach((item: any) => {
-         const { name, marker } = item.insert.TemplateVariable;
-
-         console.log({ name, marker });
-
-         formattedData = formattedData.replace(marker, createElementVariable(name, marker, true));
-      });
+      markers &&
+         markers.forEach((item) => {
+            formattedData = formattedData.replace(
+               item?.marker,
+               createElementVariable(item?.name, item?.marker, true)
+            );
+         });
 
       return formattedData;
    };
 
-   const handleChooseVariable = (variable: ITempVariable) => {
+   const handleChooseVariable = (variable: any) => {
       const newElement = createElementVariable(variable.name, variable.marker);
 
       setContent(newElement);
+
+      const quill = editorRef.current.getEditor();
+
+      quill.setSelection(curIndex + variable.name.length);
    };
 
    useEffect(() => {
-      if (!data || !delta) return;
+      if (!data) return;
 
-      const formattedData = formatVariables(data, delta);
+      const formattedData = formatVariables(data);
 
       setContent(formattedData);
       setValue(name, formattedData);
-   }, [data, delta]);
+   }, [data]);
 
    useEffect(() => {
       const quill = editorRef.current.getEditor();
 
-      quill.on("selection-change", function (delta: any, oldDelta: any, source: any) {
+      quill.on("selection-change", function (delta, oldDelta, source) {
          if (!delta) return;
 
          setCurIndex(delta.index);
       });
 
-      quill.on("text-change", function (delta: any, oldDelta: any, source: any) {
+      quill.on("text-change", function (delta, oldDelta, source) {
          setCurIndex(() => (delta.ops[0]?.retain ? delta.ops[0]?.retain + 1 : 1));
       });
    }, []);
@@ -151,19 +164,27 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
          )}
 
          <StyledVariablesContent>
-            <Label>Variables:</Label>
+            <Label>Biến:</Label>
             <div className="content">
-               {variables &&
-                  variables.length > 0 &&
-                  variables.map((variable) => (
-                     <Tooltip
-                        title={t(`${variable.description}`)}
-                        placement="bottomRight"
-                        key={variable.id}
-                     >
-                        <Tag2 onClick={() => handleChooseVariable(variable)}>{variable.name}</Tag2>
-                     </Tooltip>
-                  ))}
+               {variables && variables?.length > 0 && (
+                  <StyledVariablesContent>
+                     <Label>Variables:</Label>
+                     <div className="content">
+                        {(variables ?? []).map((variable: any) => (
+                           <Tooltip
+                              // title={t(common:enum.email.${variable?.description})}
+                              title={variable?.description}
+                              placement="bottomRight"
+                              key={variable?.id}
+                           >
+                              <Tag2 onClick={() => handleChooseVariable(variable)}>
+                                 {variable?.name}
+                              </Tag2>
+                           </Tooltip>
+                        ))}
+                     </div>
+                  </StyledVariablesContent>
+               )}
             </div>
          </StyledVariablesContent>
          <Controller
@@ -172,7 +193,7 @@ const EmailVariables: FC<IEmailVariables> = (props) => {
             render={({ field: { onChange, ...field } }) => (
                <QuillEditor
                   {...field}
-                  {...register(`${name}`)}
+                  {...register(name)}
                   editorRef={editorRef}
                   value={content}
                   onChange={(content) => {

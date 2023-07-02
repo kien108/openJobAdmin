@@ -34,7 +34,7 @@ const EmailTemplates = () => {
          />
 
          <StyledModal
-            title={selectedEmail ? t("Edit email") : t("Create email")}
+            title={"Chỉnh sửa email"}
             destroyOnClose={true}
             visible={isOpenCreate}
             onCancel={handleCloseCreateAndEdit}

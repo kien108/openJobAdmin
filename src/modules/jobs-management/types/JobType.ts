@@ -23,6 +23,7 @@ export interface IJob {
    };
    title: string;
    updatedAt: string;
+   jobStatus: string;
    updatedBy: string;
    workPlace: string;
    major: {

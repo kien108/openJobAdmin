@@ -33,10 +33,6 @@ const CreateAndEditEmail: FC<ICreateAndEditEmail> = ({ handleClose, selectedEmai
 
    const [createAndUpdate, { isLoading }] = useCreateAndUpdateMutation();
 
-   // const [checkTemplateName, { isLoading: loadingCheckTemplate }] = useCheckTemplateNameMutation();
-   // const [addTemplate, { isLoading: loadingAddTemplate }] = useAddTemplateMutation();
-   // const [editTemplate, { isLoading: loadingEditTemplate }] = useEditTemplateMutation();
-
    const { t } = useTranslation();
 
    const form = useForm({
@@ -81,7 +77,6 @@ const CreateAndEditEmail: FC<ICreateAndEditEmail> = ({ handleClose, selectedEmai
             ...data,
             id: selectedEmail.id,
             value: formattedMarker(data.value),
-            extraValue: JSON.stringify(contentRef.current.getEditor().getContents()),
          };
 
          createAndUpdate({ ...body, type: "update" })
@@ -89,30 +84,7 @@ const CreateAndEditEmail: FC<ICreateAndEditEmail> = ({ handleClose, selectedEmai
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Update this email successfully"),
-               });
-
-               handleClose();
-            })
-            .catch((error) => {
-               openNotification({
-                  type: "error",
-                  message: t("common:ERRORS.SERVER_ERROR"),
-               });
-            });
-      } else {
-         if (message) return;
-         const body = {
-            ...data,
-            value: formattedMarker(data.value),
-            extraValue: JSON.stringify(contentRef.current.getEditor().getContents()),
-         };
-         createAndUpdate({ ...body, type: "create" })
-            .unwrap()
-            .then(() => {
-               openNotification({
-                  type: "success",
-                  message: t("Create new email successfully"),
+                  message: "Cập nhật email thành công",
                });
 
                handleClose();
@@ -152,7 +124,6 @@ const CreateAndEditEmail: FC<ICreateAndEditEmail> = ({ handleClose, selectedEmai
                name="value"
                label="Content"
                required
-               delta={selectedEmail && selectedEmail.extraValue}
                data={selectedEmail && selectedEmail.value}
             />
 

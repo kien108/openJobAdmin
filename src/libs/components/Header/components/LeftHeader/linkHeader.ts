@@ -18,7 +18,7 @@ export const navLinks = (openLink: string) => {
          return [
             {
                path: "/settings/email-templates",
-               display: "Email Templates",
+               display: "Mẫu email",
                key: "/settings/email-templates",
             },
          ];

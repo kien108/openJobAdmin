@@ -98,7 +98,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, major }) => 
             <FormProvider {...form}>
                <Input
                   required
-                  label={t("Major Name")}
+                  label="Chuyên ngành"
                   name="name"
                   placeholder={t("Enter major name...")}
                />

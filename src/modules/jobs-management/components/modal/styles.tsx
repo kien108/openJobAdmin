@@ -5,6 +5,7 @@ export const StyledCreateAndEditHr = styled.div`
    flex-direction: column;
    gap: 20px;
    margin-top: 20px;
+   padding: 15px;
 
    .avatar {
       margin: 30px 0;

@@ -108,7 +108,7 @@ const Specialization = () => {
 
    const columns: ColumnsType<any> = [
       {
-         title: t("Tên chuyên ngành hẹp"),
+         title: t("Tên chuyên môn"),
          dataIndex: "name",
          key: "name",
          sorter: true,
@@ -170,7 +170,7 @@ const Specialization = () => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Xóa chuyên ngành hẹp thành công!!!"),
+                  message: t("Xóa chuyên môn thành công!!!"),
                });
                setSelectedSpecialization(undefined);
                handleCloseDelete();
@@ -178,7 +178,7 @@ const Specialization = () => {
             .catch((error) => {
                openNotification({
                   type: "error",
-                  message: t("Chuyên ngành hẹp đang được sử dụng, không thể xóa"),
+                  message: t("Chuyên môn đang được sử dụng, không thể xóa"),
                });
                handleCloseDelete();
             });
@@ -216,7 +216,7 @@ const Specialization = () => {
    }, [dataMajors]);
    return (
       <>
-         <Header handleOpenCreate={handleOpen} title="Quản lý chuyên ngành hẹp" />
+         <Header handleOpenCreate={handleOpen} title="Quản lý chuyên môn" />
          <ContainerTable>
             <FormProvider {...form}>
                <Row gutter={[32, 32]}>
@@ -244,11 +244,7 @@ const Specialization = () => {
             />
          </ContainerTable>
          <StyledModal
-            title={
-               selectedSpecialization
-                  ? t("Cập nhật chuyên ngành hẹp")
-                  : t("Tạo mới chuyên ngành hẹp")
-            }
+            title={selectedSpecialization ? t("Cập nhật chuyên môn") : t("Tạo mới chuyên môn")}
             destroyOnClose
             open={isOpen}
             onCancel={() => {
@@ -273,7 +269,7 @@ const Specialization = () => {
                handleCloseDelete();
             }}
             confirmIcon="?"
-            title={t("Bạn có chắc chắn muốn xóa chuyên ngành hẹp không?")}
+            title={t("Bạn có chắc chắn muốn xóa chuyên môn không?")}
          >
             <GroupButton>
                <Button

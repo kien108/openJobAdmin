@@ -80,7 +80,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Deactivate this user successfully!!!"),
+                  message: "Vô hiệu hóa tài khoản thành công",
                });
                searchParams.delete("id");
                setSearchParams(searchParams);
@@ -101,7 +101,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
             .then(() => {
                openNotification({
                   type: "success",
-                  message: t("Activate this user successfully!!!"),
+                  message: "Kích hoạt tài khoản thành công",
                });
                searchParams.delete("id");
                setSearchParams(searchParams);
@@ -132,15 +132,15 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                   name={dataUser?.lastName}
                />
                <div className="item">
-                  <span className="label">First Name:</span>
+                  <span className="label">Tên:</span>
                   <span className="value">{dataUser?.firstName || "-"}</span>
                </div>
                <div className="item">
-                  <span className="label">Last Name:</span>
+                  <span className="label">Họ tên:</span>
                   <span className="value">{dataUser?.lastName || "-"}</span>
                </div>
                <div className="item">
-                  <span className="label">Phone:</span>
+                  <span className="label">Số điện thoại:</span>
                   <span className="value">{dataUser?.phone || "-"}</span>
                </div>
                <div className="item">
@@ -148,11 +148,11 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                   <span className="value">{dataUser?.email || "-"}</span>
                </div>
                <div className="item">
-                  <span className="label">Gender:</span>
+                  <span className="label">Giới tính:</span>
                   <span className="value">{dataUser?.gender || "-"}</span>
                </div>
                <div className="item">
-                  <span className="label">DoB:</span>
+                  <span className="label">Ngày sinh:</span>
                   <span className="value">
                      {dataUser?.dob ? moment(dataUser?.dob).format("DD/MM/YYYY") : "-"}
                   </span>
@@ -168,7 +168,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                            handleActivate();
                         }}
                      >
-                        {t("Activate")}
+                        Kích hoạt
                      </Button>
                   ) : (
                      <Button
@@ -179,7 +179,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                            handleConfirmDeactivate();
                         }}
                      >
-                        {t("Deactivate")}
+                        Vô hiệu hóa
                      </Button>
                   )}
                   <Button
@@ -190,7 +190,7 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
                      }}
                      border={"outline"}
                   >
-                     {t("common:confirm.cancel")}
+                     Đóng
                   </Button>
                </GroupButton>
             </FormProvider>
