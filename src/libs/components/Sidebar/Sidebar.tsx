@@ -7,6 +7,7 @@ import { RiAdminLine } from "react-icons/ri";
 import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome } from "react-icons/ai";
 import { GiPowerLightning } from "react-icons/gi";
+import { BiCoinStack } from "react-icons/bi";
 import { SiBitcoinsv } from "react-icons/si";
 import { MdAnalytics } from "react-icons/md";
 
@@ -58,7 +59,7 @@ const SideBar = () => {
    };
 
    const items: MenuItem[] = [
-      getItem(true, "Phân tích", "/analytics", "analytics", <MdAnalytics />),
+      getItem(true, "Phân tích", "/analytics/posts", "analytics", <MdAnalytics />),
 
       getItem(
          // useRole([ROLE_ENUM.SUPER_ADMIN]),
@@ -84,6 +85,7 @@ const SideBar = () => {
          <MdOutlinePostAdd />
       ),
       getItem(true, "Dịch vụ công ty", "business", "business", <SiBitcoinsv />),
+      getItem(true, "Quản lý giao dịch", "/invoice", "invoice", <BiCoinStack />),
    ];
 
    const onOpenChange = (items: string[]) => {

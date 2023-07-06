@@ -38,6 +38,31 @@ export const navLinks = (openLink: string) => {
          ];
       }
 
+      case "analytics": {
+         return [
+            {
+               path: "/analytics/posts",
+               display: "Tin tuyển dụng",
+               key: "/analytics/posts",
+            },
+            {
+               path: "/analytics/cvs",
+               display: "Hồ sơ ứng tuyển",
+               key: "/analytics/cvs",
+            },
+            {
+               path: "/analytics/users",
+               display: "Người dùng",
+               key: "/analytics/users",
+            },
+            {
+               path: "/analytics/income",
+               display: "Nguồn thu",
+               key: "/analytics/income",
+            },
+         ];
+      }
+
       default:
          return [];
    }

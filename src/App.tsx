@@ -12,9 +12,11 @@ import ModulesSettings from "./modules/settings/modules-settings";
 import ModulesJobs from "./modules/jobs/modules-jobs";
 import ModulesJobsManagement from "./modules/jobs-management/modules-jobs-management";
 import ModulesBusiness from "./modules/business/modules-business";
+import ModulesInvoice from "./modules/invoice/modules-invoice";
 
 import "./style.scss";
 import "antd/dist/antd.css";
+import ModulesAnalytics from "./modules/analytics/modules-analytics";
 
 export function App() {
    return (
@@ -32,6 +34,8 @@ export function App() {
                      <Route path="jobs/*" element={<ModulesJobs />} />
                      <Route path="posts-management/*" element={<ModulesJobsManagement />} />
                      <Route path="business/*" element={<ModulesBusiness />} />
+                     <Route path="invoice/*" element={<ModulesInvoice />} />
+                     <Route path="analytics/*" element={<ModulesAnalytics />} />
                   </Route>
                </Route>
                <Route path="login" element={<ModulesAuth />} />

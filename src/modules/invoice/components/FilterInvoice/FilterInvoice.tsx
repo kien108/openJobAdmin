@@ -1,0 +1,207 @@
+import {
+   Button,
+   Checkbox,
+   DateRangePicker,
+   Input,
+   SearchIcon,
+   Select,
+} from "../../../../libs/components";
+import { Col, Row, Spin } from "antd";
+import { debounce } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
+
+import { v4 as uuidv4 } from "uuid";
+
+import { useDebounce } from "../../../../libs/common";
+
+import moment from "moment";
+import { Container } from "./styles";
+import { EServiceType, EServiceTypeTranslate } from "../../pages/Invoice/Invoice";
+import { useGetCompaniesQuery } from "../../services";
+
+const formatDate = "DD/MM/YYYY";
+
+const FilterInvoice = () => {
+   const { t } = useTranslation();
+
+   const [searchParams, setSearchParams] = useSearchParams();
+   const [options, setOptions] = useState<any>([]);
+   const [provinces, setProvinces] = useState<any>([]);
+   const [majors, setMajors] = useState<any>([]);
+   const [skills, setSkills] = useState<any>([]);
+   const [searchLocation, setSearchLocation] = useState<any>("");
+
+   const [checked, setChecked] = useState<boolean>(false);
+
+   const searchProvinceDebounce = useDebounce(searchLocation, 300);
+
+   const defaultValues = {
+      dates: searchParams.get("dates"),
+      serviceType: searchParams.get("serviceType"),
+      companyName: searchParams.get("companyName"),
+      companyId: searchParams.get("companyId"),
+   };
+
+   const { data: dataCompanies, isFetching: fetchingCompanies } = useGetCompaniesQuery({
+      page: 0,
+      size: 999,
+   });
+
+   const setValueToSearchParams = (name: string, value: string) => {
+      if (value) {
+         searchParams.set(name, value);
+         setSearchParams(searchParams);
+      } else {
+         searchParams.delete(name);
+         setSearchParams(searchParams);
+      }
+   };
+
+   const handleOnChange = debounce(setValueToSearchParams, 500);
+
+   const handleChangeDate = (key: string, value: any) => {
+      let dateFormat;
+      if (value) {
+         dateFormat = value?.map((item: any) => moment(item._d).format(formatDate));
+         searchParams.set(key, encodeURI(dateFormat.join(" - ")));
+         setSearchParams(searchParams);
+      }
+
+      if (!value || value.length === 0) {
+         searchParams.delete(key);
+         setSearchParams(searchParams);
+      }
+   };
+
+   const statuses = [
+      {
+         key: uuidv4(),
+         label: EServiceType.COIN_IN,
+         value: EServiceType.COIN_IN,
+         render: () => EServiceTypeTranslate.COIN_IN,
+      },
+      {
+         key: uuidv4(),
+         label: EServiceType.JOB_POST,
+         value: EServiceType.JOB_POST,
+         render: () => EServiceTypeTranslate.JOB_POST,
+      },
+
+      {
+         key: uuidv4(),
+         label: EServiceType.REFUND,
+         value: EServiceType.REFUND,
+         render: () => EServiceTypeTranslate.REFUND,
+      },
+
+      {
+         key: uuidv4(),
+         label: EServiceType.UPDATE_JOB,
+         value: EServiceType.UPDATE_JOB,
+         render: () => EServiceTypeTranslate.UPDATE_JOB,
+      },
+
+      {
+         key: uuidv4(),
+         label: EServiceType.UPGRADE_MEMBERSHIP,
+         value: EServiceType.UPGRADE_MEMBERSHIP,
+         render: () => EServiceTypeTranslate.UPGRADE_MEMBERSHIP,
+      },
+
+      {
+         key: uuidv4(),
+         label: EServiceType.VIEW_CV,
+         value: EServiceType.VIEW_CV,
+         render: () => EServiceTypeTranslate.VIEW_CV,
+      },
+   ];
+
+   useEffect(() => {
+      form.reset(defaultValues);
+   }, [searchParams.toString()]);
+
+   return (
+      <Container>
+         <FormProvider {...form}>
+            <Row gutter={[20, 20]} align="middle">
+               <Col span={24}>
+                  <Input
+                     className="search"
+                     title={"Tên công ty"}
+                     placeholder="Tên công ty"
+                     icons={<SearchIcon width={20} />}
+                     name="companyName"
+                     onChange={(e: any) => {
+                        form.setValue("companyName", e.target.value);
+                        handleOnChange("companyName", e.target.value);
+                     }}
+                  />
+               </Col>
+
+               <Col span={8}>
+                  <Select
+                     required
+                     name="companyId"
+                     label="Công ty"
+                     options={
+                        dataCompanies?.companies?.map((item) => ({
+                           key: item?.id,
+                           label: item?.name,
+                           value: item?.id,
+                           render: () => item?.name,
+                        })) || []
+                     }
+                     onChange={(value) => {
+                        form.setValue("companyId", value);
+                        setValueToSearchParams("companyId", value);
+                     }}
+                  />
+               </Col>
+               <Col span={8}>
+                  <DateRangePicker
+                     format={formatDate}
+                     name="dates"
+                     label={"Ngày giao dịch"}
+                     value={
+                        form.getValues("dates")
+                           ? [
+                                moment(form.getValues("dates")?.split("%20-%20")[0], formatDate),
+                                moment(form.getValues("dates")?.split("%20-%20")[1], formatDate),
+                             ]
+                           : undefined
+                     }
+                     onChange={(value) => {
+                        const dateFormat = value
+                           ? value.map((item: any) => moment(item._d).format(formatDate))
+                           : null;
+                        form.setValue(
+                           "dates",
+                           dateFormat ? encodeURI(`${dateFormat[0]} - ${dateFormat[1]}`) : null
+                        );
+                        handleChangeDate("dates", value);
+                     }}
+                  />
+               </Col>
+
+               <Col span={8}>
+                  <Select
+                     required
+                     name="serviceType"
+                     label="Loại dịch vụ"
+                     options={statuses || []}
+                     onChange={(value) => {
+                        form.setValue("serviceType", value);
+                        setValueToSearchParams("serviceType", value);
+                     }}
+                  />
+               </Col>
+            </Row>
+         </FormProvider>
+      </Container>
+   );
+};
+
+export default FilterInvoice;
