@@ -110,6 +110,13 @@ const Jobs = () => {
          render: (item) => <TextEllipsis className="name" data={item} length={50} />,
       },
       {
+         title: t("Công ty"),
+         dataIndex: "companyName",
+         key: "title",
+         sorter: true,
+         width: "20%",
+      },
+      {
          title: t("Vị trí"),
          dataIndex: "jobLevel",
          key: "jobLevel",
@@ -223,6 +230,8 @@ const Jobs = () => {
                : `${convertPrice(item?.salaryInfo?.minSalary)} - ${convertPrice(
                     item?.salaryInfo?.maxSalary
                  )} (${item?.salaryInfo?.salaryType})`,
+
+            companyName: item?.company?.name,
          }));
 
       setDataSource(dataSource || []);

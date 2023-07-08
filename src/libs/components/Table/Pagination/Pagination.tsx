@@ -108,7 +108,7 @@ export default function Pagination({ tableInstance, ...props }: PaginationProps)
                               {range[0]}-{range[1]}{" "}
                            </span>
                         </Popover>
-                        của
+                        trên
                         <span className="page-total"> {props.totalElements}</span>
                      </span>
                   );

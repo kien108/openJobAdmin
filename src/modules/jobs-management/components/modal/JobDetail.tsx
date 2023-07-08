@@ -187,6 +187,10 @@ const CreateJob: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          <StyledCreateAndEditHr>
             <Row gutter={[10, 30]}>
                <Col span={24}>
+                  <div className="title-container" style={{ marginBottom: "20px" }}>
+                     <span className="label">Công ty:</span>
+                     <span className="value primary">{dataJob?.company?.name}</span>
+                  </div>
                   <div className="title-container">
                      <span className="label">Tiêu đề:</span>
                      <span className="value primary">{dataJob?.title}</span>

@@ -5,6 +5,7 @@ export interface IResJobs {
 }
 
 export interface IJob {
+   company: any;
    createdAt: string;
    createdBy: string;
    description: string;

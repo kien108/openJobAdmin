@@ -41,7 +41,7 @@ const JobsChart = () => {
 
    return (
       <Spin spinning={isFetching}>
-         <Chart options={options} series={series} type="bar" width="100%" />
+         <Chart options={options} series={series} type="bar" width="100%" height={"500px"} />
       </Spin>
    );
 };

@@ -46,7 +46,7 @@ const IncomeChart = () => {
 
    return (
       <Spin spinning={isFetching}>
-         <Chart options={options} series={series} type="pie" width="70%" />
+         <Chart options={options} series={series} type="pie" width="70%" height={"500px"} />
       </Spin>
    );
 };

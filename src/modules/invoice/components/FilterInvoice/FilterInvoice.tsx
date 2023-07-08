@@ -76,6 +76,8 @@ const FilterInvoice = () => {
       }
    };
 
+   const form = useForm({ defaultValues });
+
    const statuses = [
       {
          key: uuidv4(),
