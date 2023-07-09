@@ -11,7 +11,7 @@ import { Popover } from "../Popover";
 import { useCommonDispatch, changeLang } from "../../../../common";
 import { LanguageIcon, NotificationIcon } from "../../../Icons";
 import { Image } from "../../../Avatar";
-import logo from "../../../../../assets/img/logo.png";
+import logo from "../../../../../assets/img/hu.png";
 const { Text } = Typography;
 
 interface Props {
@@ -31,48 +31,6 @@ const RightHeader = ({ languages, accounts }: Props) => {
 
    return (
       <StyledRightHeader>
-         {/* <div className="dropdown">
-            <Popover
-               overlayClassName="styled-header-popover"
-               trigger="click"
-               visible={visiblePopover}
-               onVisibleChange={handleVisibleChange}
-               content={
-                  <div className="dropdown-group-btn">
-                     {languages.map((language) => (
-                        <button
-                           className="button-content"
-                           key={language.id}
-                           onClick={() => {
-                              i18n
-                                 .changeLanguage(language.code)
-                                 .then(() => setVisiblePopover(false));
-                              dispatch(changeLang(language.code));
-                           }}
-                        >
-                           <Text>{language.title}</Text>
-                        </button>
-                     ))}
-                  </div>
-               }
-            >
-               <button className="button-header hover">
-                  <LanguageIcon width="30px" height="36px" />
-               </button>
-            </Popover>
-         </div> */}
-         {/* <div className="notification">
-            <Popover
-               overlayClassName="styled-header-popover"
-               content={<Notification></Notification>}
-               trigger="click"
-            >
-               <button className="button-header hover">
-                  <NotificationIcon width="30px" height="36px" />
-                  <div className="number-notification">1</div>
-               </button>
-            </Popover>
-         </div> */}
          <div className="dropdown">
             <Popover
                overlayClassName="styled-header-popover"
@@ -93,7 +51,7 @@ const RightHeader = ({ languages, accounts }: Props) => {
                }
             >
                <button className="button-header">
-                  <Image type="circle" src={logo} width="60px" />
+                  <Image type="circle" src={logo} width="40px" />
                </button>
             </Popover>
          </div>

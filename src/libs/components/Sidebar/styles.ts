@@ -278,7 +278,7 @@ export const StyledLogo = styled.header`
 export const StyledImage = styled.img`
    margin-left: auto;
    margin-right: auto;
-   width: 160px;
+   width: 120px;
    height: auto;
    display: block;
    vertical-align: middle;

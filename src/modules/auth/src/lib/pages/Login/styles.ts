@@ -26,10 +26,11 @@ export const StyledForm = styled.form`
 export const StyledLogo = styled.img`
    margin-left: auto;
    margin-right: auto;
-   width: 150px;
+   width: 140px;
    height: auto;
    display: block;
    user-select: none;
+   margin-bottom: 30px;
 `;
 export const StyledGroupRemembers = styled.div`
    display: flex;

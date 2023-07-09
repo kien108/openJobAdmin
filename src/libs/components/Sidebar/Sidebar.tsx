@@ -1,7 +1,7 @@
 import { Menu, MenuProps, Tooltip } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { StyledSidebar, StyledImage, StyledLogo } from "./styles";
-import ImageLogo from "../../../assets/img/logo.png";
+import ImageLogo from "../../../assets/img/hehe.png";
 
 import { RiAdminLine } from "react-icons/ri";
 import { MdOutlinePostAdd, MdWorkOutline } from "react-icons/md";
