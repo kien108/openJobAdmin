@@ -31,9 +31,9 @@ const CreateAndEditSetting: FC<IProps> = ({ handleClose, id, settingName }) => {
             name: yup
                .string()
                .trim()
-               .required(t("common:form.required"))
+               .required("Trường này không được để trống!")
                .min(4, "This field length must more than 3 characters"),
-            value: yup.string().trim().required(t("common:form.required")),
+            value: yup.string().trim().required("Trường này không được để trống!"),
          })
       ),
    });

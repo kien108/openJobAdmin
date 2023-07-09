@@ -53,7 +53,7 @@ const CreateAndEditMajor: FC<ICreateAndEditAdmin> = ({ handleClose, major }) => 
       },
       resolver: yupResolver(
          yup.object({
-            name: yup.string().trim().required(t("common:form.required")),
+            name: yup.string().trim().required("Trường này không được để trống!"),
          })
       ),
    });

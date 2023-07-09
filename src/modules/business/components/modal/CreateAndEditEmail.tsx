@@ -46,8 +46,8 @@ const CreateAndEditEmail: FC<ICreateAndEditEmail> = ({ handleClose, selectedEmai
       },
       resolver: yupResolver(
          yup.object({
-            name: yup.string().trim().required(t("common:form.required")),
-            value: yup.string().trim().required(t("common:form.required")),
+            name: yup.string().trim().required("Trường này không được để trống!"),
+            value: yup.string().trim().required("Trường này không được để trống!"),
          })
       ),
    });

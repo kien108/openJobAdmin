@@ -65,6 +65,9 @@ interface FormType {
    member_type: any;
    extraAddress: any;
    imgs: any;
+
+   amountOfFreeCvViews: any;
+   amountOfFreeJobs: any;
 }
 const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const { t } = useTranslation();
@@ -87,6 +90,7 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const searchDistrictDebounce = useDebounce(searchDistrict, 300);
 
    const form = useForm<FormType>({
+      mode: "all",
       defaultValues: {
          firstName: "",
          email: "",
@@ -108,15 +112,17 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       },
       resolver: yupResolver(
          yup.object({
-            firstName: isEdit
-               ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
-            companyName: isEdit
-               ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
-            email: isEdit
-               ? yup.string()
-               : yup.string().email(t("common:form.email")).required(t("common:form.required")),
+            firstName: yup.string().trim().required("Trường này không được để trống!"),
+            companyName: yup.string().trim().required("Trường này không được để trống!"),
+            province: yup.string().trim().required("Trường này không được để trống!"),
+            district: yup.string().trim().required("Trường này không được để trống!"),
+            email: yup
+               .string()
+               .email(t("common:form.email"))
+               .required("Trường này không được để trống!"),
+            phone: yup.string().required("Trường này không được để trống!").nullable(),
+            companyPhone: yup.string().required("Trường này không được để trống!").nullable(),
+            position: yup.string().required("Trường này không được để trống!").nullable(),
             isActive: yup.boolean(),
          })
       ),
@@ -187,6 +193,8 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
             name: data?.companyName,
             phone: data?.companyPhone,
             scope: data?.scope,
+            amountOfFreeCvViews: data?.amountOfFreeCvViews,
+            amountOfFreeJobs: data?.amountOfFreeJobs,
          },
 
          firstName: data?.firstName,
@@ -239,8 +247,8 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       setValue("company_type", company?.companyType);
       setValue("member_type", company?.memberType);
       setValue("accountBalance", company?.accountBalance);
-      province && setValue("province", province);
-      district && setValue("district", district);
+      setValue("province", province || undefined);
+      setValue("district", district || undefined);
       extraAddress && setValue("extraAddress", extraAddress);
 
       setImgs(company?.imageUrls);
@@ -251,6 +259,9 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       setValue("phone", dataAccount?.phone);
       setValue("position", dataAccount?.position);
       setValue("isActive", company?.isActive);
+      setValue("amountOfFreeCvViews", company?.amountOfFreeCvViews);
+      setValue("amountOfFreeJobs", company?.amountOfFreeJobs);
+
       setCheckedStatus(company?.isActive);
 
       setFormReset((prev) => !prev);
@@ -387,6 +398,24 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                         name="accountBalance"
                         placeholder="Số dư tài khoản"
                         label="Số dư tài khoản"
+                     />
+                  </Col>
+
+                  <Col span={12}>
+                     <Input
+                        type="number"
+                        name="amountOfFreeCvViews"
+                        placeholder="Lượt xem hồ sơ miễn phí"
+                        label="Lượt xem hồ sơ miễn phí"
+                     />
+                  </Col>
+
+                  <Col span={12}>
+                     <Input
+                        type="number"
+                        name="amountOfFreeJobs"
+                        placeholder="Lượt đăng tin tuyển dụng miễn phí"
+                        label="Lượt đăng tin tuyển dụng miễn phí"
                      />
                   </Col>
 

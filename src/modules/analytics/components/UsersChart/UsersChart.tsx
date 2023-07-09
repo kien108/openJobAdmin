@@ -35,7 +35,7 @@ const UsersChart = () => {
    const series = [
       {
          name: "Số lượng người dùng đăng ký",
-         data: data?.amountOfJobs,
+         data: data?.amountOfUsers,
       },
    ];
 

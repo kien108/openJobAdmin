@@ -11,7 +11,6 @@ interface IProps {
 }
 
 const GetImage: FC<IProps> = ({ url, width, className }) => {
-   console.log({ url });
    return (
       <StyledImg
          className={className}

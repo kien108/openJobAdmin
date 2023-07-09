@@ -32,20 +32,20 @@ const Business = () => {
       },
       resolver: yupResolver(
          yup.object({
-            freeCvView: yup.string().required(t("common:form.required")),
-            freeJob: yup.string().required(t("common:form.required")),
-            premiumFreeJob: yup.string().required(t("common:form.required")),
-            premiumFreeViewCv: yup.string().required(t("common:form.required")),
-            baseCvViewPrice: yup.string().required(t("common:form.required")),
-            baseJobPricePerDay: yup.string().required(t("common:form.required")),
-            maxTimeForFreeJobInDays: yup.string().required(t("common:form.required")),
-            premiumPrice: yup.string().required(t("common:form.required")),
-            internWeight: yup.string().required(t("common:form.required")),
-            fresherWeight: yup.string().required(t("common:form.required")),
-            juniorWeight: yup.string().required(t("common:form.required")),
-            middleWeight: yup.string().required(t("common:form.required")),
-            seniorWeight: yup.string().required(t("common:form.required")),
-            highPositionWeight: yup.string().required(t("common:form.required")),
+            freeCvView: yup.string().required("Trường này không được để trống!"),
+            freeJob: yup.string().required("Trường này không được để trống!"),
+            premiumFreeJob: yup.string().required("Trường này không được để trống!"),
+            premiumFreeViewCv: yup.string().required("Trường này không được để trống!"),
+            baseCvViewPrice: yup.string().required("Trường này không được để trống!"),
+            baseJobPricePerDay: yup.string().required("Trường này không được để trống!"),
+            maxTimeForFreeJobInDays: yup.string().required("Trường này không được để trống!"),
+            premiumPrice: yup.string().required("Trường này không được để trống!"),
+            internWeight: yup.string().required("Trường này không được để trống!"),
+            fresherWeight: yup.string().required("Trường này không được để trống!"),
+            juniorWeight: yup.string().required("Trường này không được để trống!"),
+            middleWeight: yup.string().required("Trường này không được để trống!"),
+            seniorWeight: yup.string().required("Trường này không được để trống!"),
+            highPositionWeight: yup.string().required("Trường này không được để trống!"),
          })
       ),
    });
@@ -121,7 +121,7 @@ const Business = () => {
                         <span className="required">*</span>
                      </Col>
                      <Col push={6} span={9} className="label">
-                        Lượt xem tin tuyển dụng miễn phí
+                        Lượt đăng tin tuyển dụng miễn phí
                         <span className="required">*</span>
                      </Col>
                   </Row>
@@ -224,7 +224,7 @@ const Business = () => {
                         <Input
                            type="number"
                            name="maxTimeForFreeJobInDays"
-                           label="Thời gian tối đa cho tin miễn phí (tháng)"
+                           label="Thời gian tối đa cho tin miễn phí (ngày)"
                            required
                            placeholder="Nhập giá trị..."
                         />

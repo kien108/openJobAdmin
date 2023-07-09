@@ -53,18 +53,18 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       },
       resolver: yupResolver(
          yup.object({
-            firstName: yup.string().trim().required(t("common:form.required")),
-            lastName: yup.string().trim().required(t("common:form.required")),
-            username: yup.string().trim().required(t("common:form.required")),
+            firstName: yup.string().trim().required("Trường này không được để trống!"),
+            lastName: yup.string().trim().required("Trường này không được để trống!"),
+            username: yup.string().trim().required("Trường này không được để trống!"),
             password: !searchParams.get("id")
                ? yup
                     .string()
                     .trim()
-                    .required(t("common:form.required"))
-                    .min(8, t("common:form.passwordLength"))
+                    .required("Trường này không được để trống!")
+                    .min(8, "Mật khẩu phải ít nhất 8 ký tự")
                : yup.string(),
             isActive: yup.boolean(),
-            role: yup.string().trim().required(t("common:form.required")),
+            role: yup.string().trim().required("Trường này không được để trống!"),
          })
       ),
    });
@@ -81,13 +81,13 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          key: 1,
          label: "super_admin",
          value: "SUPER_ADMIN",
-         render: () => t("adminManagement.superAdmin"),
+         render: () => "Quản trị viên cấp cao",
       },
       {
          key: 2,
          label: "admin",
          value: "ADMIN",
-         render: () => t("adminManagement.admin"),
+         render: () => "Quản trị viên",
       },
    ];
 
@@ -112,7 +112,7 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                setMessage(undefined);
             })
             .catch((error) => {
-               setMessage(t("adminManagement.valueExists"));
+               setMessage("Tên đăng nhập đã tồn tại");
             });
    };
 
@@ -135,7 +135,7 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("adminManagement.updateAdminSuccessful"),
+                    message: "Cập nhật quản trị viên thành công!",
                  });
                  searchParams.delete("id");
                  setSearchParams(searchParams);
@@ -152,7 +152,7 @@ const CreateAndEditAdmin: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
               .then(() => {
                  openNotification({
                     type: "success",
-                    message: t("adminManagement.createAdminSuccessful"),
+                    message: "Tạo mới quản trị viên thành công!",
                  });
                  handleClose();
               })

@@ -78,7 +78,7 @@ const CreateAndEditSkill: FC<ICreateAndEditAdmin> = ({ handleClose, skill }) => 
       },
       resolver: yupResolver(
          yup.object({
-            name: yup.string().trim().required(t("common:form.required")),
+            name: yup.string().trim().required("Trường này không được để trống!"),
          })
       ),
    });

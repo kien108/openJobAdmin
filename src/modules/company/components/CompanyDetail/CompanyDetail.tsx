@@ -64,6 +64,9 @@ interface FormType {
    member_type: any;
    extraAddress: any;
    imgs: any;
+
+   amountOfFreeCvViews: any;
+   amountOfFreeJobs: any;
 }
 const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
    const { t } = useTranslation();
@@ -109,13 +112,16 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          yup.object({
             firstName: isEdit
                ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
+               : yup.string().trim().required("Trường này không được để trống!"),
             companyName: isEdit
                ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
+               : yup.string().trim().required("Trường này không được để trống!"),
             email: isEdit
                ? yup.string()
-               : yup.string().email(t("common:form.email")).required(t("common:form.required")),
+               : yup
+                    .string()
+                    .email(t("common:form.email"))
+                    .required("Trường này không được để trống!"),
             isActive: yup.boolean(),
          })
       ),
@@ -163,56 +169,6 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       return base64Regex.test(str);
    }
 
-   const onSubmit = (data: any) => {
-      const { companyName, ...dataBody } = data;
-
-      const base64Imgs = imgs?.filter((item: any) => isBase64(item?.url || item?.thumbUrl));
-      const existImgs = imgs?.filter((item: any) => !isBase64(item?.url || item?.thumbUrl));
-      const payload = {
-         ...dataAccount,
-         company: {
-            ...dataAccount?.company,
-            accountBalance: data?.accountBalance,
-            address: `${data?.extraAddress},${data?.district},${data?.province}`,
-            base64Images: (base64Imgs ?? [])?.map((item: any) => item?.url || item?.thumbUrl),
-            imageUrlsString: (existImgs ?? [])
-               ?.map((item: any) => item?.url || item?.thumbUrl)
-               ?.join(", "),
-            companyType: data?.company_type,
-            description: data?.description,
-            isActive: checkedStatus,
-            logoUrl: avatar?.[0]?.url || avatar?.[0]?.thumbUrl,
-            memberType: data?.member_type,
-            name: data?.companyName,
-            phone: data?.companyPhone,
-            scope: data?.scope,
-         },
-
-         firstName: data?.firstName,
-         email: data?.email,
-         position: data?.position,
-         phone: data?.phone,
-      };
-
-      updateHr(payload)
-         .unwrap()
-         .then(() => {
-            openNotification({
-               type: "success",
-               message: t("Update this account successfully!!!"),
-            });
-            searchParams.delete("id");
-            setSearchParams(searchParams);
-            handleClose();
-         })
-         .catch((error) => {
-            openNotification({
-               type: "error",
-               message: t("common:ERRORS.SERVER_ERROR"),
-            });
-         });
-   };
-
    useEffect(() => {
       setEdit(!!searchParams.get("id"));
    }, [searchParams.get("id")]);
@@ -238,8 +194,8 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       setValue("company_type", company?.companyType);
       setValue("member_type", company?.memberType);
       setValue("accountBalance", company?.accountBalance);
-      province && setValue("province", province);
-      district && setValue("district", district);
+      setValue("province", province || undefined);
+      setValue("district", district || undefined);
       extraAddress && setValue("extraAddress", extraAddress);
 
       setImgs(company?.imageUrls);
@@ -250,6 +206,8 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
       setValue("phone", dataAccount?.phone);
       setValue("position", dataAccount?.position);
       setValue("isActive", company?.isActive);
+      setValue("amountOfFreeCvViews", company?.amountOfFreeCvViews);
+      setValue("amountOfFreeJobs", company?.amountOfFreeJobs);
       setCheckedStatus(company?.isActive);
 
       setFormReset((prev) => !prev);
@@ -389,6 +347,26 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
                         placeholder="Số dư tài khoản"
                         label="Số dư tài khoản"
                         disabled
+                     />
+                  </Col>
+
+                  <Col span={12}>
+                     <Input
+                        disabled
+                        type="number"
+                        name="amountOfFreeCvViews"
+                        placeholder="Lượt xem hồ sơ miễn phí"
+                        label="Lượt xem hồ sơ miễn phí"
+                     />
+                  </Col>
+
+                  <Col span={12}>
+                     <Input
+                        disabled
+                        type="number"
+                        name="amountOfFreeJobs"
+                        placeholder="Lượt đăng tin tuyển dụng miễn phí"
+                        label="Lượt đăng tin tuyển dụng miễn phí"
                      />
                   </Col>
 

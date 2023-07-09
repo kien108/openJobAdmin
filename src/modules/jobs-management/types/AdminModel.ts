@@ -20,6 +20,8 @@ export interface ICompany {
    scope: number;
    updatedAt: string;
    updatedBy: string;
+   amountOfFreeCvViews: any;
+   amountOfFreeJobs: any;
 }
 
 export interface IHrs {

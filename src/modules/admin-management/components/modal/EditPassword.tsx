@@ -33,7 +33,7 @@ const EditPassword: FC<IEditPassword> = ({ handleClose, id }) => {
             newPassword: yup
                .string()
                .trim()
-               .required(t("common:form.required"))
+               .required("Trường này không được để trống!")
                .min(8, t("common:form.passwordLength")),
          })
       ),
@@ -84,7 +84,7 @@ const EditPassword: FC<IEditPassword> = ({ handleClose, id }) => {
                      form.handleSubmit(onSubmit)();
                   }}
                >
-                  {t("common:confirm.save")}
+                  Lưu
                </Button>
                <Button
                   onClick={() => {
@@ -94,7 +94,7 @@ const EditPassword: FC<IEditPassword> = ({ handleClose, id }) => {
                   }}
                   border="outline"
                >
-                  {t("common:confirm.cancel")}
+                  Hủy
                </Button>
             </GroupButton>
          </FormProvider>

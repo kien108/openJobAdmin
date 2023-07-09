@@ -42,6 +42,8 @@ export interface ICompany {
    imageUrlsString: any;
    createdAt: any;
    updatedBy: any;
+   amountOfFreeCvViews: any;
+   amountOfFreeJobs: any;
 }
 
 export interface IHrs {

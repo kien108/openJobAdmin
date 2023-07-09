@@ -35,11 +35,14 @@ const ContactInformation: FC<IProps> = ({ handleClose }) => {
       },
       resolver: yupResolver(
          yup.object({
-            firstName: yup.string().trim().required(t("common:form.required")),
-            lastName: yup.string().trim().required(t("common:form.required")),
+            firstName: yup.string().trim().required("Trường này không được để trống!"),
+            lastName: yup.string().trim().required("Trường này không được để trống!"),
             phone: yup.string().trim(),
             gender: yup.string(),
-            email: yup.string().email(t("common:form.email")).required(t("common:form.required")),
+            email: yup
+               .string()
+               .email(t("common:form.email"))
+               .required("Trường này không được để trống!"),
          })
       ),
    });

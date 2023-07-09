@@ -42,16 +42,19 @@ const CreateAndEditHr: FC<ICreateAndEditAdmin> = ({ handleClose }) => {
          yup.object({
             firstName: isEdit
                ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
+               : yup.string().trim().required("Trường này không được để trống!"),
             lastName: isEdit
                ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
+               : yup.string().trim().required("Trường này không được để trống!"),
             companyName: isEdit
                ? yup.string()
-               : yup.string().trim().required(t("common:form.required")),
+               : yup.string().trim().required("Trường này không được để trống!"),
             email: isEdit
                ? yup.string()
-               : yup.string().email(t("common:form.email")).required(t("common:form.required")),
+               : yup
+                    .string()
+                    .email(t("common:form.email"))
+                    .required("Trường này không được để trống!"),
             isActive: yup.boolean(),
          })
       ),

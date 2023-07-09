@@ -71,19 +71,13 @@ const SideBar = () => {
       ),
       getItem(true, "Quản lý công ty", "/company", "company", <MdWorkOutline />),
       getItem(true, "Quản lý người dùng", "/candidates", "candidates", <AiOutlineUser />),
-      getItem(true, "Quản lý cấu hình", "/settings", "settings", <AiOutlineSetting />),
+      getItem(true, "Quản lý mẫu email", "/settings", "settings", <AiOutlineSetting />),
       getItem(true, "Quản lý kỹ năng", "#", "jobs", <GiPowerLightning size={21} />, [
          getItem(true, "Quản lý chuyên ngành", "/jobs/majors", "jobs/majors"),
          getItem(true, "Quản lý chuyên ngành hẹp", "/jobs/specializations", "jobs/specializations"),
          getItem(true, "Quản lý kỹ năng", "/jobs/skills/skills", "jobs/skills"),
       ]),
-      getItem(
-         true,
-         "Quản lý tin đăng tuyển",
-         "posts-management",
-         "posts-management",
-         <MdOutlinePostAdd />
-      ),
+      getItem(true, "Tin tuyển dụng", "posts-management", "posts-management", <MdOutlinePostAdd />),
       getItem(true, "Dịch vụ công ty", "business", "business", <SiBitcoinsv />),
       getItem(true, "Quản lý giao dịch", "/invoice", "invoice", <BiCoinStack />),
    ];

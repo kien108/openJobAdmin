@@ -44,8 +44,8 @@ const Login = () => {
       },
       resolver: yupResolver(
          yup.object({
-            username: yup.string().required(t("common:form.required")),
-            password: yup.string().required(t("common:form.required")),
+            username: yup.string().required("Trường này không được để trống!"),
+            password: yup.string().required("Trường này không được để trống!"),
          })
       ),
    });
